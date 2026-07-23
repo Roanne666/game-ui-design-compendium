@@ -19,8 +19,8 @@
 - 写实军事战术射击(应用 Tactical Military)
 
 **本风格推荐场景包**
-- 主场景:`gameplay-hud.html`(植入 HUD + 任务条 + 小地图读数)
-- 扩展:终端邮件、义体商店、扫描高亮
+- 主场景:`demo/scenes/01-cyberpunk-hud/index.html`（可玩 HUD：扫描/锁定/射击/交互/Quickhack/日志）
+- 扩展:义体商店、车载 HUD、对话选项条
 
 ## 3. 视觉关键词
 

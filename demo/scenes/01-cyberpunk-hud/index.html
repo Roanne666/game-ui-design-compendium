@@ -3,165 +3,435 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cyberpunk — Interactive HUD</title>
-  <link rel="stylesheet" href="../../lib/components.css" />
-  <link rel="stylesheet" href="../../lib/game-feel.css" />
+  <title>01 Cyberpunk — Gameplay HUD</title>
   <link rel="stylesheet" href="../../lib/styles/cyberpunk.css" />
-  <style>
-    .icon { width:28px; height:28px; image-rendering:pixelated; vertical-align:middle; filter: drop-shadow(0 0 4px var(--glow)); }
-    .icon-sm { width:20px; height:20px; }
-    .left-stack { display:flex; flex-direction:column; gap:8px; width:300px; }
-    .quest-stack { display:flex; flex-direction:column; gap:8px; width:280px; margin-top:72px; }
-    .bottom-bar { display:flex; gap:16px; align-items:flex-end; }
-    .weapons { display:flex; gap:8px; }
-    .weapon-btn { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px; border:1px solid var(--border); background:var(--surface); cursor:pointer; min-width:72px; }
-    .weapon-btn.selected { border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
-    .weapon-btn img { width:32px; height:32px; image-rendering:pixelated; }
-    [data-sk-panel] { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(420px,90vw); z-index:20; }
-    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.12em; pointer-events:none; }
-  </style>
+  <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
-  <div class="game-root letterbox">
-    <div class="game-world has-grid"></div>
-    <div class="meta-vignette" id="vignette"></div>
-    <div class="reticle-center"></div>
-    <div class="game-hud">
-      <div class="hud-anchor-tl left-stack">
-        <div class="hud-bar">
-          <span class="hud-bar-label">HP</span>
-          <div class="hud-bar-track"><div id="hp-fill" class="hud-bar-fill danger" style="width:62%"></div></div>
-          <span id="hp-val" class="hud-bar-value">620</span>
+  <div id="viewport">
+    <div id="world">
+      <div class="skyline" id="skyline"></div>
+      <div class="street"></div>
+      <div id="rain"></div>
+
+      <div class="entity hostile" data-id="guard" data-type="hostile" data-name="CORPO GUARD" data-dist="18m"
+           style="left:62%; top:58%">
+        <div class="tag">HOSTILE · CORPO GUARD · LVL12</div>
+        <div class="body"></div>
+      </div>
+      <div class="entity" data-id="civ" data-type="neutral" data-name="CIVILIAN" data-dist="12m"
+           style="left:38%; top:60%">
+        <div class="tag">NEUTRAL · CIVILIAN</div>
+        <div class="body"></div>
+      </div>
+      <div class="entity loot" data-id="shard" data-type="loot" data-name="DATA SHARD" data-dist="4m"
+           style="left:48%; top:68%">
+        <div class="tag">LOOT · DATA SHARD</div>
+        <div class="body"></div>
+      </div>
+      <div class="entity cam" data-id="cam" data-type="device" data-name="SEC CAM" data-dist="22m"
+           style="left:78%; top:42%">
+        <div class="tag">DEVICE · SEC CAM · HACKABLE</div>
+        <div class="body"></div>
+      </div>
+      <div class="entity" data-id="door" data-type="door" data-name="AFTERLIFE DOOR" data-dist="6m"
+           style="left:28%; top:55%">
+        <div class="tag">DOOR · AFTERLIFE · LOCKED</div>
+        <div class="body" style="height:90px;width:42px;clip-path:none;border-color:#f6c73b"></div>
+      </div>
+    </div>
+
+    <div id="hurt"></div>
+
+    <div id="hud">
+      <div class="crosshair" id="crosshair">
+        <i class="h"></i><i class="h2"></i><i class="v"></i><i class="v2"></i>
+      </div>
+      <div class="prompt" id="prompt"><span class="key" id="prompt-key">E</span><span id="prompt-text">INTERACT</span></div>
+
+      <div class="minimap">
+        <div class="grid"></div>
+        <div class="player" id="mm-player"></div>
+        <div class="ping" style="left:70%;top:40%"></div>
+        <div class="ping" style="left:30%;top:60%;background:#e60012;box-shadow:0 0 6px #e60012"></div>
+        <div class="label">WATSON</div>
+      </div>
+
+      <div class="quest" id="quest">
+        <div class="q-title">PRIMARY JOB</div>
+        <div class="q-main" id="q-main">Meet fixer at Afterlife</div>
+        <div class="q-sub" id="q-sub">OBJ · Locate entrance · 240m</div>
+      </div>
+
+      <div class="sys">
+        <div class="row" id="clock">00:00:00</div>
+        <div class="row">NIGHT CITY // WATSON</div>
+        <div class="row scan-flag off" id="scan-flag">SCAN OFF · [TAB]</div>
+        <div class="row">RAM <span id="ram-val">6</span>/6</div>
+      </div>
+
+      <div class="vitals">
+        <div class="vital hp">
+          <span class="lab">HP</span>
+          <div class="trk"><div class="fill" id="hp-fill"></div></div>
+          <span class="num" id="hp-num">620</span>
         </div>
-        <div class="hud-bar">
-          <span class="hud-bar-label">CYBER</span>
-          <div class="hud-bar-track"><div id="cyber-fill" class="hud-bar-fill" style="width:40%;background:var(--accent-2)"></div></div>
-          <span id="cyber-val" class="hud-bar-value">40%</span>
+        <div class="vital st">
+          <span class="lab">ST</span>
+          <div class="trk"><div class="fill" id="st-fill"></div></div>
+          <span class="num" id="st-num">100</span>
+        </div>
+        <div class="vital ar">
+          <span class="lab">AR</span>
+          <div class="trk"><div class="fill" id="ar-fill"></div></div>
+          <span class="num" id="ar-num">40</span>
         </div>
       </div>
 
-      <div class="hud-anchor-tr" style="text-align:right">
-        <div><img class="icon icon-sm" src="../../assets/_shared/kenney/icons/information.png" alt="" /> NIGHT CITY // WATSON</div>
-        <button type="button" class="btn btn-secondary" id="btn-scan" style="margin-top:8px">
-          <img class="icon icon-sm" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> TOGGLE SCAN
-        </button>
-      </div>
-
-      <div class="hud-anchor-tr quest-stack">
-        <div class="alert warning" id="quest-line">[ JOB ] Meet fixer at Afterlife</div>
-        <button type="button" class="btn btn-primary" id="btn-accept">ACCEPT JOB</button>
-        <button type="button" class="btn" id="btn-track">TRACK OBJECTIVE</button>
-      </div>
-
-      <div class="hud-anchor-bl bottom-bar">
-        <div class="weapons" id="weapons">
-          <button type="button" class="weapon-btn selected" data-ammo="24" data-max="120" data-name="UNITY">
-            <img src="../../assets/_shared/rpg-icons/gun.png" alt="gun" /><span>UNITY</span>
-          </button>
-          <button type="button" class="weapon-btn" data-ammo="6" data-max="24" data-name="SHOTTY">
-            <img src="../../assets/_shared/rpg-icons/crossbow.png" alt="shotty" /><span>SHOTTY</span>
-          </button>
-          <button type="button" class="weapon-btn" data-ammo="1" data-max="3" data-name="KNIFE">
-            <img src="../../assets/_shared/rpg-icons/knife.png" alt="knife" /><span>MELEE</span>
-          </button>
-        </div>
-        <div class="panel frame-brackets" style="min-width:160px">
-          <div class="panel-title">WEAPON</div>
-          <div class="panel-body">
-            <div class="stat-row"><span class="stat-key">NAME</span><span class="stat-val" id="w-name">UNITY</span></div>
-            <div class="stat-row"><span class="stat-key">AMMO</span><span class="stat-val" id="w-ammo">24 / 120</span></div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button type="button" class="btn btn-primary" id="btn-hack">
-            <img class="icon icon-sm" src="../../assets/_shared/kenney/icons/gear.png" alt="" /> QUICKHACK
-          </button>
-          <button type="button" class="btn btn-danger" id="btn-damage">SIM DAMAGE</button>
+      <div class="weapon-hud">
+        <div class="wname" id="w-name">UNITY</div>
+        <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
+        <div class="slots">
+          <div class="slot on hit" data-w="0">1</div>
+          <div class="slot hit" data-w="1">2</div>
+          <div class="slot hit" data-w="2">3</div>
         </div>
       </div>
 
-      <div id="hack-panel" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">QUICKHACK · NEURAL LINK</div>
-        <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
-          <button type="button" class="btn" data-hack="distract">Distract Enemies (−15 CYBER)</button>
-          <button type="button" class="btn" data-hack="breach">Breach Protocol (−25 CYBER)</button>
-          <button type="button" class="btn btn-ghost" id="hack-close">Close</button>
-        </div>
+      <div class="ram" id="ram-menu">
+        <div class="title">QUICKHACK · TARGET</div>
+        <button type="button" data-hack="ping" data-cost="1">Ping <span class="cost">1</span></button>
+        <button type="button" data-hack="distract" data-cost="2">Distract <span class="cost">2</span></button>
+        <button type="button" data-hack="breach" data-cost="3">Breach <span class="cost">3</span></button>
+        <button type="button" data-hack="suicide" data-cost="4">System Reset <span class="cost">4</span></button>
       </div>
-      <div class="hint">Esc closes panels · accept job · switch weapons · quickhack · sim damage</div>
+
+      <div id="feed"></div>
+      <div class="help">LMB FIRE · RMB LOCK · E USE · TAB SCAN · 1-3 WEAPON · R RELOAD · J JOURNAL · SHIFT SPRINT · WASD LOOK</div>
+    </div>
+
+    <div id="journal">
+      <h2>JOURNAL // FIXER NET</h2>
+      <div class="job active" data-job="0">
+        <div class="t">The Afterlife Handshake</div>
+        <div class="d">Meet Rogue's contact. Bring the shard. Don't draw heat.</div>
+      </div>
+      <div class="job" data-job="1">
+        <div class="t">Ghost in the Cam</div>
+        <div class="d">Breach the Watson alley cam before corpo backup arrives.</div>
+      </div>
+      <div class="job" data-job="2">
+        <div class="t">Flatline Optional</div>
+        <div class="d">Neutralize the corpo guard — or leave him breathing.</div>
+      </div>
+      <p style="font-size:10px;letter-spacing:.12em;color:rgba(246,199,59,.45);margin-top:16px">[J] / [ESC] CLOSE</p>
     </div>
   </div>
-  <script src="../../lib/scene-kit.js"></script>
+
   <script>
-    const sk = SceneKit;
-    let hp = 620, cyber = 40, scan = true, tracked = false;
+(function () {
+  const weapons = [
+    { name: "UNITY", cur: 24, res: 120, mag: 24, dmg: 35 },
+    { name: "DB-2 SATARA", cur: 6, res: 24, mag: 6, dmg: 90 },
+    { name: "SATORI", cur: 1, res: 1, mag: 1, dmg: 120, melee: true },
+  ];
+  const jobs = [
+    { main: "Meet fixer at Afterlife", sub: "OBJ · Locate entrance · 240m" },
+    { main: "Ghost the SEC CAM", sub: "OBJ · Breach device · 22m" },
+    { main: "Optional: Flatline guard", sub: "OBJ · Hostile · 18m" },
+  ];
 
-    function flashVignette() {
-      const v = document.getElementById("vignette");
-      v.classList.add("on");
-      setTimeout(() => v.classList.remove("on"), 400);
+  const state = {
+    hp: 620, hpMax: 1000,
+    st: 100, ar: 40,
+    ram: 6, ramMax: 6,
+    w: 0,
+    scan: false,
+    lock: null,
+    focus: null,
+    lookX: 0, lookY: 0,
+    keys: {},
+    sprint: false,
+    journal: false,
+    shard: false,
+    doorOpen: false,
+  };
+
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+  const world = $("#world");
+  const skyline = $("#skyline");
+
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement("div");
+    b.className = "bldg";
+    b.style.height = 40 + Math.random() * 100 + "%";
+    skyline.appendChild(b);
+  }
+
+  function feed(msg) {
+    const el = document.createElement("div");
+    el.textContent = msg;
+    $("#feed").prepend(el);
+    setTimeout(() => el.remove(), 2200);
+  }
+
+  function sync() {
+    const w = weapons[state.w];
+    $("#hp-fill").style.width = (state.hp / state.hpMax) * 100 + "%";
+    $("#st-fill").style.width = state.st + "%";
+    $("#ar-fill").style.width = state.ar + "%";
+    $("#hp-num").textContent = String(Math.round(state.hp));
+    $("#st-num").textContent = String(Math.round(state.st));
+    $("#ar-num").textContent = String(Math.round(state.ar));
+    $("#w-name").textContent = w.name;
+    $("#ammo-cur").textContent = String(w.cur);
+    $("#ammo-res").textContent = String(w.res);
+    $("#ram-val").textContent = String(state.ram);
+    $$(".weapon-hud .slot").forEach((s, i) => s.classList.toggle("on", i === state.w));
+    document.body.classList.toggle("scan-on", state.scan);
+    $("#scan-flag").textContent = state.scan ? "SCAN ON · [TAB]" : "SCAN OFF · [TAB]";
+    $("#scan-flag").classList.toggle("off", !state.scan);
+    $("#crosshair").classList.toggle("hack", !!state.lock);
+    $("#ram-menu").classList.toggle("show", !!state.lock);
+    $("#journal").classList.toggle("open", state.journal);
+  }
+
+  function setFocus(ent) {
+    state.focus = ent;
+    const prompt = $("#prompt");
+    if (!ent) {
+      prompt.classList.remove("show");
+      return;
     }
+    const type = ent.dataset.type;
+    let key = "E", text = "INTERACT · " + ent.dataset.name;
+    if (type === "hostile") { key = "F"; text = "QUICKHACK · " + ent.dataset.name; }
+    if (type === "loot") { key = "E"; text = "PICK UP · " + ent.dataset.name; }
+    if (type === "door") { key = "E"; text = state.doorOpen ? "ENTER · AFTERLIFE" : "FORCE / NEED SHARD"; }
+    if (type === "device") { key = "F"; text = "BREACH · " + ent.dataset.name; }
+    $("#prompt-key").textContent = key;
+    $("#prompt-text").textContent = text;
+    prompt.classList.add("show");
+  }
 
-    function syncBars() {
-      sk.setFill(sk.$("#hp-fill"), (hp / 1000) * 100);
-      sk.setText(sk.$("#hp-val"), String(hp));
-      sk.setFill(sk.$("#cyber-fill"), cyber);
-      sk.setText(sk.$("#cyber-val"), cyber + "%");
+  function nearestEntity(clientX, clientY) {
+    let best = null, bestD = 70;
+    $$(".entity").forEach((ent) => {
+      if (ent.hidden) return;
+      const r = ent.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const d = Math.hypot(clientX - cx, clientY - cy);
+      if (d < bestD) { bestD = d; best = ent; }
+    });
+    return best;
+  }
+
+  function hurt(amount) {
+    let dmg = amount;
+    if (state.ar > 0) {
+      const absorb = Math.min(state.ar, dmg * 0.5);
+      state.ar -= absorb;
+      dmg -= absorb;
     }
+    state.hp = Math.max(0, state.hp - dmg);
+    $("#hurt").classList.add("on");
+    setTimeout(() => $("#hurt").classList.remove("on"), 280);
+    feed(state.hp <= 0 ? "FLATLINED // CRITICAL" : "DAMAGE −" + Math.round(amount));
+    sync();
+  }
 
-    sk.$all(".weapon-btn").forEach((btn) => {
-      sk.on(btn, "click", () => {
-        sk.$all(".weapon-btn").forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        sk.setText(sk.$("#w-name"), btn.dataset.name);
-        sk.setText(sk.$("#w-ammo"), btn.dataset.ammo + " / " + btn.dataset.max);
-        sk.toast("Equipped " + btn.dataset.name);
-        sk.pulse(btn);
-      });
+  function fire() {
+    if (state.journal) return;
+    const w = weapons[state.w];
+    if (!w.melee && w.cur <= 0) { feed("CLICK · RELOAD [R]"); return; }
+    if (!w.melee) w.cur -= 1;
+    sync();
+    if (state.lock && state.lock.dataset.type === "hostile") {
+      const hp = Number(state.lock.dataset.hp || 100) - w.dmg;
+      state.lock.dataset.hp = String(hp);
+      feed("HIT · " + state.lock.dataset.name + " · " + Math.max(0, Math.round(hp)));
+      if (hp <= 0) {
+        feed("NEUTRALIZED · " + state.lock.dataset.name);
+        state.lock.hidden = true;
+        state.lock = null;
+        setFocus(null);
+      }
+    } else {
+      feed(w.melee ? "SLASH" : "SHOT");
+    }
+  }
+
+  function reload() {
+    const w = weapons[state.w];
+    if (w.melee) return;
+    const need = w.mag - w.cur;
+    const take = Math.min(need, w.res);
+    w.cur += take;
+    w.res -= take;
+    feed(take ? "RELOADED · " + w.name : "NO RESERVE AMMO");
+    sync();
+  }
+
+  function useFocus() {
+    const ent = state.focus;
+    if (!ent) return;
+    const type = ent.dataset.type;
+    if (type === "loot") {
+      state.shard = true;
+      ent.hidden = true;
+      setFocus(null);
+      feed("ACQUIRED · DATA SHARD");
+      $("#q-sub").textContent = "OBJ · Door unlocked with shard · 6m";
+    } else if (type === "door") {
+      if (state.shard || state.doorOpen) {
+        state.doorOpen = true;
+        feed("DOOR OPEN · AFTERLIFE");
+        $("#q-main").textContent = "Enter Afterlife";
+        $("#q-sub").textContent = "OBJ · Complete · Handshake ready";
+      } else {
+        feed("LOCKED · NEED DATA SHARD");
+        hurt(15);
+      }
+    } else if (type === "hostile" || type === "device") {
+      lockEntity(ent);
+    } else if (type === "neutral") {
+      feed("NO HOSTILES · CIVILIAN");
+    }
+  }
+
+  function lockEntity(ent) {
+    $$(".entity").forEach((e) => e.classList.remove("locked"));
+    if (state.lock === ent) {
+      state.lock = null;
+      sync();
+      return;
+    }
+    state.lock = ent;
+    ent.classList.add("locked");
+    if (!ent.dataset.hp) ent.dataset.hp = ent.dataset.type === "hostile" ? "100" : "40";
+    feed("LOCK · " + ent.dataset.name);
+    sync();
+  }
+
+  function hack(id, cost) {
+    if (!state.lock) return;
+    if (state.ram < cost) { feed("INSUFFICIENT RAM"); return; }
+    state.ram -= cost;
+    const target = state.lock;
+    feed("HACK · " + id.toUpperCase() + " · " + target.dataset.name);
+    if (id === "distract" && target.dataset.type === "hostile") {
+      feed("GUARD DISTRACTED");
+    }
+    if (id === "breach" && target.dataset.type === "device") {
+      target.hidden = true;
+      state.lock = null;
+      feed("CAM OFFLINE · GHOSTED");
+      $("#q-main").textContent = jobs[1].main;
+      $("#q-sub").textContent = "OBJ · Complete";
+    }
+    if (id === "suicide" && target.dataset.type === "hostile") {
+      target.hidden = true;
+      state.lock = null;
+      feed("SYSTEM RESET · TARGET DOWN");
+    }
+    if (id === "ping") {
+      document.body.classList.add("scan-on");
+      state.scan = true;
+      feed("PING · NETWORK REVEALED");
+    }
+    sync();
+  }
+
+  // Input
+  window.addEventListener("mousemove", (e) => {
+    const nx = (e.clientX / window.innerWidth) * 2 - 1;
+    const ny = (e.clientY / window.innerHeight) * 2 - 1;
+    state.lookX = nx * 18;
+    state.lookY = ny * 10;
+    world.style.transform = `translate(${-state.lookX}px, ${-state.lookY}px)`;
+    const ent = nearestEntity(e.clientX, e.clientY);
+    if (ent !== state.focus) setFocus(ent);
+  });
+
+  window.addEventListener("mousedown", (e) => {
+    if (e.target.closest(".hit") || e.target.closest("#journal") || e.target.closest(".ram")) return;
+    if (e.button === 0) fire();
+    if (e.button === 2 && state.focus) {
+      e.preventDefault();
+      lockEntity(state.focus);
+    }
+  });
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  window.addEventListener("keydown", (e) => {
+    state.keys[e.code] = true;
+    if (e.code === "Tab") {
+      e.preventDefault();
+      state.scan = !state.scan;
+      feed(state.scan ? "SCANNER ONLINE" : "SCANNER OFFLINE");
+      sync();
+    }
+    if (e.code === "KeyE") useFocus();
+    if (e.code === "KeyF" && state.focus) lockEntity(state.focus);
+    if (e.code === "KeyR") reload();
+    if (e.code === "KeyJ" || e.code === "Escape") {
+      if (e.code === "Escape" && state.lock) { state.lock = null; $$(".entity").forEach((x) => x.classList.remove("locked")); }
+      else state.journal = e.code === "KeyJ" ? !state.journal : false;
+      sync();
+    }
+    if (e.code === "Digit1") { state.w = 0; sync(); }
+    if (e.code === "Digit2") { state.w = 1; sync(); }
+    if (e.code === "Digit3") { state.w = 2; sync(); }
+    if (e.code === "ShiftLeft" || e.code === "ShiftRight") state.sprint = true;
+  });
+  window.addEventListener("keyup", (e) => {
+    state.keys[e.code] = false;
+    if (e.code === "ShiftLeft" || e.code === "ShiftRight") state.sprint = false;
+  });
+
+  $$(".weapon-hud .slot").forEach((s) => {
+    s.addEventListener("click", () => { state.w = Number(s.dataset.w); sync(); });
+  });
+  $$("#ram-menu button").forEach((b) => {
+    b.addEventListener("click", () => hack(b.dataset.hack, Number(b.dataset.cost)));
+  });
+  $$("#journal .job").forEach((j) => {
+    j.addEventListener("click", () => {
+      $$("#journal .job").forEach((x) => x.classList.remove("active"));
+      j.classList.add("active");
+      const job = jobs[Number(j.dataset.job)];
+      $("#q-main").textContent = job.main;
+      $("#q-sub").textContent = job.sub;
+      feed("JOB PINNED · " + job.main);
+      state.journal = false;
+      sync();
     });
+  });
 
-    sk.on(sk.$("#btn-scan"), "click", () => {
-      scan = !scan;
-      sk.toast(scan ? "SCAN ON" : "SCAN OFF", scan ? "success" : "warning");
-    });
+  // Ambient loop: stamina, clock, occasional threat
+  let t = 0;
+  setInterval(() => {
+    t += 1;
+    const now = new Date();
+    $("#clock").textContent = now.toTimeString().slice(0, 8);
+    const moving = state.keys.KeyW || state.keys.KeyA || state.keys.KeyS || state.keys.KeyD;
+    if (state.sprint && moving) state.st = Math.max(0, state.st - 1.2);
+    else state.st = Math.min(100, state.st + 0.4);
+    if (state.ram < state.ramMax && t % 40 === 0) state.ram += 1;
+    if (t % 120 === 0 && !state.journal && Math.random() < 0.35) {
+      feed("GUNFIRE NEARBY");
+      if (Math.random() < 0.4) hurt(25 + Math.random() * 40);
+    }
+    const ang = (t / 20) % 360;
+    $("#mm-player").style.transform = `translate(-50%,-50%) rotate(${ang}deg)`;
+    sync();
+  }, 100);
 
-    sk.on(sk.$("#btn-accept"), "click", () => {
-      sk.$("#quest-line").textContent = "[ ACTIVE ] Ripperdoc meet · 240m";
-      sk.$("#quest-line").className = "alert success";
-      sk.toast("Job accepted", "success");
-    });
-
-    sk.on(sk.$("#btn-track"), "click", () => {
-      tracked = !tracked;
-      sk.toast(tracked ? "Objective pinned on AR" : "Tracking cleared", "warning");
-    });
-
-    sk.on(sk.$("#btn-hack"), "click", () => sk.openPanel("#hack-panel"));
-    sk.on(sk.$("#hack-close"), "click", () => sk.closePanel("#hack-panel"));
-
-    sk.$all("[data-hack]").forEach((btn) => {
-      sk.on(btn, "click", () => {
-        const cost = btn.dataset.hack === "breach" ? 25 : 15;
-        if (cyber < cost) {
-          sk.toast("Insufficient CYBER", "danger");
-          return;
-        }
-        cyber -= cost;
-        syncBars();
-        sk.closePanel("#hack-panel");
-        sk.toast("Hack deployed: " + btn.dataset.hack, "success");
-      });
-    });
-
-    sk.on(sk.$("#btn-damage"), "click", () => {
-      hp = Math.max(0, hp - 80);
-      syncBars();
-      sk.pulse(sk.$("#hp-fill"));
-      flashVignette();
-      sk.toast(hp <= 0 ? "FLATLINED" : "Took 80 damage", hp <= 0 ? "danger" : "warning");
-    });
-
-    syncBars();
+  feed("LINK ESTABLISHED · WATSON");
+  sync();
+})();
   </script>
 </body>
 </html>
