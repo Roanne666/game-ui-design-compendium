@@ -10,34 +10,33 @@
 <body>
   <div id="viewport">
     <div id="world">
-      <div class="skyline" id="skyline"></div>
-      <div class="street"></div>
       <div id="rain"></div>
+      <div class="fog"></div>
 
       <div class="entity hostile" data-id="guard" data-type="hostile" data-name="CORPO GUARD" data-dist="18m"
-           style="left:62%; top:58%">
+           style="left:68%; top:72%">
         <div class="tag">HOSTILE · CORPO GUARD · LVL12</div>
         <div class="body"></div>
       </div>
       <div class="entity" data-id="civ" data-type="neutral" data-name="CIVILIAN" data-dist="12m"
-           style="left:38%; top:60%">
+           style="left:32%; top:74%">
         <div class="tag">NEUTRAL · CIVILIAN</div>
         <div class="body"></div>
       </div>
       <div class="entity loot" data-id="shard" data-type="loot" data-name="DATA SHARD" data-dist="4m"
-           style="left:48%; top:68%">
+           style="left:48%; top:78%">
         <div class="tag">LOOT · DATA SHARD</div>
         <div class="body"></div>
       </div>
       <div class="entity cam" data-id="cam" data-type="device" data-name="SEC CAM" data-dist="22m"
-           style="left:78%; top:42%">
+           style="left:82%; top:38%">
         <div class="tag">DEVICE · SEC CAM · HACKABLE</div>
         <div class="body"></div>
       </div>
-      <div class="entity" data-id="door" data-type="door" data-name="AFTERLIFE DOOR" data-dist="6m"
-           style="left:28%; top:55%">
+      <div class="entity door" data-id="door" data-type="door" data-name="AFTERLIFE DOOR" data-dist="6m"
+           style="left:22%; top:70%">
         <div class="tag">DOOR · AFTERLIFE · LOCKED</div>
-        <div class="body" style="height:90px;width:42px;clip-path:none;border-color:#f6c73b"></div>
+        <div class="body"></div>
       </div>
     </div>
 
@@ -107,7 +106,7 @@
       </div>
 
       <div id="feed"></div>
-      <div class="help">LMB FIRE · RMB LOCK · E USE · TAB SCAN · 1-3 WEAPON · R RELOAD · J JOURNAL · SHIFT SPRINT · WASD LOOK</div>
+      <div class="help" id="help" hidden>LMB FIRE · RMB LOCK · E USE · TAB SCAN · 1-3 WEAPON · R RELOAD · J JOURNAL · H HELP · SHIFT SPRINT</div>
     </div>
 
     <div id="journal">
@@ -160,14 +159,6 @@
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
   const world = $("#world");
-  const skyline = $("#skyline");
-
-  for (let i = 0; i < 14; i++) {
-    const b = document.createElement("div");
-    b.className = "bldg";
-    b.style.height = 40 + Math.random() * 100 + "%";
-    skyline.appendChild(b);
-  }
 
   function feed(msg) {
     const el = document.createElement("div");
@@ -380,6 +371,10 @@
       if (e.code === "Escape" && state.lock) { state.lock = null; $$(".entity").forEach((x) => x.classList.remove("locked")); }
       else state.journal = e.code === "KeyJ" ? !state.journal : false;
       sync();
+    }
+    if (e.code === "KeyH") {
+      const help = $("#help");
+      help.hidden = !help.hidden;
     }
     if (e.code === "Digit1") { state.w = 0; sync(); }
     if (e.code === "Digit2") { state.w = 1; sync(); }

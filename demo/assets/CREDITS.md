@@ -28,8 +28,8 @@
 - Path: `demo/assets/_shared/fantasy-gui/`  
 - Used in: Dark Fantasy / Hand-drawn decorative chrome  
 
-## Project rules
+## Project-generated scene plates (01 Cyberpunk)
 
-- Prefer CC0 / CC-BY / itch free packs with clear license text  
-- Always record new packs in this file before commit  
-- Do not add Cyberpunk 2077 / Elden Ring / etc. ripped assets  
+- `demo/scenes/01-cyberpunk-hud/art/street-bg.png` — original night street plate
+- `demo/scenes/01-cyberpunk-hud/art/guard.png` / `civ.png` — original character plates  
+- License: project original for this encyclopedia demo
