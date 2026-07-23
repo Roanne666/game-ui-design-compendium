@@ -102,40 +102,48 @@ html, body {
 .pockets {
   left: 50% !important;
   right: auto !important;
-  bottom: 12px !important;
+  bottom: 108px !important;
   transform: translateX(-50%) !important;
   gap: 5px !important;
+  max-width: calc(100% - 168px);
+  justify-content: center;
 }
 .pockets .pocket {
-  width: 48px !important;
-  height: 48px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
   font-size: 8px !important;
+  padding: 4px !important;
 }
 .pockets .pocket .ico { font-size: 14px !important; }
-.pockets .pocket .k { font-size: 7px !important; }
+.pockets .pocket .k { display: none !important; }
 
+/* Ammo readout sits above left scan — never beside fire */
 .weapon-hud {
-  right: 10px !important;
-  bottom: 72px !important;
-  left: auto !important;
-  text-align: right !important;
+  left: 12px !important;
+  right: auto !important;
+  bottom: 140px !important;
+  text-align: left !important;
   min-width: 0 !important;
+  transform: none !important;
 }
-.weapon-hud .ammo { font-size: 34px !important; }
-.weapon-hud .ammo > span { font-size: 13px !important; }
+.weapon-hud .ammo { font-size: 22px !important; line-height: 1; }
+.weapon-hud .ammo > span { font-size: 11px !important; }
 .weapon-hud .wname { font-size: 10px !important; }
 .weapon-hud .stance { font-size: 9px !important; }
 
 .stamina {
-  bottom: 30% !important;
-  width: 58% !important;
+  bottom: 34% !important;
+  width: 48% !important;
+  left: 12px !important;
+  transform: none !important;
 }
 
 .ram {
-  right: 8px !important;
-  left: 8px !important;
+  right: 86px !important;
+  left: 12px !important;
   top: auto !important;
-  bottom: 140px !important;
+  bottom: 248px !important;
   transform: none !important;
   width: auto !important;
 }
@@ -215,17 +223,17 @@ body.help-open .help { top: 48px !important; }
   gap: 8px !important;
 }
 [data-dialect="matrix"] .nav-block {
-  top: auto !important;
-  bottom: 130px !important;
-  right: auto !important;
-  left: 10px !important;
-  align-items: flex-start !important;
+  top: 48px !important;
+  bottom: auto !important;
+  right: 10px !important;
+  left: auto !important;
+  align-items: flex-end !important;
 }
-[data-dialect="matrix"] .nav-meta { align-items: flex-start !important; }
+[data-dialect="matrix"] .nav-meta { align-items: flex-end !important; }
 [data-dialect="matrix"] .quest {
   top: 78px !important;
   left: 10px !important;
-  right: 10px !important;
+  right: 96px !important;
   border-left: 0 !important;
   border-bottom: 1px dashed rgba(var(--accent-rgb), 0.35);
   background: transparent !important;
@@ -234,16 +242,17 @@ body.help-open .help { top: 48px !important; }
 }
 [data-dialect="matrix"] .quest .q-main { font-size: 12px !important; letter-spacing: 0.06em; }
 [data-dialect="matrix"] .pockets {
-  left: auto !important;
-  right: 8px !important;
-  bottom: 120px !important;
-  transform: none !important;
-  flex-direction: column;
+  left: 50% !important;
+  right: auto !important;
+  bottom: 108px !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  max-width: calc(100% - 168px);
 }
 [data-dialect="matrix"] .weapon-hud {
-  left: 10px !important;
+  left: 12px !important;
   right: auto !important;
-  bottom: 14px !important;
+  bottom: 140px !important;
   text-align: left !important;
 }
 [data-dialect="matrix"] .weapon-hud .ammo {
@@ -282,21 +291,29 @@ body.help-open .help { top: 48px !important; }
   box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.12);
 }
 [data-dialect="amber"] .quest .q-title { text-align: center; }
+[data-dialect="amber"] .nav-block {
+  top: 48px !important;
+  right: 10px !important;
+  bottom: auto !important;
+  left: auto !important;
+  align-items: flex-end !important;
+}
 [data-dialect="amber"] .pockets {
   left: 50% !important;
-  bottom: 14px !important;
+  bottom: 108px !important;
   transform: translateX(-50%) !important;
   flex-direction: row;
-  padding: 6px 8px;
+  max-width: calc(100% - 168px);
+  padding: 4px 6px;
   background: rgba(8, 6, 0, 0.55);
   border: 1px solid rgba(var(--accent-rgb), 0.3);
 }
 [data-dialect="amber"] .weapon-hud {
-  left: 50% !important;
+  left: 12px !important;
   right: auto !important;
-  bottom: 78px !important;
-  transform: translateX(-50%);
-  text-align: center !important;
+  bottom: 140px !important;
+  transform: none !important;
+  text-align: left !important;
 }
 [data-dialect="amber"] .weapon-hud .ammo {
   color: var(--cp-red) !important;
@@ -317,18 +334,18 @@ body.help-open .help { top: 48px !important; }
   gap: 8px !important;
 }
 [data-dialect="noir"] .nav-block {
-  top: auto !important;
-  bottom: 14px !important;
-  left: 10px !important;
-  right: auto !important;
-  align-items: flex-start !important;
+  top: 52px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 10px !important;
+  align-items: flex-end !important;
 }
-[data-dialect="noir"] .nav-meta { align-items: flex-start !important; }
+[data-dialect="noir"] .nav-meta { align-items: flex-end !important; }
 [data-dialect="noir"] .nav-meta .district { color: var(--cp-blue) !important; }
 [data-dialect="noir"] .quest {
   top: 96px !important;
   left: 10px !important;
-  right: 20% !important;
+  right: 96px !important;
   text-align: left !important;
   border-left: 2px solid var(--cp-blue);
   background: linear-gradient(90deg, rgba(var(--data-rgb), 0.15), transparent) !important;
@@ -339,21 +356,22 @@ body.help-open .help { top: 48px !important; }
   text-shadow: 0 0 10px rgba(var(--data-rgb), 0.45) !important;
 }
 [data-dialect="noir"] .pockets {
-  left: auto !important;
-  right: 10px !important;
-  bottom: 100px !important;
-  transform: none !important;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 112px;
-  justify-content: flex-end;
+  left: 50% !important;
+  right: auto !important;
+  bottom: 108px !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: auto !important;
+  max-width: calc(100% - 168px);
+  justify-content: center;
 }
 [data-dialect="noir"] .weapon-hud {
-  right: 10px !important;
-  bottom: 14px !important;
-  left: auto !important;
-  transform: none;
-  text-align: right !important;
+  left: 12px !important;
+  right: auto !important;
+  bottom: 140px !important;
+  transform: none !important;
+  text-align: left !important;
 }
 [data-dialect="noir"] .weapon-hud .ammo {
   color: var(--cp-blue) !important;
@@ -461,61 +479,62 @@ body.help-open .help { top: 48px !important; }
   padding: 0;
 }
 
+/* Right column: fire ← action ← reload ← journal */
+.t-journal {
+  right: 14px;
+  left: auto;
+  bottom: 196px;
+  width: 64px;
+  height: 36px;
+  padding: 0;
+}
+
+/* Final band lock — dialects must not drag chrome into thumb zone */
 .pockets {
   left: 50% !important;
   bottom: 108px !important;
   transform: translateX(-50%) !important;
   gap: 6px !important;
+  max-width: calc(100% - 168px) !important;
 }
 .pockets .pocket {
   min-width: 40px !important;
-  padding: 6px 8px !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 4px !important;
 }
 .pockets .pocket .k { display: none !important; }
 .weapon-hud {
-  right: 86px !important;
-  bottom: 14px !important;
-  left: auto !important;
-  text-align: right !important;
-}
-[data-dialect="matrix"] .pockets {
-  bottom: 108px !important;
-  left: 50% !important;
+  left: 12px !important;
   right: auto !important;
-  transform: translateX(-50%) !important;
-  flex-direction: row !important;
-  width: auto !important;
-}
-[data-dialect="matrix"] .weapon-hud {
-  bottom: 14px !important;
-  left: 10px !important;
-  right: auto !important;
+  bottom: 140px !important;
   text-align: left !important;
+  transform: none !important;
 }
-[data-dialect="amber"] .pockets {
-  bottom: 108px !important;
-}
-[data-dialect="amber"] .weapon-hud {
-  bottom: 160px !important;
-  right: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%);
-  text-align: center !important;
-}
+[data-dialect="matrix"] .pockets,
+[data-dialect="amber"] .pockets,
 [data-dialect="noir"] .pockets {
   bottom: 108px !important;
   left: 50% !important;
   right: auto !important;
   transform: translateX(-50%) !important;
-  width: auto !important;
-  flex-wrap: nowrap !important;
 }
+[data-dialect="matrix"] .weapon-hud,
+[data-dialect="amber"] .weapon-hud,
 [data-dialect="noir"] .weapon-hud {
-  bottom: 14px !important;
-  right: 86px !important;
+  left: 12px !important;
+  right: auto !important;
+  bottom: 140px !important;
+  text-align: left !important;
+  transform: none !important;
 }
+[data-dialect="matrix"] .nav-block,
+[data-dialect="amber"] .nav-block,
 [data-dialect="noir"] .nav-block {
-  bottom: 14px !important;
+  top: 48px !important;
+  bottom: auto !important;
+  right: 10px !important;
+  left: auto !important;
 }
 
 #viewport {
