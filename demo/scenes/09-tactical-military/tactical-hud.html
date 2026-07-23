@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tactical Military — HUD</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/tactical-military.css" />
+  <style>
+    body { min-height: 100vh; background: var(--bg); margin: 0; color: var(--text); }
+    .hud { min-height: 100vh; position: relative; padding: 16px; box-sizing: border-box; }
+    .top { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; }
+    .bottom { position: absolute; bottom: 16px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .ammo { font-family: var(--font-mono); font-size: 28px; }
+    .stance { display: flex; gap: 8px; }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="top">
+      <div>
+        <div>SQD-2 // ALPHA</div>
+        <div style="color:var(--text-muted)">GRID 14-C</div>
+      </div>
+      <div style="text-align:right">
+        <div>COMPASS 047°</div>
+        <div style="color:var(--text-muted)">WIND 3 m/s</div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div>
+        <div class="stance">
+          <span class="badge">STAND</span>
+          <span class="badge accent">ADS</span>
+          <span class="tag">SUPPRESSOR</span>
+        </div>
+        <div class="hud-bar" style="margin-top:10px;width:220px">
+          <span class="hud-bar-label">STM</span>
+          <div class="hud-bar-track"><div class="hud-bar-fill" style="width:64%;background:var(--accent)"></div></div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="ammo">28 <span style="font-size:14px;color:var(--text-muted)">/ 120</span></div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">5.56 × M4A1</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

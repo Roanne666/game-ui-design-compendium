@@ -4,7 +4,6 @@
   "private": true,
   "description": "10 procedural game UI styles. Shared component library + per-style CSS variables.",
   "scripts": {
-    "gen:scenes": "node tools/gen-scenes.js",
     "shoot": "node tools/shoot.js"
   },
   "devDependencies": {

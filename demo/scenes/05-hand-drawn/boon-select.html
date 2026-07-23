@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hand-drawn — Boon Select</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/hand-drawn.css" />
+  <style>
+    body { min-height: 100vh; background: var(--bg); margin: 0; }
+    .wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
+    h1 { font-family: var(--font-display); font-size: 28px; color: var(--text); margin: 0; letter-spacing: 0.08em; }
+    .boons { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .boon { width: 200px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Choose a Boon</h1>
+    <div class="dialogue" style="max-width:520px">
+      <div class="dialogue-portrait">Ω</div>
+      <div>
+        <div class="dialogue-name">Olympian</div>
+        <div class="dialogue-text">One gift. One path. The rest remain in shadow.</div>
+      </div>
+    </div>
+    <div class="boons">
+      <div class="skill-node selected boon">
+        <div class="skill-icon">⚔</div>
+        <div class="skill-name">Wrath Strike</div>
+        <div class="skill-cost">Attack +</div>
+      </div>
+      <div class="skill-node unlocked boon">
+        <div class="skill-icon">🛡</div>
+        <div class="skill-name">Bulwark</div>
+        <div class="skill-cost">Armor +</div>
+      </div>
+      <div class="skill-node unlocked boon">
+        <div class="skill-icon">✧</div>
+        <div class="skill-name">Swift Dash</div>
+        <div class="skill-cost">Speed +</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

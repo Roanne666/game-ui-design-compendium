@@ -1,4 +1,4 @@
-// Take screenshots of all 10 style showcase files using puppeteer
+// Screenshot genre-bound main scenes (puppeteer-core + local Chrome)
 // Usage: node tools/shoot.js
 
 const puppeteer = require('puppeteer-core');
@@ -6,9 +6,17 @@ const path = require('path');
 const fs = require('fs');
 
 const root = path.join(__dirname, '..');
-const styles = [
-  'cyberpunk', 'dark-fantasy', 'scifi-space', 'pixel-retro', 'hand-drawn',
-  'cartoon-comic', 'survival-horror', 'anime-colorful', 'tactical-military', 'synthwave-neon'
+const scenes = [
+  ['01-cyberpunk-hud', 'gameplay-hud.html', 'cyberpunk'],
+  ['02-dark-fantasy', 'souls-hud.html', 'dark-fantasy'],
+  ['03-scifi-space', 'bridge-holo.html', 'scifi-space'],
+  ['04-pixel-retro', 'battle-command.html', 'pixel-retro'],
+  ['05-hand-drawn', 'boon-select.html', 'hand-drawn'],
+  ['06-cartoon-comic', 'comic-shop.html', 'cartoon-comic'],
+  ['07-survival-horror', 'spine-inventory.html', 'survival-horror'],
+  ['08-anime-colorful', 'phantom-menu.html', 'anime-colorful'],
+  ['09-tactical-military', 'tactical-hud.html', 'tactical-military'],
+  ['10-synthwave-neon', 'neon-title.html', 'synthwave-neon'],
 ];
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 
@@ -35,11 +43,12 @@ async function shootOne(browser, url, out, h = 800) {
     args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
   });
   try {
-    for (const s of styles) {
-      const url = 'file:///' + path.join(root, 'demo', s, 'index.html').replace(/\\/g, '/');
-      const out = path.join(root, 'demo', s, 'preview.png');
+    for (const [dir, file] of scenes) {
+      const sceneDir = path.join(root, 'demo', 'scenes', dir);
+      const url = 'file:///' + path.join(sceneDir, file).replace(/\\/g, '/');
+      const out = path.join(sceneDir, 'preview.png');
       await shootOne(browser, url, out);
-      console.log('shot', s);
+      console.log('shot', dir);
     }
   } finally {
     await browser.close();

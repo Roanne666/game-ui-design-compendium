@@ -37,11 +37,11 @@
 - [Kotaku: Elden Ring Minimal UI Debate](https://kotaku.com/elden-ring-ui-ux-user-experience-interface-fromsoftware-1848637410) — 设计师讨论
 - [LinkedIn: Souls-like UI Evolution](https://www.linkedin.com/posts/yaroslavna-korovayska-tarasenko-b506681aa_fromsoftware-eldenring-uiuxdesign-activity-7269313441192894465-EG20) — 9 阶段演化
 
-## Style 03 — Minimal Modern
+## Style 03 — Sci-Fi Space
 
-- 来源:通用 UI 设计理论(NN/g, Material Design, HIG)
-- [Apple HIG](https://developer.apple.com/design/human-interface-guidelines) — 系统级参考
-- [MDN: Backdrop Filter](https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter) — 实现细节
+- [Game UI Database](https://www.gameuidatabase.com/) — 太空模拟 HUD 截图参考
+- [interfaceingame.com](https://interfaceingame.com/) — Elite / Star Citizen 类界面分类
+- [MDN: CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) — 全息仪表 Token 实现
 
 ## Style 04 — Pixel Retro
 
@@ -64,28 +64,17 @@
 - [Drew Smith: UI Crossover](https://www.drewzelle.com/ui-crossover) — Boon 菜单改版
 - [Medium: Hades Responsive Underworld](https://medium.com/@Nat.Rowley/how-hades-creates-a-responsive-underworld-915715a7c2a) — 反馈系统
 
-## Style 06 — Brutalist
+## Style 06 — Cartoon Comic
 
-- [NN/g: Neobrutalism](https://www.nngroup.com/articles/neobrutalism/) — 定义 + 最佳实践
-- [Alex Mayhew: Neo-Brutalism Guide](https://alexmayhew.dev/blog/neo-brutalism-developer-guide) — CSS 实现
-- [GeekyAnts: Anti-Design Neo-Brutalism](https://geekyants.com/blog/exploring-anti-design-through-a-neo-brutalist-product-experience) — 系统层应用
-- [One Thing: Neo Brutalism Principles](https://www.onething.design/post/what-is-neo-brutalism-ui-design) — 7 大特征
-- [Medium: Raw Digital Brutalism](https://eminaraki.medium.com/the-beauty-of-the-unfinished-3e98ead67afe) — 美学起源
-- [Setproduct: Retro & Brutalist 2026](https://www.setproduct.com/blog/retro-brutalist-ui-design-2026) — 当代应用
-- [Bejamas: Neubrutalism Web Design](https://bejamas.com/blog/neubrutalism-web-design-trend) — 历史
-- [GitHub: ng-brutalism](https://github.com/khangtrannn/ng-brutalism) — Angular 实现参考
+- [Destructoid: Borderlands Art Style](https://www.destructoid.com/borderlands-explains-its-not-cel-shaded-actually-art-style/) — 厚边/漫画风说明
+- [gameui.net](https://www.gameui.net/) — 动作射击 UI 社区参考
+- [interfaceingame.com](https://interfaceingame.com/) — 商店/HUD 截图分类
 
-## Style 07 — Glassmorphism
+## Style 07 — Survival Horror
 
-- [NN/g: Glassmorphism](https://www.nngroup.com/articles/glassmorphism/) — 定义 + 最佳实践
-- [Superdesign: Glassmorphism Recipe](https://www.superdesign.dev/styles/glassmorphism) — CSS 完整配方
-- [OpenReplay: Glassmorphic UI Effects](https://blog.openreplay.com/create-glassmorphic-ui-css/) — backdrop-filter 实现
-- [GlassKit Docs](https://glasskit.jungherz.com/docs.html) — 设计 token 完整规范
-- [Frostpane](https://cameronrye.github.io/frostpane/) — 可定制 CSS 库
-- [EverydayTools: Glassmorphism Generator](https://everydaytools.pro/glassmorphism-generator) — WCAG 对比检查
-- [CodeFronts: Glassmorphism Generator](https://codefronts.com/generators/css-glassmorphism-generator/) — Vibrancy 公式
-- [Clay: Glassmorphism in 2026](https://clay.global/blog/glassmorphism-ui) — 苹果 Liquid Glass 演进
-- [TypeUI: Glassmorphism Skill File](https://www.typeui.sh/design-skills/glassmorphism) — AI 编码代理 token
+- [Nasty Rodent: Diegetic UI](https://nastyrodent.com/diegetic-and-non-diegetic-ui/) — diegetic HUD 理论
+- [Game UI Design: The Complete Guide](https://www.uichallenges.design/guides/game-ui-design) — 致命/空间 UI 分类
+- [interfaceingame.com](https://interfaceingame.com/) — Dead Space / RE 类界面参考
 
 ## Style 08 — Anime Colorful
 
