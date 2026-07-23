@@ -6,9 +6,10 @@
 
 **建材共享,楼型按游戏类型分。**
 
-- 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css`（结构与 Token）
-- 独占：`demo/scenes/<style>/` 下的场景 HTML——布局必须符合该风格适合的游戏类型
-- **禁止**用「同一套页面换 CSS」作为风格验收标准
+- 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js`（结构 / Token / 交互）
+- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，布局符合该类型游戏
+- 美术：`demo/assets/`（CC0 / CC-BY 等开放许可，见 `demo/assets/CREDITS.md`）
+- **禁止**用「同一套页面换 CSS」作为风格验收标准；**禁止**商业游戏官方/Rip 素材
 
 ```
 游戏UI设计大全/
@@ -28,9 +29,9 @@
 
 打开 `styles/01-cyberpunk-hud.md`，先看「适用游戏类型」再看色彩/几何/动效。
 
-### 2. 看对应游戏类型的参考场景
+### 2. 玩对应游戏类型的交互场景
 
-打开 `demo/scenes/index.html`，点进某风格的主场景（例如 Dark Fantasy → 魂类极简 HUD，不是通用商店页）。
+打开 `demo/scenes/index.html`，点进某风格的 `index.html`（可点菜单、背包、买东西、换弹等）。素材署名见 `demo/assets/CREDITS.md`。
 
 ### 3. 用组件库做建材
 
@@ -105,4 +106,6 @@
 
 ## 许可
 
-本项目仅含设计规范和示例代码,不含任何受版权保护的游戏资产(logo、icon、screenshot)。
+- 设计规范与示例代码：项目自有
+- 第三方美术：见 `demo/assets/CREDITS.md`（CC0 / CC-BY 等）
+- **不含**商业游戏官方素材或 Rip

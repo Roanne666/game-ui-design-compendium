@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark Fantasy — Bonfire Interactive</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/dark-fantasy.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:#0a0908; color:var(--text); }
+    .world { min-height:100vh; position:relative;
+      background:radial-gradient(ellipse at 50% 40%, #1a1510 0%, #0a0908 70%); }
+    .icon { width:36px; height:36px; image-rendering:pixelated; }
+    .hud { position:absolute; bottom:48px; left:48px; width:320px; }
+    .fp { position:absolute; bottom:48px; right:48px; width:140px; text-align:center; }
+    .fp .label { font-family:var(--font-display); color:var(--text-muted); font-size:12px; letter-spacing:.2em; margin-bottom:8px; }
+    .center-prompt { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); text-align:center; }
+    .center-prompt img { width:64px; height:64px; image-rendering:pixelated; filter:sepia(1) saturate(.6); }
+    [data-sk-panel] { position:absolute; left:50%; top:55%; transform:translate(-50%,0); width:min(360px,90vw); }
+    .hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); color:var(--text-muted); font-size:12px; opacity:.6; letter-spacing:.12em; }
+  </style>
+</head>
+<body>
+  <div class="world">
+    <div class="center-prompt">
+      <img src="../../assets/_shared/rpg-icons/fire.png" alt="bonfire" />
+      <div style="margin-top:12px;letter-spacing:.2em;text-transform:uppercase;font-size:13px;color:var(--accent)">Bonfire ahead</div>
+      <button type="button" class="btn btn-primary" id="btn-rest" style="margin-top:16px">Rest at Bonfire</button>
+    </div>
+
+    <div class="hud">
+      <div class="hud-bar">
+        <span class="hud-bar-label">HP</span>
+        <div class="hud-bar-track"><div id="hp" class="hud-bar-fill danger" style="width:38%"></div></div>
+      </div>
+      <div class="hud-bar">
+        <span class="hud-bar-label">FP</span>
+        <div class="hud-bar-track"><div id="fp" class="hud-bar-fill" style="width:70%;background:var(--accent)"></div></div>
+      </div>
+      <div class="hud-bar">
+        <span class="hud-bar-label">ST</span>
+        <div class="hud-bar-track"><div id="st" class="hud-bar-fill success" style="width:55%"></div></div>
+      </div>
+    </div>
+
+    <div class="fp">
+      <div class="label">FLASK <span id="flask-n">2</span></div>
+      <div class="arc-bar">
+        <div class="arc-track"><div id="flask-fill" class="arc-fill" style="height:45%"></div></div>
+        <div class="arc-value" id="flask-v">2</div>
+      </div>
+      <button type="button" class="btn" id="btn-drink" style="margin-top:8px;width:100%">Drink</button>
+    </div>
+
+    <div id="menu" class="panel" data-sk-panel hidden>
+      <div class="panel-title">Bonfire Menu</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+        <button type="button" class="menu-item-large" id="m-level">Level Up</button>
+        <button type="button" class="menu-item-large" id="m-equip">Equipment</button>
+        <button type="button" class="menu-item-large" id="m-leave">Leave</button>
+      </div>
+    </div>
+    <div class="hint">Rest · open menu · drink flask · leave</div>
+  </div>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let hp = 38, fp = 70, st = 55, flask = 2;
+
+    function sync() {
+      sk.setFill(sk.$("#hp"), hp);
+      sk.setFill(sk.$("#fp"), fp);
+      sk.setFill(sk.$("#st"), st);
+      sk.$("#flask-fill").style.height = (flask / 4) * 100 + "%";
+      sk.setText(sk.$("#flask-n"), String(flask));
+      sk.setText(sk.$("#flask-v"), String(flask));
+    }
+
+    sk.on(sk.$("#btn-rest"), "click", () => {
+      hp = 100; fp = 100; st = 100; flask = 4;
+      sync();
+      sk.openPanel("#menu");
+      sk.toast("Embers restored. Enemies revive in the distance…", "warning");
+    });
+
+    sk.on(sk.$("#btn-drink"), "click", () => {
+      if (flask <= 0) { sk.toast("No flasks left", "danger"); return; }
+      flask -= 1;
+      hp = Math.min(100, hp + 35);
+      sync();
+      sk.pulse(sk.$("#hp"));
+      sk.toast("Flask of Crimson Tears", "success");
+    });
+
+    sk.on(sk.$("#m-level"), "click", () => sk.toast("Not enough runes", "warning"));
+    sk.on(sk.$("#m-equip"), "click", () => sk.toast("Inventory is a stone tablet elsewhere", "warning"));
+    sk.on(sk.$("#m-leave"), "click", () => {
+      sk.closePanel("#menu");
+      sk.toast("You rise from the bonfire");
+    });
+
+    sync();
+  </script>
+</body>
+</html>
