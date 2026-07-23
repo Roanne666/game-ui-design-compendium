@@ -43,3 +43,10 @@
 - `demo/scenes/02-dark-fantasy/art/icons/` — HUD touch icons (lock / use / roll / attack / estus / help), black-keyed
 - License: project original for this encyclopedia demo
 - **不含**商业魂类 / 空洞骑士等官方或 Rip 素材
+
+## Project-generated scene plates (03 Sci-Fi Space)
+
+- `demo/scenes/03-scifi-space/art/space-bg.png` — original deep-space canopy plate
+- `demo/scenes/03-scifi-space/art/hostile-ship.png` — hostile fighter plate (black-keyed)
+- `demo/scenes/03-scifi-space/art/icons/` — HUD touch icons (lock / fire / power / nav / mode / help), black-keyed
+- License: project original for this encyclopedia demo

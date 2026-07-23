@@ -2,216 +2,282 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>科幻太空 — 舰桥全息</title>
-  <link rel="stylesheet" href="../../lib/components.css" />
-  <link rel="stylesheet" href="../../lib/game-feel.css" />
-  <link rel="stylesheet" href="../../lib/styles/scifi-space.css" />
-  <style>
-    .icon { width:24px; height:24px; vertical-align:middle; filter:drop-shadow(0 0 4px var(--glow)); }
-    .playfield-target { position:absolute; left:50%; top:46%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:16px; }
-    .reticle { width:200px; height:200px; border:1px solid var(--accent); border-radius:50%; position:relative; box-shadow:0 0 32px var(--glow); transition:border-color .24s ease-out; }
-    .reticle.locked { border-color:var(--danger); box-shadow:0 0 40px color-mix(in srgb, var(--danger) 60%, transparent); }
-    .reticle::after { content:""; position:absolute; inset:18%; border:1px dashed var(--border); border-radius:50%; }
-    .reticle img { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:48px; height:48px; opacity:.85; }
-    .pwr-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-    .pwr-row label { min-width:72px; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; }
-    .pwr-row input[type=range] { flex:1; accent-color:var(--accent); }
-    .pwr-val { min-width:42px; text-align:right; font-family:var(--font-mono); font-size:12px; }
-    .pwr-btns { display:flex; gap:4px; }
-    .pwr-btns button { padding:2px 8px; font-size:11px; }
-    .sys-left { width:min(280px,42vw); }
-    .sys-right { width:min(300px,42vw); }
-    [data-sk-panel] { position:relative; width:100%; z-index:20; }
-    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.08em; pointer-events:none; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>03 科幻太空 — 竖屏舰桥 HUD</title>
+  <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
-  <div class="game-root letterbox">
-    <div class="game-world has-grid"></div>
-    <div class="meta-vignette" id="vignette"></div>
-    <div class="reticle-center"></div>
-    <div class="game-hud">
-      <div class="playfield-target">
-        <div class="reticle" id="reticle">
-          <img src="../../assets/_shared/rpg-icons/gun.png" alt="目标" />
+  <div id="viewport">
+    <div id="world">
+      <div class="grid-overlay" aria-hidden="true"></div>
+      <div class="target hit" id="target" data-type="hostile">
+        <img src="./art/hostile-ship.png" alt="" draggable="false" />
+      </div>
+    </div>
+
+    <div id="hurt"></div>
+
+    <div id="hud">
+      <div class="place" id="place">
+        <div class="sys">LHS 3447</div>
+        <div class="meta"><span id="nav-mode">超巡航</span> · 燃料 16.2 T</div>
+      </div>
+
+      <div class="target-badge" id="target-badge">目标 · 12.4 公里 · 未锁定</div>
+      <div class="prompt" id="prompt">点按锁定 · 再开火</div>
+      <div id="feed"></div>
+
+      <div class="vitals" id="vitals">
+        <div class="vital hull">
+          <span class="lab">船体</span>
+          <div class="trk"><div class="fill ok" id="hull-fill"></div></div>
+          <span class="n" id="hull-n">88%</span>
         </div>
-        <button type="button" class="btn btn-primary" id="btn-lock">
-          <img class="icon" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> 锁定目标
-        </button>
-        <span class="badge" id="target-badge">目标 · 12.4 公里 · 未锁定</span>
-        <div class="ring" style="width:72px;height:72px">
-          <svg viewBox="0 0 36 36">
-            <circle class="ring-track" cx="18" cy="18" r="15.5" />
-            <circle id="lock-ring" class="ring-fill" cx="18" cy="18" r="15.5" stroke-dasharray="20 100" />
-          </svg>
-          <div class="ring-label" id="lock-label">0%</div>
+        <div class="vital shield">
+          <span class="lab">护盾</span>
+          <div class="trk"><div class="fill" id="shield-fill"></div></div>
+          <span class="n" id="shield-n">33%</span>
         </div>
       </div>
 
-      <div class="hud-anchor-tl sys-left">
-        <div class="panel frame-brackets">
-          <div class="panel-title">
-            <span>能量分配</span>
-            <img class="icon" src="../../assets/_shared/kenney/icons/power.png" alt="" />
-          </div>
-          <div class="panel-body" id="pwr-panel">
-            <div class="pwr-row" data-sys="engines">
-              <label>引擎</label>
-              <input type="range" min="0" max="100" value="42" />
-              <span class="pwr-val">42</span>
-              <div class="pwr-btns">
-                <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
-                <button type="button" class="btn btn-ghost" data-delta="5">+</button>
-              </div>
-            </div>
-            <div class="pwr-row" data-sys="shields">
-              <label>护盾</label>
-              <input type="range" min="0" max="100" value="33" />
-              <span class="pwr-val">33</span>
-              <div class="pwr-btns">
-                <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
-                <button type="button" class="btn btn-ghost" data-delta="5">+</button>
-              </div>
-            </div>
-            <div class="pwr-row" data-sys="weapons">
-              <label>武器</label>
-              <input type="range" min="0" max="100" value="25" />
-              <span class="pwr-val">25</span>
-              <div class="pwr-btns">
-                <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
-                <button type="button" class="btn btn-ghost" data-delta="5">+</button>
-              </div>
-            </div>
-            <div class="stat-row"><span class="stat-key">总计</span><span class="stat-val" id="pwr-total">100%</span></div>
-          </div>
-        </div>
-        <div class="hud-bar" style="margin-top:8px">
-          <span class="hud-bar-label">船体</span>
-          <div class="hud-bar-track"><div id="hull-fill" class="hud-bar-fill success" style="width:88%"></div></div>
-          <span id="hull-val" class="hud-bar-value">88%</span>
-        </div>
-        <button type="button" class="btn btn-danger" id="btn-hull-dmg" style="margin-top:8px">
-          <img class="icon" src="../../assets/_shared/rpg-icons/fire.png" alt="" /> 模拟船体受击
+      <div class="pwr-dock" id="pwr-dock">
+        <button type="button" class="pwr-chip hit on" data-sys="engines" aria-label="引擎能量">
+          <span class="lab">引擎</span>
+          <span class="val" id="pwr-engines">42</span>
+        </button>
+        <button type="button" class="pwr-chip hit" data-sys="shields" aria-label="护盾能量">
+          <span class="lab">护盾</span>
+          <span class="val" id="pwr-shields">33</span>
+        </button>
+        <button type="button" class="pwr-chip hit" data-sys="weapons" aria-label="武器能量">
+          <span class="lab">武器</span>
+          <span class="val" id="pwr-weapons">25</span>
         </button>
       </div>
 
-      <div class="hud-anchor-tr sys-right">
-        <button type="button" class="btn btn-secondary" id="btn-nav-toggle" style="width:100%;margin-bottom:8px">
-          <img class="icon" src="../../assets/_shared/kenney/icons/information.png" alt="" /> 切换导航
-        </button>
-        <div id="nav-panel" class="panel frame-brackets" data-sk-panel>
-          <div class="panel-title">导航 · 舰桥</div>
-          <div class="panel-body">
-            <div class="stat-row"><span class="stat-key">系统</span><span class="stat-val">LHS 3447</span></div>
-            <div class="stat-row"><span class="stat-key">模式</span><span class="stat-val" id="nav-mode">超巡航</span></div>
-            <div class="stat-row"><span class="stat-key">燃料</span><span class="stat-val">16.2 T</span></div>
-            <button type="button" class="btn" id="btn-mode" style="margin-top:10px;width:100%">切换驱动模式</button>
-          </div>
+      <div class="nav-slate" id="nav-slate">
+        <h2>导航 · 舰桥</h2>
+        <div class="row"><span>系统</span><span>LHS 3447</span></div>
+        <div class="row"><span>模式</span><span id="slate-mode">超巡航</span></div>
+        <div class="row"><span>燃料</span><span>16.2 T</span></div>
+        <div class="row"><span>通讯</span><span>空管许可通过</span></div>
+        <div class="actions">
+          <button type="button" id="slate-mode-btn">切换模式</button>
+          <button type="button" id="slate-close">关闭</button>
         </div>
-        <div class="alert" style="margin-top:12px">通讯 · 空管许可已通过</div>
       </div>
 
-      <p class="hint">调整能量 · 锁定目标 · 切换导航 · 模拟船体损伤 · Esc 关闭导航</p>
+      <div class="touch-pad">
+        <button type="button" class="t-btn t-lock hit" id="btn-lock" aria-label="锁定目标">
+          <img class="ico" src="./art/icons/icon-lock.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-mode hit" id="btn-mode" aria-label="驱动模式">
+          <img class="ico" src="./art/icons/icon-mode.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-nav hit" id="btn-nav" aria-label="导航面板">
+          <img class="ico" src="./art/icons/icon-nav.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火" disabled>
+          <img class="ico" src="./art/icons/icon-fire.png" alt="" draggable="false" />
+        </button>
+      </div>
+
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
+        <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
+      </button>
+      <div class="help" id="help" hidden>拖动环视 · 点目标或左下锁定 · 锁定后右下开火 · 中下点能量格调配 · 右侧导航/模式</div>
     </div>
   </div>
-  <script src="../../lib/scene-kit.js"></script>
+
   <script>
-    const sk = SceneKit;
-    const pwr = { engines: 42, shields: 33, weapons: 25 };
-    let hull = 88, locked = false, lockPct = 0, navOpen = true;
-    const modes = ["超巡航", "巡航", "手动"];
+(function () {
+  const pwr = { engines: 42, shields: 33, weapons: 25 };
+  const modes = ["超巡航", "巡航", "手动"];
+  let modeIdx = 0;
+  let hull = 88;
+  let locked = false;
+  let lockPct = 0;
+  let lookX = 0, lookY = 0;
+  let vitalsUntil = 0;
 
-    function flashVignette() {
-      const v = document.getElementById("vignette");
-      v.classList.add("on");
-      setTimeout(() => v.classList.remove("on"), 400);
-    }
+  const $ = (s) => document.querySelector(s);
+  const world = $("#world");
+  const target = $("#target");
+  const badge = $("#target-badge");
+  const prompt = $("#prompt");
+  const fireBtn = $("#btn-fire");
+  const lockBtn = $("#btn-lock");
+  const feed = $("#feed");
+  const hurt = $("#hurt");
+  const vitals = $("#vitals");
 
-    function syncPwr(changedKey, newVal) {
-      newVal = Math.max(0, Math.min(100, newVal));
-      const others = Object.keys(pwr).filter((k) => k !== changedKey);
-      const otherSum = others.reduce((s, k) => s + pwr[k], 0);
-      const maxForChanged = 100 - otherSum;
-      if (newVal > maxForChanged) newVal = maxForChanged;
-      pwr[changedKey] = newVal;
-      const total = pwr.engines + pwr.shields + pwr.weapons;
-      if (total < 100) {
-        const spare = 100 - total;
-        const target = others[0];
-        pwr[target] = Math.min(100, pwr[target] + spare);
-      }
-      sk.$all(".pwr-row").forEach((row) => {
-        const key = row.dataset.sys;
-        row.querySelector("input").value = pwr[key];
-        row.querySelector(".pwr-val").textContent = pwr[key];
-      });
-      sk.setText(sk.$("#pwr-total"), (pwr.engines + pwr.shields + pwr.weapons) + "%");
-    }
+  function toast(msg, cls) {
+    const line = document.createElement("div");
+    line.className = "line" + (cls ? " " + cls : "");
+    line.textContent = msg;
+    feed.prepend(line);
+    while (feed.children.length > 4) feed.lastChild.remove();
+  }
 
-    sk.$all(".pwr-row").forEach((row) => {
-      const key = row.dataset.sys;
-      const input = row.querySelector("input");
-      sk.on(input, "input", () => syncPwr(key, parseInt(input.value, 10)));
-      row.querySelectorAll("[data-delta]").forEach((btn) => {
-        sk.on(btn, "click", () => syncPwr(key, pwr[key] + parseInt(btn.dataset.delta, 10)));
-      });
+  function showVitals(ms) {
+    vitalsUntil = performance.now() + (ms || 2800);
+    vitals.classList.remove("dim");
+  }
+
+  function syncPwr() {
+    ["engines", "shields", "weapons"].forEach((k) => {
+      const el = $("#pwr-" + k);
+      if (el) el.textContent = String(pwr[k]);
     });
+    const shieldFill = $("#shield-fill");
+    const shieldN = $("#shield-n");
+    if (shieldFill) shieldFill.style.transform = "scaleX(" + (pwr.shields / 100) + ")";
+    if (shieldN) shieldN.textContent = pwr.shields + "%";
+  }
 
-    function syncHull() {
-      sk.setFill(sk.$("#hull-fill"), hull);
-      sk.setText(sk.$("#hull-val"), hull + "%");
-      sk.$("#hull-fill").className = "hud-bar-fill " + (hull > 50 ? "success" : hull > 25 ? "warning" : "danger");
+  function boostSys(key) {
+    const others = Object.keys(pwr).filter((k) => k !== key);
+    let take = 8;
+    others.forEach((k) => {
+      const give = Math.min(take, pwr[k]);
+      pwr[k] -= give;
+      take -= give;
+      pwr[key] += give;
+    });
+    document.querySelectorAll(".pwr-chip").forEach((c) => {
+      c.classList.toggle("on", c.dataset.sys === key);
+    });
+    syncPwr();
+    showVitals();
+    const names = { engines: "引擎", shields: "护盾", weapons: "武器" };
+    toast(names[key] + " +" + (8 - take) + "%", "ok");
+  }
+
+  function syncHull() {
+    const fill = $("#hull-fill");
+    const n = $("#hull-n");
+    fill.style.transform = "scaleX(" + (hull / 100) + ")";
+    n.textContent = hull + "%";
+    fill.className = "fill " + (hull > 50 ? "ok" : hull > 25 ? "warn" : "danger");
+  }
+
+  function setLock(on) {
+    locked = on;
+    if (!on) lockPct = 0;
+    target.classList.toggle("locked", on);
+    lockBtn.classList.toggle("on", on);
+    fireBtn.disabled = !on;
+    fireBtn.classList.toggle("armed", on);
+    badge.classList.toggle("hot", on);
+    badge.textContent = on
+      ? "目标 · 已锁定 · 可开火"
+      : (lockPct > 0 ? "目标 · 锁定中 " + lockPct + "%" : "目标 · 12.4 公里 · 未锁定");
+    prompt.classList.toggle("show", !on);
+    prompt.textContent = on ? "右下开火" : "点按锁定 · 再开火";
+  }
+
+  function progressLock() {
+    if (locked) {
+      setLock(false);
+      toast("锁定已解除");
+      return;
     }
+    lockPct = Math.min(100, lockPct + 34);
+    badge.textContent = "目标 · 锁定中 " + lockPct + "%";
+    if (lockPct >= 100) {
+      setLock(true);
+      toast("目标已锁定", "ok");
+    } else {
+      toast("正在锁定… " + lockPct + "%");
+    }
+  }
 
-    sk.on(sk.$("#btn-hull-dmg"), "click", () => {
-      hull = Math.max(0, hull - 12);
+  function flashHurt() {
+    hurt.classList.add("on");
+    setTimeout(() => hurt.classList.remove("on"), 320);
+  }
+
+  function fire() {
+    if (!locked) {
+      toast("未锁定目标", "warn");
+      return;
+    }
+    const dmg = 8 + Math.floor(pwr.weapons / 10);
+    toast("命中 · 伤害 " + dmg, "ok");
+    if (Math.random() < 0.45) {
+      const ret = Math.max(4, 14 - Math.floor(pwr.shields / 10));
+      hull = Math.max(0, hull - ret);
       syncHull();
-      sk.pulse(sk.$("#hull-fill"));
-      flashVignette();
-      sk.toast(hull <= 0 ? "船体破裂" : "船体 −12%", hull <= 25 ? "danger" : "warning");
-    });
+      showVitals();
+      flashHurt();
+      toast(hull <= 0 ? "船体破裂" : "敌方回击 −" + ret + "%", hull <= 25 ? "danger" : "warn");
+    }
+  }
 
-    sk.on(sk.$("#btn-lock"), "click", () => {
-      if (locked) {
-        locked = false;
-        lockPct = 0;
-        sk.$("#reticle").classList.remove("locked");
-        sk.setText(sk.$("#target-badge"), "目标 · 12.4 公里 · 未锁定");
-        sk.toast("锁定已解除");
-      } else {
-        lockPct = Math.min(100, lockPct + 25);
-        sk.$("#lock-ring").setAttribute("stroke-dasharray", lockPct + " 100");
-        sk.setText(sk.$("#lock-label"), lockPct + "%");
-        if (lockPct >= 100) {
-          locked = true;
-          sk.$("#reticle").classList.add("locked");
-          sk.setText(sk.$("#target-badge"), "目标 · 已锁定 · 可开火");
-          sk.toast("目标已锁定", "success");
-          sk.pulse(sk.$("#reticle"));
-        } else {
-          sk.toast("正在锁定… " + lockPct + "%");
-        }
-      }
-    });
+  function setMode(i) {
+    modeIdx = i;
+    const m = modes[modeIdx];
+    $("#nav-mode").textContent = m;
+    $("#slate-mode").textContent = m;
+    toast("驱动：" + m);
+  }
 
-    sk.on(sk.$("#btn-nav-toggle"), "click", () => {
-      navOpen = !navOpen;
-      if (navOpen) sk.openPanel("#nav-panel");
-      else sk.closePanel("#nav-panel");
-      sk.toast(navOpen ? "导航面板已打开" : "导航面板已隐藏");
-    });
+  /* Power chips */
+  document.querySelectorAll(".pwr-chip").forEach((btn) => {
+    btn.addEventListener("click", () => boostSys(btn.dataset.sys));
+  });
 
-    let modeIdx = 0;
-    sk.on(sk.$("#btn-mode"), "click", () => {
-      modeIdx = (modeIdx + 1) % modes.length;
-      sk.setText(sk.$("#nav-mode"), modes[modeIdx]);
-      sk.toast("驱动：" + modes[modeIdx]);
-    });
+  lockBtn.addEventListener("click", progressLock);
+  target.addEventListener("click", progressLock);
+  fireBtn.addEventListener("click", fire);
 
-    syncPwr("engines", pwr.engines);
-    syncHull();
-    sk.openPanel("#nav-panel");
+  $("#btn-mode").addEventListener("click", () => setMode((modeIdx + 1) % modes.length));
+  $("#btn-nav").addEventListener("click", () => {
+    $("#nav-slate").classList.toggle("open");
+  });
+  $("#slate-close").addEventListener("click", () => $("#nav-slate").classList.remove("open"));
+  $("#slate-mode-btn").addEventListener("click", () => setMode((modeIdx + 1) % modes.length));
+
+  $("#btn-help").addEventListener("click", () => {
+    const h = $("#help");
+    if (h.hasAttribute("hidden")) h.removeAttribute("hidden");
+    else h.setAttribute("hidden", "");
+  });
+
+  /* Drag look */
+  let dragging = false, lx = 0, ly = 0;
+  const vp = $("#viewport");
+  function onDown(e) {
+    if (e.target.closest(".hit")) return;
+    dragging = true;
+    const t = e.touches ? e.touches[0] : e;
+    lx = t.clientX; ly = t.clientY;
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const t = e.touches ? e.touches[0] : e;
+    lookX = Math.max(-18, Math.min(18, lookX + (t.clientX - lx) * 0.08));
+    lookY = Math.max(-12, Math.min(12, lookY + (t.clientY - ly) * 0.08));
+    lx = t.clientX; ly = t.clientY;
+    world.style.transform = "translate(" + lookX + "px," + lookY + "px)";
+  }
+  function onUp() { dragging = false; }
+  vp.addEventListener("pointerdown", onDown);
+  vp.addEventListener("pointermove", onMove);
+  vp.addEventListener("pointerup", onUp);
+  vp.addEventListener("pointercancel", onUp);
+
+  function tick(now) {
+    if (now > vitalsUntil) vitals.classList.add("dim");
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  syncPwr();
+  syncHull();
+  setLock(false);
+  showVitals(4000);
+})();
   </script>
 </body>
 </html>
