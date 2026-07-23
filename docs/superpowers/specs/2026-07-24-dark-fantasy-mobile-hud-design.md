@@ -1,7 +1,7 @@
 # 02 Dark Fantasy — 竖屏触控魂类 HUD 设计
 
 日期: 2026-07-24  
-状态: 已落地；竖屏通用思路见 [`mobile-portrait-first.md`](../../research/synthesis/mobile-portrait-first.md)；02 案例见 [`dark-fantasy-mobile-hud.md`](../../research/synthesis/dark-fantasy-mobile-hud.md)
+状态: 已落地；竖屏结构遵循 [`mobile-portrait-first.md`](../../research/synthesis/mobile-portrait-first.md)
 
 ## 目标
 

@@ -1,9 +1,8 @@
 # 移动端竖屏优先 — 通用 HUD 思路
 
 > 本仓库**所有风格**的默认交付：竖屏游戏 UI。桌面浏览器仅作预览壳。  
-> 本文 = **硬性准则** + **从 01/02 可玩场景迭代沉淀的通用落地思路**。  
-> 游戏感 vs 网页见 [`game-feel-vs-web.md`](./game-feel-vs-web.md)。  
-> Style 02 案例附录见 [`dark-fantasy-mobile-hud.md`](./dark-fantasy-mobile-hud.md)。
+> 本文是**独立的跨风格方法论**（硬性准则 + 竖屏 HUD 落地思路），不依附任一风格附录。  
+> 相关：[`game-feel-vs-web.md`](./game-feel-vs-web.md)。
 
 日期: 2026-07-24
 
@@ -172,11 +171,7 @@
 - 图标用 `<img>`（或等价）+ `aria-label`；键面避免残留可见字
 - 按下反馈：`scale` + 材质态变化，时长按风格 Spec（魂系偏慢，赛博可更快）
 - 新场景 / 大改默认交付：**9:20 + 触控 + 中文 + 本分层**
-
-参考实现：
-
-- Style 01：`demo/scenes/01-cyberpunk-hud/`（`layout-9x20.css` + 触控层）
-- Style 02：`demo/scenes/02-dark-fantasy/`（分层 + 生成图标案例）
+- 各风格用自有 `demo/scenes/<style>/` 落实本文；材质与动效跟该风格 Spec，结构跟本文
 
 ---
 

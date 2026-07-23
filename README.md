@@ -4,8 +4,7 @@
 
 **交付目标：移动端竖屏（默认 9:20）+ 触控操作；玩家可见 UI 文案一律中文。** 桌面仅作预览。
 
-通用 HUD 思路（分层、图标主键、避网页感）：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。  
-Style 02 案例附录：[`research/synthesis/dark-fantasy-mobile-hud.md`](research/synthesis/dark-fantasy-mobile-hud.md)。
+通用 HUD 思路：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
 
 ## 核心原则
 
@@ -50,7 +49,7 @@ Style 02 案例附录：[`research/synthesis/dark-fantasy-mobile-hud.md`](resear
 | # | 风格 | 适合的游戏类型 | 本轮主场景 |
 |---|------|----------------|------------|
 | 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `01-cyberpunk-hud/`（9:20 触控） |
-| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控）· [案例](research/synthesis/dark-fantasy-mobile-hud.md) |
+| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控） |
 | 03 | Sci-Fi Space | 太空模拟 | `bridge-holo.html` |
 | 04 | Pixel Retro | 2D 像素 RPG/平台 | `battle-command.html` |
 | 05 | Hand-drawn | 叙事动作 / Roguelike | `boon-select.html` |

@@ -21,7 +21,6 @@
 **本风格推荐场景包**
 - 主场景:`demo/scenes/02-dark-fantasy/index.html`（9:20 竖屏触控魂类 HUD：篝火休息 / 锁定攻击 / 露滴 / 翻滚）
 - 竖屏通用思路:`research/synthesis/mobile-portrait-first.md`
-- 本风格案例附录:`research/synthesis/dark-fantasy-mobile-hud.md`
 - 扩展:篝火菜单、装备对比石板
 
 ## 3. 视觉关键词
