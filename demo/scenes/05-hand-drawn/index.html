@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hand-drawn — Boon Select</title>
+  <title>手绘风 — 恩赐选择</title>
   <link rel="stylesheet" href="../../lib/components.css" />
   <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/hand-drawn.css" />
@@ -42,45 +42,45 @@
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
       <div class="title-overlay">
-        <h1 class="title">Choose Your Boon</h1>
-        <p class="subtitle">The gods offer three paths — pick one, then claim the next blessing.</p>
+        <h1 class="title">选择你的恩赐</h1>
+        <p class="subtitle">诸神提供三条道路 — 择一，再领取下一份祝福。</p>
       </div>
 
       <div class="boon-row" id="boon-nodes">
-        <button type="button" class="boon-card" data-boon="strike" data-next="Your blade thirsts — +15% attack speed on dash strikes.">
+        <button type="button" class="boon-card" data-boon="strike" data-next="你的利刃渴求鲜血 — 冲刺斩击攻速 +15%。">
           <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
-          <h3>Strike of Hermes</h3>
-          <p>Dash attacks deal bonus damage and leave ink trails.</p>
+          <h3>赫尔墨斯之击</h3>
+          <p>冲刺攻击造成额外伤害并留下墨迹轨迹。</p>
         </button>
-        <button type="button" class="boon-card selected" data-boon="ward" data-next="Aegis blooms — blocking restores 8 HP per perfect parry.">
+        <button type="button" class="boon-card selected" data-boon="ward" data-next="神盾绽放 — 完美格挡每次恢复 8 生命。">
           <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
-          <h3>Aegis Ward</h3>
-          <p>Perfect blocks heal and stagger nearby foes.</p>
+          <h3>神盾守护</h3>
+          <p>完美格挡治疗并击退附近敌人。</p>
         </button>
-        <button type="button" class="boon-card" data-boon="flux" data-next="Chaos surge — special cooldown −20%, random element each cast.">
+        <button type="button" class="boon-card" data-boon="flux" data-next="混沌涌动 — 特技冷却 −20%，每次施放随机元素。">
           <img src="../../assets/_shared/rpg-icons/fire.png" alt="" />
-          <h3>Flux Ember</h3>
-          <p>Specials rotate elements and refund mana on kill.</p>
+          <h3>混沌余烬</h3>
+          <p>特技轮换元素，击杀返还魔力。</p>
         </button>
       </div>
 
       <div class="action-bar">
         <button type="button" class="btn btn-primary" id="btn-confirm">
-          <img src="../../assets/_shared/kenney/icons/checkmark.png" alt="" style="width:18px;height:18px" /> CONFIRM BOON
+          <img src="../../assets/_shared/kenney/icons/checkmark.png" alt="" style="width:18px;height:18px" /> 确认恩赐
         </button>
         <button type="button" class="btn" id="btn-reroll">
-          <img src="../../assets/_shared/kenney/icons/gear.png" alt="" style="width:18px;height:18px" /> REROLL OFFER
+          <img src="../../assets/_shared/kenney/icons/gear.png" alt="" style="width:18px;height:18px" /> 重新抽取
         </button>
-        <span class="badge" id="pick-label">Selected: Aegis Ward</span>
+        <span class="badge" id="pick-label">已选：神盾守护</span>
       </div>
 
       <div id="boon-result" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">Next Boon · Epilogue</div>
+        <div class="panel-title">下一恩赐 · 尾声</div>
         <div class="panel-body" id="boon-text">—</div>
-        <button type="button" class="btn btn-success" id="btn-continue" style="margin-top:12px">CONTINUE RUN</button>
+        <button type="button" class="btn btn-success" id="btn-continue" style="margin-top:12px">继续征程</button>
       </div>
 
-      <p class="hint">Pick a card · confirm · read next boon · reroll or continue</p>
+      <p class="hint">选择卡片 · 确认 · 阅读下一恩赐 · 重新抽取或继续</p>
     </div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
@@ -88,9 +88,9 @@
     const sk = SceneKit;
     let selected = sk.$(".boon-card.selected");
     const rerollPool = [
-      { icon: "potion.png", name: "Nectar Sip", desc: "Potions heal over time.", next: "Vitality drip — regen 2 HP/s for 8s after potion." },
-      { icon: "bow.png", name: "Artemis Reach", desc: "Ranged crits pierce one foe.", next: "Piercing shot — crits chain to a second target at 50% dmg." },
-      { icon: "key.png", name: "Skeleton Key", desc: "Unlock hidden chambers.", next: "Secret paths revealed on the map for this biome." },
+      { icon: "potion.png", name: "花蜜啜饮", desc: "药水持续恢复生命。", next: "活力滴注 — 使用药水后 8 秒内每秒恢复 2 生命。" },
+      { icon: "bow.png", name: "阿尔忒弥斯之触", desc: "远程暴击穿透一名敌人。", next: "穿透射击 — 暴击以 50% 伤害连锁第二名目标。" },
+      { icon: "key.png", name: "万能钥匙", desc: "解锁隐藏密室。", next: "本区域地图显示秘密通道。" },
     ];
 
     sk.$all(".boon-card").forEach((card) => {
@@ -98,19 +98,19 @@
         sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
         card.classList.add("selected");
         selected = card;
-        sk.setText(sk.$("#pick-label"), "Selected: " + card.querySelector("h3").textContent);
+        sk.setText(sk.$("#pick-label"), "已选：" + card.querySelector("h3").textContent);
         sk.pulse(card);
       });
     });
 
     sk.on(sk.$("#btn-confirm"), "click", () => {
       if (!selected) {
-        sk.toast("Pick a boon first", "warning");
+        sk.toast("请先选择恩赐", "warning");
         return;
       }
       sk.setText(sk.$("#boon-text"), selected.dataset.next);
       sk.openPanel("#boon-result");
-      sk.toast("Boon claimed: " + selected.dataset.boon, "success");
+      sk.toast("恩赐已领取：" + selected.dataset.boon, "success");
       sk.pulse(selected);
     });
 
@@ -127,14 +127,14 @@
       sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
       cards[1].classList.add("selected");
       selected = cards[1];
-      sk.setText(sk.$("#pick-label"), "Selected: " + selected.querySelector("h3").textContent);
+      sk.setText(sk.$("#pick-label"), "已选：" + selected.querySelector("h3").textContent);
       sk.closePanel("#boon-result");
-      sk.toast("New boons offered", "warning");
+      sk.toast("已刷新恩赐选项", "warning");
     });
 
     sk.on(sk.$("#btn-continue"), "click", () => {
       sk.closePanel("#boon-result");
-      sk.toast("Entering next chamber…", "success");
+      sk.toast("进入下一密室…", "success");
     });
   </script>
 </body>

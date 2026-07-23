@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Synthwave Neon — Title</title>
+  <title>合成波霓虹 — 标题</title>
   <link rel="stylesheet" href="../../lib/components.css" />
   <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/synthwave-neon.css" />
@@ -36,70 +36,71 @@
     <div class="game-hud">
       <div class="title-block">
         <h1 class="logo">
-          <img src="../../assets/_shared/kenney/icons/star.png" alt="" />NEON DRIFT
+          <img src="../../assets/_shared/kenney/icons/star.png" alt="" />霓虹漂移
         </h1>
         <div id="loading-bar-wrap">
           <div class="progress progress-linear" style="height:12px">
             <div id="title-load-bar" class="progress-fill" style="width:0%;background:var(--accent-2)"></div>
           </div>
-          <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">INSERT COIN</span></div>
+          <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">投币开始</span></div>
         </div>
       </div>
 
       <div class="hud-anchor-bc menu">
-        <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">START</button>
-        <button type="button" class="btn menu-item-large" id="btn-scores">HIGH SCORES</button>
-        <button type="button" class="btn menu-item-large" id="btn-options">OPTIONS</button>
-        <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">QUIT</button>
+        <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">开始</button>
+        <button type="button" class="btn menu-item-large" id="btn-scores">高分榜</button>
+        <button type="button" class="btn menu-item-large" id="btn-options">选项</button>
+        <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">退出</button>
       </div>
 
       <div class="hud-anchor-tr side-stack">
         <div id="scores-panel" class="panel frame-brackets" data-sk-panel hidden>
-          <div class="panel-title">HIGH SCORES</div>
+          <div class="panel-title">高分榜</div>
           <div class="panel-body">
             <ul class="score-list">
               <li class="top"><span>1. VAPOR_KID</span><span>984,200</span></li>
               <li><span>2. RETRO_FOX</span><span>812,050</span></li>
               <li><span>3. SYNTH_RON</span><span>640,880</span></li>
-              <li><span>4. YOU</span><span id="your-score">000,000</span></li>
+              <li><span>4. 你</span><span id="your-score">000,000</span></li>
             </ul>
-            <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">Close</button>
+            <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">关闭</button>
           </div>
         </div>
 
         <div id="options-panel" class="panel frame-brackets" data-sk-panel hidden>
-          <div class="panel-title">OPTIONS</div>
+          <div class="panel-title">选项</div>
           <div class="panel-body">
             <div class="vol-row">
-              <span>Master Volume</span>
+              <span>主音量</span>
               <button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button>
               <span id="vol-master" class="badge">70</span>
               <button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button>
             </div>
             <div class="vol-row">
-              <span>Music Volume</span>
+              <span>音乐音量</span>
               <button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button>
               <span id="vol-music" class="badge">80</span>
               <button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button>
             </div>
             <div class="vol-row">
-              <span>SFX Volume</span>
+              <span>音效音量</span>
               <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button>
               <span id="vol-sfx" class="badge">90</span>
               <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button>
             </div>
-            <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">Close</button>
+            <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">关闭</button>
           </div>
         </div>
       </div>
 
-      <p class="hint">START fills bar · HIGH SCORES · OPTIONS volume · QUIT · Esc closes</p>
+      <p class="hint">开始填充进度条 · 高分榜 · 选项音量 · 退出 · Esc 关闭</p>
     </div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
     const vol = { master: 70, music: 80, sfx: 90 };
+    const volLabels = { master: "主音量", music: "音乐音量", sfx: "音效音量" };
 
     function syncVol(key) {
       sk.setText(sk.$("#vol-" + key), String(vol[key]));
@@ -108,7 +109,7 @@
     sk.on(sk.$("#btn-start"), "click", () => {
       const wrap = sk.$("#loading-bar-wrap");
       wrap.classList.add("visible");
-      sk.setText(sk.$("#load-label"), "LOADING…");
+      sk.setText(sk.$("#load-label"), "加载中…");
       let pct = 0;
       const bar = sk.$("#title-load-bar");
       const timer = setInterval(() => {
@@ -117,8 +118,8 @@
           pct = 100;
           clearInterval(timer);
           sk.setFill(bar, pct);
-          sk.setText(sk.$("#load-label"), "READY");
-          sk.toast("Stage 1 — Midnight Highway", "success");
+          sk.setText(sk.$("#load-label"), "就绪");
+          sk.toast("第一关 — 午夜公路", "success");
           sk.pulse(wrap);
         } else {
           sk.setFill(bar, pct);
@@ -144,15 +145,15 @@
         const key = btn.dataset.vol;
         vol[key] = Math.max(0, Math.min(100, vol[key] + parseInt(btn.dataset.delta, 10)));
         syncVol(key);
-        sk.toast(key.toUpperCase() + " " + vol[key]);
+        sk.toast(volLabels[key] + " " + vol[key]);
       });
     });
 
     sk.on(sk.$("#btn-quit"), "click", () => {
       sk.modal({
-        title: "Quit to desktop?",
-        body: "Your high score is saved locally.",
-        onConfirm: () => sk.toast("See you on the grid!", "warning"),
+        title: "退出到桌面？",
+        body: "你的高分已本地保存。",
+        onConfirm: () => sk.toast("网格上再见！", "warning"),
       });
     });
 

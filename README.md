@@ -2,7 +2,7 @@
 
 10 套游戏 UI 风格：每套 = Spec 文档 + CSS Token + **该类型游戏**的参考场景。
 
-**交付目标：移动端竖屏（默认 9:20）+ 触控操作。** 桌面仅作预览。准则见 [`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
+**交付目标：移动端竖屏（默认 9:20）+ 触控操作；玩家可见 UI 文案一律中文。** 桌面仅作预览。准则见 [`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
 
 ## 核心原则
 

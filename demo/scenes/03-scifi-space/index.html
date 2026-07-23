@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sci-Fi Space — Bridge Holo</title>
+  <title>科幻太空 — 舰桥全息</title>
   <link rel="stylesheet" href="../../lib/components.css" />
   <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/scifi-space.css" />
@@ -34,12 +34,12 @@
     <div class="game-hud">
       <div class="playfield-target">
         <div class="reticle" id="reticle">
-          <img src="../../assets/_shared/rpg-icons/gun.png" alt="target" />
+          <img src="../../assets/_shared/rpg-icons/gun.png" alt="目标" />
         </div>
         <button type="button" class="btn btn-primary" id="btn-lock">
-          <img class="icon" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> TARGET LOCK
+          <img class="icon" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> 锁定目标
         </button>
-        <span class="badge" id="target-badge">TARGET · 12.4 km · UNLOCKED</span>
+        <span class="badge" id="target-badge">目标 · 12.4 公里 · 未锁定</span>
         <div class="ring" style="width:72px;height:72px">
           <svg viewBox="0 0 36 36">
             <circle class="ring-track" cx="18" cy="18" r="15.5" />
@@ -52,12 +52,12 @@
       <div class="hud-anchor-tl sys-left">
         <div class="panel frame-brackets">
           <div class="panel-title">
-            <span>PWR DIST</span>
+            <span>能量分配</span>
             <img class="icon" src="../../assets/_shared/kenney/icons/power.png" alt="" />
           </div>
           <div class="panel-body" id="pwr-panel">
             <div class="pwr-row" data-sys="engines">
-              <label>ENGINES</label>
+              <label>引擎</label>
               <input type="range" min="0" max="100" value="42" />
               <span class="pwr-val">42</span>
               <div class="pwr-btns">
@@ -66,7 +66,7 @@
               </div>
             </div>
             <div class="pwr-row" data-sys="shields">
-              <label>SHIELDS</label>
+              <label>护盾</label>
               <input type="range" min="0" max="100" value="33" />
               <span class="pwr-val">33</span>
               <div class="pwr-btns">
@@ -75,7 +75,7 @@
               </div>
             </div>
             <div class="pwr-row" data-sys="weapons">
-              <label>WEAPONS</label>
+              <label>武器</label>
               <input type="range" min="0" max="100" value="25" />
               <span class="pwr-val">25</span>
               <div class="pwr-btns">
@@ -83,36 +83,36 @@
                 <button type="button" class="btn btn-ghost" data-delta="5">+</button>
               </div>
             </div>
-            <div class="stat-row"><span class="stat-key">TOTAL</span><span class="stat-val" id="pwr-total">100%</span></div>
+            <div class="stat-row"><span class="stat-key">总计</span><span class="stat-val" id="pwr-total">100%</span></div>
           </div>
         </div>
         <div class="hud-bar" style="margin-top:8px">
-          <span class="hud-bar-label">HULL</span>
+          <span class="hud-bar-label">船体</span>
           <div class="hud-bar-track"><div id="hull-fill" class="hud-bar-fill success" style="width:88%"></div></div>
           <span id="hull-val" class="hud-bar-value">88%</span>
         </div>
         <button type="button" class="btn btn-danger" id="btn-hull-dmg" style="margin-top:8px">
-          <img class="icon" src="../../assets/_shared/rpg-icons/fire.png" alt="" /> SIM HULL HIT
+          <img class="icon" src="../../assets/_shared/rpg-icons/fire.png" alt="" /> 模拟船体受击
         </button>
       </div>
 
       <div class="hud-anchor-tr sys-right">
         <button type="button" class="btn btn-secondary" id="btn-nav-toggle" style="width:100%;margin-bottom:8px">
-          <img class="icon" src="../../assets/_shared/kenney/icons/information.png" alt="" /> TOGGLE NAV
+          <img class="icon" src="../../assets/_shared/kenney/icons/information.png" alt="" /> 切换导航
         </button>
         <div id="nav-panel" class="panel frame-brackets" data-sk-panel>
-          <div class="panel-title">NAV · BRIDGE</div>
+          <div class="panel-title">导航 · 舰桥</div>
           <div class="panel-body">
-            <div class="stat-row"><span class="stat-key">SYS</span><span class="stat-val">LHS 3447</span></div>
-            <div class="stat-row"><span class="stat-key">MODE</span><span class="stat-val" id="nav-mode">SUPERCRUISE</span></div>
-            <div class="stat-row"><span class="stat-key">FUEL</span><span class="stat-val">16.2 T</span></div>
-            <button type="button" class="btn" id="btn-mode" style="margin-top:10px;width:100%">CYCLE DRIVE MODE</button>
+            <div class="stat-row"><span class="stat-key">系统</span><span class="stat-val">LHS 3447</span></div>
+            <div class="stat-row"><span class="stat-key">模式</span><span class="stat-val" id="nav-mode">超巡航</span></div>
+            <div class="stat-row"><span class="stat-key">燃料</span><span class="stat-val">16.2 T</span></div>
+            <button type="button" class="btn" id="btn-mode" style="margin-top:10px;width:100%">切换驱动模式</button>
           </div>
         </div>
-        <div class="alert" style="margin-top:12px">COMMS · ATC CLEARANCE GRANTED</div>
+        <div class="alert" style="margin-top:12px">通讯 · 空管许可已通过</div>
       </div>
 
-      <p class="hint">Adjust power · lock target · toggle nav · sim hull damage · Esc closes nav</p>
+      <p class="hint">调整能量 · 锁定目标 · 切换导航 · 模拟船体损伤 · Esc 关闭导航</p>
     </div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
@@ -120,7 +120,7 @@
     const sk = SceneKit;
     const pwr = { engines: 42, shields: 33, weapons: 25 };
     let hull = 88, locked = false, lockPct = 0, navOpen = true;
-    const modes = ["SUPERCRUISE", "CRUISE", "MANUAL"];
+    const modes = ["超巡航", "巡航", "手动"];
 
     function flashVignette() {
       const v = document.getElementById("vignette");
@@ -169,7 +169,7 @@
       syncHull();
       sk.pulse(sk.$("#hull-fill"));
       flashVignette();
-      sk.toast(hull <= 0 ? "HULL BREACH" : "Hull −12%", hull <= 25 ? "danger" : "warning");
+      sk.toast(hull <= 0 ? "船体破裂" : "船体 −12%", hull <= 25 ? "danger" : "warning");
     });
 
     sk.on(sk.$("#btn-lock"), "click", () => {
@@ -177,8 +177,8 @@
         locked = false;
         lockPct = 0;
         sk.$("#reticle").classList.remove("locked");
-        sk.setText(sk.$("#target-badge"), "TARGET · 12.4 km · UNLOCKED");
-        sk.toast("Lock released");
+        sk.setText(sk.$("#target-badge"), "目标 · 12.4 公里 · 未锁定");
+        sk.toast("锁定已解除");
       } else {
         lockPct = Math.min(100, lockPct + 25);
         sk.$("#lock-ring").setAttribute("stroke-dasharray", lockPct + " 100");
@@ -186,11 +186,11 @@
         if (lockPct >= 100) {
           locked = true;
           sk.$("#reticle").classList.add("locked");
-          sk.setText(sk.$("#target-badge"), "TARGET · LOCKED · FIRE READY");
-          sk.toast("Target locked", "success");
+          sk.setText(sk.$("#target-badge"), "目标 · 已锁定 · 可开火");
+          sk.toast("目标已锁定", "success");
           sk.pulse(sk.$("#reticle"));
         } else {
-          sk.toast("Acquiring lock… " + lockPct + "%");
+          sk.toast("正在锁定… " + lockPct + "%");
         }
       }
     });
@@ -199,14 +199,14 @@
       navOpen = !navOpen;
       if (navOpen) sk.openPanel("#nav-panel");
       else sk.closePanel("#nav-panel");
-      sk.toast(navOpen ? "Nav panel open" : "Nav panel hidden");
+      sk.toast(navOpen ? "导航面板已打开" : "导航面板已隐藏");
     });
 
     let modeIdx = 0;
     sk.on(sk.$("#btn-mode"), "click", () => {
       modeIdx = (modeIdx + 1) % modes.length;
       sk.setText(sk.$("#nav-mode"), modes[modeIdx]);
-      sk.toast("Drive: " + modes[modeIdx]);
+      sk.toast("驱动：" + modes[modeIdx]);
     });
 
     syncPwr("engines", pwr.engines);

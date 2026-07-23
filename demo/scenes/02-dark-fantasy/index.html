@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>02 Dark Fantasy — 竖屏魂类 HUD</title>
+  <title>02 黑暗奇幻 — 竖屏魂类 HUD</title>
   <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
@@ -15,7 +15,7 @@
         <img src="./art/bonfire.png" alt="" draggable="false" />
       </div>
 
-      <div class="enemy hit" id="enemy" data-type="enemy" data-name="RUIN WARDEN">
+      <div class="enemy hit" id="enemy" data-type="enemy" data-name="废墟守卫">
         <img class="body" src="./art/hollow.png" alt="" draggable="false" />
       </div>
 
@@ -26,47 +26,47 @@
 
     <div id="hud">
       <div class="place" id="place">
-        <div>LIMGRAVE · RUINS</div>
+        <div>宁姆格福 · 废墟</div>
         <div class="rest-hint">篝火近前 · 点按休息</div>
       </div>
 
       <div class="vitals" id="vitals">
         <div class="vital hp" id="hp-row">
-          <span class="lab">HP</span>
+          <span class="lab">生命</span>
           <div class="trk"><div class="fill" id="hp-fill"></div></div>
         </div>
         <div class="vital fp">
-          <span class="lab">FP</span>
+          <span class="lab">集中</span>
           <div class="trk"><div class="fill" id="fp-fill"></div></div>
         </div>
         <div class="vital st">
-          <span class="lab">ST</span>
+          <span class="lab">耐力</span>
           <div class="trk"><div class="fill" id="st-fill"></div></div>
         </div>
       </div>
 
-      <button type="button" class="estus-slot hit" id="btn-estus" aria-label="Estus">
+      <button type="button" class="estus-slot hit" id="btn-estus" aria-label="黄金种子露滴">
         <span class="n" id="estus-n">3</span>
-        <span>ESTUS</span>
+        <span>露滴</span>
       </button>
 
       <div class="prompt" id="prompt"></div>
       <div id="feed"></div>
 
       <div class="slate" id="slate">
-        <h2>Bonfire</h2>
-        <button type="button" id="slate-rest">Rest</button>
-        <button type="button" id="slate-leave">Leave</button>
+        <h2>篝火</h2>
+        <button type="button" id="slate-rest">休息</button>
+        <button type="button" id="slate-leave">离开</button>
       </div>
 
       <div class="touch-pad">
-        <button type="button" class="t-btn t-lock hit" id="btn-lock">LOCK</button>
-        <button type="button" class="t-btn t-use hit" id="btn-use">USE</button>
-        <button type="button" class="t-btn t-roll hit" id="btn-roll">ROLL</button>
-        <button type="button" class="t-btn t-attack hit" id="btn-attack">ATTACK</button>
+        <button type="button" class="t-btn t-lock hit" id="btn-lock">锁定</button>
+        <button type="button" class="t-btn t-use hit" id="btn-use">互动</button>
+        <button type="button" class="t-btn t-roll hit" id="btn-roll">翻滚</button>
+        <button type="button" class="t-btn t-attack hit" id="btn-attack">攻击</button>
       </div>
 
-      <div class="help" id="help">拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点 Estus 回血 · 靠近篝火休息</div>
+      <div class="help" id="help">拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点露滴回血 · 靠近篝火休息</div>
     </div>
   </div>
 
@@ -132,7 +132,7 @@
     showVitals();
     $("#hurt").classList.add("on");
     setTimeout(() => $("#hurt").classList.remove("on"), 280);
-    feed(state.hp <= 0 ? "YOU DIED" : "受伤");
+    feed(state.hp <= 0 ? "死去" : "受伤");
     if (state.hp <= 0) {
       setTimeout(() => {
         state.hp = Math.floor(state.hpMax * 0.4);
@@ -200,13 +200,13 @@
     if (!loot.hidden) {
       loot.hidden = true;
       state.estus = Math.min(state.estusMax, state.estus + 1);
-      feed("拾取 · Estus 碎片感");
+      feed("拾取 · 露滴残渣");
       sync();
       return;
     }
     if (state.enemyAlive) {
       state.lock = !state.lock;
-      feed(state.lock ? "锁定 · RUIN WARDEN" : "解除锁定");
+      feed(state.lock ? "锁定 · 废墟守卫" : "解除锁定");
       sync();
     }
   }
@@ -234,9 +234,9 @@
     const dx = Math.abs(state.lookX);
     const dy = Math.abs(state.lookY + 4);
     state.nearBonfire = dx < 14 && dy < 12;
-    if (state.nearBonfire && !state.slate) setPrompt("点按 USE · 篝火");
-    else if (!loot.hidden) setPrompt("点按 USE · 拾取");
-    else if (state.lock) setPrompt("锁定中 · ATTACK");
+    if (state.nearBonfire && !state.slate) setPrompt("点按「互动」· 篝火");
+    else if (!loot.hidden) setPrompt("点按「互动」· 拾取");
+    else if (state.lock) setPrompt("锁定中 · 点按攻击");
     else setPrompt("");
   }
 
@@ -281,7 +281,7 @@
     e.stopPropagation();
     if (!state.enemyAlive) return;
     state.lock = true;
-    feed("锁定 · RUIN WARDEN");
+    feed("锁定 · 废墟守卫");
     sync();
   });
   loot.addEventListener("pointerdown", (e) => {

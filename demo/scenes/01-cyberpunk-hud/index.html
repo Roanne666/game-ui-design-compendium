@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>01 Cyberpunk — Mobile 9:20 HUD</title>
+  <title>01 赛博朋克 — 竖屏 9:20 HUD</title>
   <link rel="stylesheet" href="hud.css" />
   <link rel="stylesheet" href="layout-9x20.css" />
 </head>
 <body data-dialect="neo">
-  <div class="dialect-bar hit" id="dialect-bar" title="Cycle with [ ]">
-    <span class="lab">DIALECT · 9:20</span>
-    <button type="button" data-d="neo" class="on">NEO</button>
-    <button type="button" data-d="matrix">MATRIX</button>
-    <button type="button" data-d="amber">AMBER</button>
-    <button type="button" data-d="noir">NOIR</button>
+  <div class="dialect-bar hit" id="dialect-bar" title="按 [ ] 切换方言">
+    <span class="lab">方言 · 9:20</span>
+    <button type="button" data-d="neo" class="on">新军</button>
+    <button type="button" data-d="matrix">矩阵</button>
+    <button type="button" data-d="amber">琥珀</button>
+    <button type="button" data-d="noir">霓虹</button>
   </div>
 
   <div id="viewport">
@@ -22,29 +22,29 @@
       <div id="code-rain" aria-hidden="true"></div>
       <div class="fog"></div>
 
-      <div class="entity hostile" data-id="guard" data-type="hostile" data-name="CORPO GUARD" data-dist="18m"
+      <div class="entity hostile" data-id="guard" data-type="hostile" data-name="企业卫兵" data-dist="18m"
            style="left:72%; top:68%">
-        <div class="tag">HOSTILE · CORPO GUARD · LVL12</div>
+        <div class="tag">敌对 · 企业卫兵 · 12级</div>
         <img class="body" src="./art/guard.png" alt="" draggable="false" />
       </div>
-      <div class="entity" data-id="civ" data-type="neutral" data-name="CIVILIAN" data-dist="12m"
+      <div class="entity" data-id="civ" data-type="neutral" data-name="平民" data-dist="12m"
            style="left:28%; top:70%">
-        <div class="tag">NEUTRAL · CIVILIAN</div>
+        <div class="tag">中立 · 平民</div>
         <img class="body" src="./art/civ.png" alt="" draggable="false" />
       </div>
-      <div class="entity loot" data-id="shard" data-type="loot" data-name="DATA SHARD" data-dist="4m"
+      <div class="entity loot" data-id="shard" data-type="loot" data-name="数据芯片" data-dist="4m"
            style="left:50%; top:74%">
-        <div class="tag">LOOT · DATA SHARD</div>
+        <div class="tag">拾取 · 数据芯片</div>
         <div class="body"></div>
       </div>
-      <div class="entity cam" data-id="cam" data-type="device" data-name="SEC CAM" data-dist="22m"
+      <div class="entity cam" data-id="cam" data-type="device" data-name="安保摄像头" data-dist="22m"
            style="left:78%; top:42%">
-        <div class="tag">DEVICE · SEC CAM · HACKABLE</div>
+        <div class="tag">设备 · 安保摄像头 · 可黑客</div>
         <div class="body"></div>
       </div>
-      <div class="entity door" data-id="door" data-type="door" data-name="AFTERLIFE DOOR" data-dist="6m"
+      <div class="entity door" data-id="door" data-type="door" data-name="来世门" data-dist="6m"
            style="left:18%; top:66%">
-        <div class="tag">DOOR · AFTERLIFE · LOCKED</div>
+        <div class="tag">门 · 来世 · 锁定</div>
         <div class="body"></div>
       </div>
     </div>
@@ -55,7 +55,7 @@
       <div class="crosshair" id="crosshair">
         <i class="h"></i><i class="h2"></i><i class="v"></i><i class="v2"></i>
       </div>
-      <div class="prompt" id="prompt"><span class="key" id="prompt-key">E</span><span id="prompt-text">INTERACT</span></div>
+      <div class="prompt" id="prompt"><span class="key" id="prompt-key">●</span><span id="prompt-text">互动</span></div>
 
       <div class="player-vitals">
         <div class="lvl">12</div>
@@ -64,9 +64,9 @@
             <div class="hp-trk"><div class="fill" id="hp-fill"></div></div>
             <span class="hp-num" id="hp-num">620</span>
           </div>
-          <div class="ram-row" id="ram-ticks" aria-label="RAM"></div>
+          <div class="ram-row" id="ram-ticks" aria-label="运算力"></div>
           <div class="xp-trk"><div class="fill" id="xp-fill"></div></div>
-          <div class="scan-rail off" id="scan-flag">SCAN OFF · [TAB]</div>
+          <div class="scan-rail off" id="scan-flag">扫描关</div>
         </div>
       </div>
 
@@ -80,93 +80,93 @@
         </div>
         <div class="nav-meta">
           <span id="clock">00:00:00</span>
-          <span class="district">WATSON</span>
+          <span class="district">沃森区</span>
         </div>
       </div>
 
       <div class="quest" id="quest">
-        <div class="q-title">PRIMARY JOB</div>
-        <div class="q-main" id="q-main">Meet fixer at Afterlife</div>
-        <div class="q-sub" id="q-sub">OBJ · Locate entrance · 240m</div>
+        <div class="q-title">主线委托</div>
+        <div class="q-main" id="q-main">在来世与中间人接头</div>
+        <div class="q-sub" id="q-sub">目标 · 寻找入口 · 240米</div>
       </div>
 
       <div class="stamina" id="stamina">
-        <span class="lab">STAMINA</span>
+        <span class="lab">耐力</span>
         <div class="trk"><div class="fill" id="st-fill"></div></div>
       </div>
 
       <div class="pockets">
-        <div class="pocket on hit" data-w="0"><span class="ico">1</span><span class="k">UNITY</span></div>
-        <div class="pocket hit" data-w="1"><span class="ico">2</span><span class="k">SATARA</span></div>
-        <div class="pocket hit" data-w="2"><span class="ico">3</span><span class="k">SATORI</span></div>
-        <div class="pocket dim"><span class="ico">+</span><span class="k">INJ</span></div>
+        <div class="pocket on hit" data-w="0"><span class="ico">1</span><span class="k">团结</span></div>
+        <div class="pocket hit" data-w="1"><span class="ico">2</span><span class="k">沙塔</span></div>
+        <div class="pocket hit" data-w="2"><span class="ico">3</span><span class="k">悟</span></div>
+        <div class="pocket dim"><span class="ico">+</span><span class="k">伤药</span></div>
       </div>
 
       <div class="weapon-hud">
-        <div class="stance" id="stance">STANDING</div>
-        <div class="wname" id="w-name">UNITY</div>
+        <div class="stance" id="stance">站立</div>
+        <div class="wname" id="w-name">团结</div>
         <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
       </div>
 
       <div class="ram" id="ram-menu">
-        <div class="title">QUICKHACK · TARGET</div>
-        <button type="button" data-hack="ping" data-cost="1">Ping <span class="cost">1</span></button>
-        <button type="button" data-hack="distract" data-cost="2">Distract <span class="cost">2</span></button>
-        <button type="button" data-hack="breach" data-cost="3">Breach <span class="cost">3</span></button>
-        <button type="button" data-hack="suicide" data-cost="4">System Reset <span class="cost">4</span></button>
+        <div class="title">快速黑客 · 目标</div>
+        <button type="button" data-hack="ping" data-cost="1">侦测 <span class="cost">1</span></button>
+        <button type="button" data-hack="distract" data-cost="2">干扰 <span class="cost">2</span></button>
+        <button type="button" data-hack="breach" data-cost="3">突破 <span class="cost">3</span></button>
+        <button type="button" data-hack="suicide" data-cost="4">系统重置 <span class="cost">4</span></button>
       </div>
 
       <div id="feed"></div>
 
       <div class="touch-pad" id="touch-pad">
-        <button type="button" class="t-btn t-sprint hit" id="btn-sprint" aria-label="Sprint">SPRINT</button>
-        <button type="button" class="t-btn t-scan hit" id="btn-scan" aria-label="Scan">SCAN</button>
-        <button type="button" class="t-btn t-reload hit" id="btn-reload" aria-label="Reload">RELOAD</button>
-        <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="Journal">LOG</button>
-        <button type="button" class="t-btn t-action hit" id="btn-action" aria-label="Action">USE</button>
-        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="Fire">FIRE</button>
+        <button type="button" class="t-btn t-sprint hit" id="btn-sprint" aria-label="冲刺">冲刺</button>
+        <button type="button" class="t-btn t-scan hit" id="btn-scan" aria-label="扫描">扫描</button>
+        <button type="button" class="t-btn t-reload hit" id="btn-reload" aria-label="换弹">换弹</button>
+        <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="日志">日志</button>
+        <button type="button" class="t-btn t-action hit" id="btn-action" aria-label="互动">互动</button>
+        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火">开火</button>
       </div>
 
-      <div class="help" id="help" hidden>拖动环视 · 点目标 · 右下开火 · USE 交互/黑客 · 按住冲刺 · SCAN / RELOAD / LOG</div>
+      <div class="help" id="help" hidden>拖动环视 · 点目标 · 右下开火 · 互动/黑客 · 按住冲刺 · 扫描 / 换弹 / 日志</div>
     </div>
 
     <div id="journal">
-      <h2>JOURNAL // FIXER NET</h2>
+      <h2>日志 // 中间人网</h2>
       <div class="job active" data-job="0">
-        <div class="t">The Afterlife Handshake</div>
-        <div class="d">Meet Rogue's contact. Bring the shard. Don't draw heat.</div>
+        <div class="t">来世握手</div>
+        <div class="d">与萝格的联系人接头。带上芯片。别惹热度。</div>
       </div>
       <div class="job" data-job="1">
-        <div class="t">Ghost in the Cam</div>
-        <div class="d">Breach the Watson alley cam before corpo backup arrives.</div>
+        <div class="t">镜头幽灵</div>
+        <div class="d">在企业增援到达前，突破沃森巷摄像头。</div>
       </div>
       <div class="job" data-job="2">
-        <div class="t">Flatline Optional</div>
-        <div class="d">Neutralize the corpo guard — or leave him breathing.</div>
+        <div class="t">可选：放倒卫兵</div>
+        <div class="d">解决企业卫兵——也可以让他继续喘气。</div>
       </div>
-      <p style="font-size:12px;letter-spacing:.12em;color:rgba(242,242,242,.42);margin-top:16px">[J] / [ESC] CLOSE</p>
+      <p style="font-size:12px;letter-spacing:.12em;color:rgba(242,242,242,.42);margin-top:16px">点日志关闭 · 桌面 Esc</p>
     </div>
   </div>
 
   <script>
 (function () {
   const weapons = [
-    { name: "UNITY", cur: 24, res: 120, mag: 24, dmg: 35 },
-    { name: "DB-2 SATARA", cur: 6, res: 24, mag: 6, dmg: 90 },
-    { name: "SATORI", cur: 1, res: 1, mag: 1, dmg: 120, melee: true },
+    { name: "团结", cur: 24, res: 120, mag: 24, dmg: 35 },
+    { name: "DB-2 沙塔拉", cur: 6, res: 24, mag: 6, dmg: 90 },
+    { name: "悟", cur: 1, res: 1, mag: 1, dmg: 120, melee: true },
   ];
   const jobs = [
-    { main: "Meet fixer at Afterlife", sub: "OBJ · Locate entrance · 240m" },
-    { main: "Ghost the SEC CAM", sub: "OBJ · Breach device · 22m" },
-    { main: "Optional: Flatline guard", sub: "OBJ · Hostile · 18m" },
+    { main: "在来世与中间人接头", sub: "目标 · 寻找入口 · 240米" },
+    { main: "幽灵掉安保摄像头", sub: "目标 · 突破设备 · 22米" },
+    { main: "可选：放倒卫兵", sub: "目标 · 敌对 · 18米" },
   ];
 
   const dialects = ["neo", "matrix", "amber", "noir"];
   const dialectLabel = {
-    neo: "NEO MILITARISM",
-    matrix: "MATRIX TERMINAL",
-    amber: "AMBER AUGMENT",
-    noir: "NEON NOIR",
+    neo: "新军国主义",
+    matrix: "矩阵终端",
+    amber: "琥珀义体",
+    noir: "霓虹黑色电影",
   };
 
   const state = {
@@ -199,7 +199,7 @@
     hud.classList.remove("dialect-flash");
     void hud.offsetWidth;
     hud.classList.add("dialect-flash");
-    feed("DIALECT · " + dialectLabel[id]);
+    feed("方言 · " + dialectLabel[id]);
   }
 
   function feed(msg) {
@@ -233,14 +233,14 @@
       s.classList.toggle("on", i === state.w);
     });
     document.body.classList.toggle("scan-on", state.scan);
-    $("#scan-flag").textContent = state.scan ? "SCAN ON" : "SCAN OFF";
+    $("#scan-flag").textContent = state.scan ? "扫描开" : "扫描关";
     $("#scan-flag").classList.toggle("on", state.scan);
     $("#scan-flag").classList.toggle("off", !state.scan);
     $("#crosshair").classList.toggle("hack", !!state.lock);
     $("#ram-menu").classList.toggle("show", !!state.lock);
     $("#journal").classList.toggle("open", state.journal);
     $("#stamina").classList.toggle("show", state.sprint || state.st < 99);
-    $("#stance").textContent = state.sprint ? "SPRINTING" : "STANDING";
+    $("#stance").textContent = state.sprint ? "冲刺中" : "站立";
   }
 
   function setFocus(ent) {
@@ -249,18 +249,18 @@
     const action = $("#btn-action");
     if (!ent) {
       prompt.classList.remove("show");
-      action.textContent = "USE";
+      action.textContent = "互动";
       action.disabled = true;
       return;
     }
     const type = ent.dataset.type;
     let key = "●", text = "点选 · " + ent.dataset.name;
-    let act = "USE";
-    if (type === "hostile") { key = "◆"; text = "黑客 · " + ent.dataset.name; act = "HACK"; }
-    if (type === "loot") { key = "●"; text = "拾取 · " + ent.dataset.name; act = "PICK"; }
-    if (type === "door") { key = "●"; text = state.doorOpen ? "进入 · AFTERLIFE" : "开门 · 需要芯片"; act = "OPEN"; }
-    if (type === "device") { key = "◆"; text = "入侵 · " + ent.dataset.name; act = "HACK"; }
-    if (type === "neutral") { key = "○"; text = "平民 · " + ent.dataset.name; act = "LOOK"; }
+    let act = "互动";
+    if (type === "hostile") { key = "◆"; text = "黑客 · " + ent.dataset.name; act = "黑客"; }
+    if (type === "loot") { key = "●"; text = "拾取 · " + ent.dataset.name; act = "拾取"; }
+    if (type === "door") { key = "●"; text = state.doorOpen ? "进入 · 来世" : "开门 · 需要芯片"; act = "开门"; }
+    if (type === "device") { key = "◆"; text = "入侵 · " + ent.dataset.name; act = "黑客"; }
+    if (type === "neutral") { key = "○"; text = "平民 · " + ent.dataset.name; act = "观察"; }
     $("#prompt-key").textContent = key;
     $("#prompt-text").textContent = text;
     prompt.classList.add("show");
@@ -291,7 +291,7 @@
     state.hp = Math.max(0, state.hp - dmg);
     $("#hurt").classList.add("on");
     setTimeout(() => $("#hurt").classList.remove("on"), 280);
-    feed(state.hp <= 0 ? "FLATLINED // CRITICAL" : "DAMAGE −" + Math.round(amount));
+    feed(state.hp <= 0 ? "脑死亡 // 危急" : "损伤 −" + Math.round(amount));
     sync();
   }
 
@@ -302,7 +302,7 @@
     const take = Math.min(need, w.res);
     w.cur += take;
     w.res -= take;
-    feed(take ? "RELOADED · " + w.name : "NO RESERVE AMMO");
+    feed(take ? "已换弹 · " + w.name : "备弹不足");
     sync();
   }
 
@@ -314,22 +314,22 @@
       state.shard = true;
       ent.hidden = true;
       setFocus(null);
-      feed("ACQUIRED · DATA SHARD");
-      $("#q-sub").textContent = "OBJ · Door unlocked with shard · 6m";
+      feed("获得 · 数据芯片");
+      $("#q-sub").textContent = "目标 · 芯片已解锁门 · 6米";
     } else if (type === "door") {
       if (state.shard || state.doorOpen) {
         state.doorOpen = true;
-        feed("DOOR OPEN · AFTERLIFE");
-        $("#q-main").textContent = "Enter Afterlife";
-        $("#q-sub").textContent = "OBJ · Complete · Handshake ready";
+        feed("门已开 · 来世");
+        $("#q-main").textContent = "进入来世";
+        $("#q-sub").textContent = "目标 · 完成 · 握手就绪";
       } else {
-        feed("LOCKED · NEED DATA SHARD");
+        feed("锁定 · 需要数据芯片");
         hurt(15);
       }
     } else if (type === "hostile" || type === "device") {
       lockEntity(ent);
     } else if (type === "neutral") {
-      feed("NO HOSTILES · CIVILIAN");
+      feed("无威胁 · 平民");
     }
   }
 
@@ -343,35 +343,42 @@
     state.lock = ent;
     ent.classList.add("locked");
     if (!ent.dataset.hp) ent.dataset.hp = ent.dataset.type === "hostile" ? "100" : "40";
-    feed("LOCK · " + ent.dataset.name);
+    feed("锁定 · " + ent.dataset.name);
     sync();
   }
 
+  const hackName = {
+    ping: "侦测",
+    distract: "干扰",
+    breach: "突破",
+    suicide: "系统重置",
+  };
+
   function hack(id, cost) {
     if (!state.lock) return;
-    if (state.ram < cost) { feed("INSUFFICIENT RAM"); return; }
+    if (state.ram < cost) { feed("运算力不足"); return; }
     state.ram -= cost;
     const target = state.lock;
-    feed("HACK · " + id.toUpperCase() + " · " + target.dataset.name);
+    feed("黑客 · " + (hackName[id] || id) + " · " + target.dataset.name);
     if (id === "distract" && target.dataset.type === "hostile") {
-      feed("GUARD DISTRACTED");
+      feed("卫兵已被干扰");
     }
     if (id === "breach" && target.dataset.type === "device") {
       target.hidden = true;
       state.lock = null;
-      feed("CAM OFFLINE · GHOSTED");
+      feed("摄像头离线 · 已幽灵");
       $("#q-main").textContent = jobs[1].main;
-      $("#q-sub").textContent = "OBJ · Complete";
+      $("#q-sub").textContent = "目标 · 完成";
     }
     if (id === "suicide" && target.dataset.type === "hostile") {
       target.hidden = true;
       state.lock = null;
-      feed("SYSTEM RESET · TARGET DOWN");
+      feed("系统重置 · 目标倒下");
     }
     if (id === "ping") {
       document.body.classList.add("scan-on");
       state.scan = true;
-      feed("PING · NETWORK REVEALED");
+      feed("侦测 · 网络已揭示");
     }
     sync();
   }
@@ -383,21 +390,21 @@
   function fire() {
     if (state.journal) return;
     const w = weapons[state.w];
-    if (!w.melee && w.cur <= 0) { feed("空仓 · 点 RELOAD"); return; }
+    if (!w.melee && w.cur <= 0) { feed("空仓 · 点换弹"); return; }
     if (!w.melee) w.cur -= 1;
     sync();
     if (state.lock && state.lock.dataset.type === "hostile") {
       const hp = Number(state.lock.dataset.hp || 100) - w.dmg;
       state.lock.dataset.hp = String(hp);
-      feed("HIT · " + state.lock.dataset.name + " · " + Math.max(0, Math.round(hp)));
+      feed("命中 · " + state.lock.dataset.name + " · " + Math.max(0, Math.round(hp)));
       if (hp <= 0) {
-        feed("NEUTRALIZED · " + state.lock.dataset.name);
+        feed("已放倒 · " + state.lock.dataset.name);
         state.lock.hidden = true;
         state.lock = null;
         setFocus(null);
       }
     } else {
-      feed(w.melee ? "SLASH" : "SHOT");
+      feed(w.melee ? "挥砍" : "射击");
     }
   }
 
@@ -476,7 +483,7 @@
     e.preventDefault();
     e.stopPropagation();
     state.scan = !state.scan;
-    feed(state.scan ? "SCANNER ONLINE" : "SCANNER OFFLINE");
+    feed(state.scan ? "扫描仪在线" : "扫描仪离线");
     sync();
   });
   $("#btn-journal").addEventListener("pointerdown", (e) => {
@@ -521,7 +528,7 @@
       const job = jobs[Number(j.dataset.job)];
       $("#q-main").textContent = job.main;
       $("#q-sub").textContent = job.sub;
-      feed("JOB PINNED · " + job.main);
+      feed("已钉选委托 · " + job.main);
       state.journal = false;
       sync();
     });
@@ -560,7 +567,7 @@
     else state.st = Math.min(100, state.st + 0.4);
     if (state.ram < state.ramMax && t % 40 === 0) state.ram += 1;
     if (t % 120 === 0 && !state.journal && Math.random() < 0.35) {
-      feed("GUNFIRE NEARBY");
+      feed("附近有枪声");
       if (Math.random() < 0.4) hurt(25 + Math.random() * 40);
     }
     const ang = (t / 20) % 360;
@@ -568,7 +575,7 @@
     sync();
   }, 100);
 
-  feed("LINK ESTABLISHED · WATSON");
+  feed("链路已建立 · 沃森区");
   setFocus(null);
   sync();
 })();

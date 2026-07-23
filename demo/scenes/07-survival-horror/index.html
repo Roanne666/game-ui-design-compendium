@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Survival Horror — Spine Inventory</title>
+  <title>生存恐怖 — 脊骨背包</title>
   <link rel="stylesheet" href="../../lib/components.css" />
   <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/survival-horror.css" />
@@ -27,27 +27,27 @@
       <div class="hud-anchor-bl spine-col">
         <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
         <div class="spine-bar-vertical" id="spine-bar"></div>
-        <span class="badge" id="hp-label">HP 72%</span>
+        <span class="badge" id="hp-label">生命 72%</span>
       </div>
 
       <div class="hud-anchor-br inv-panel">
         <div class="panel frame-brackets">
-          <div class="panel-title">SPINE INVENTORY · 8 SLOTS</div>
+          <div class="panel-title">脊骨背包 · 8 格</div>
           <div class="panel-body">
             <div class="inv-grid" id="inv">
-              <button type="button" class="slot has" data-item="med" data-qty="2" data-label="Med Kit">
+              <button type="button" class="slot has" data-item="med" data-qty="2" data-label="医疗包">
                 <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
               </button>
-              <button type="button" class="slot has" data-item="key" data-qty="1" data-label="Brass Key">
+              <button type="button" class="slot has" data-item="key" data-qty="1" data-label="黄铜钥匙">
                 <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
               </button>
-              <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="Survival Knife">
+              <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="生存刀">
                 <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
               </button>
-              <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm Rounds">
+              <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm 子弹">
                 <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
               </button>
-              <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="Broken Shield">
+              <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="破损盾牌">
                 <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
               </button>
               <button type="button" class="slot"></button>
@@ -55,20 +55,20 @@
               <button type="button" class="slot"></button>
             </div>
             <div class="detail">
-              <div class="stat-row"><span class="stat-key">SELECTED</span><span class="stat-val" id="sel-name">—</span></div>
+              <div class="stat-row"><span class="stat-key">已选</span><span class="stat-val" id="sel-name">—</span></div>
               <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                <button type="button" class="btn btn-primary" id="btn-use">USE ITEM</button>
+                <button type="button" class="btn btn-primary" id="btn-use">使用物品</button>
                 <button type="button" class="btn" id="btn-door">
-                  <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> TRY DOOR
+                  <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> 尝试开门
                 </button>
-                <button type="button" class="btn btn-danger" id="btn-hurt">TAKE DAMAGE</button>
+                <button type="button" class="btn btn-danger" id="btn-hurt">受伤</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <p class="hint">Spine reflects HP · select slot · use MED · key on door · sim damage</p>
+      <p class="hint">脊骨反映生命 · 选择格子 · 使用医疗包 · 钥匙开门 · 模拟受伤</p>
     </div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
@@ -99,12 +99,12 @@
         }
         bar.appendChild(seg);
       }
-      sk.setText(sk.$("#hp-label"), "HP " + hp + "%");
+      sk.setText(sk.$("#hp-label"), "生命 " + hp + "%");
     }
 
     sk.bindSlots("#inv", (slot) => {
       if (!slot.classList.contains("has")) {
-        sk.setText(sk.$("#sel-name"), "Empty slot");
+        sk.setText(sk.$("#sel-name"), "空槽位");
         selectedSlot = null;
         return;
       }
@@ -130,33 +130,33 @@
 
     sk.on(sk.$("#btn-use"), "click", () => {
       if (!selectedSlot || !selectedSlot.dataset.item) {
-        sk.toast("Select an item", "warning");
+        sk.toast("请先选择物品", "warning");
         return;
       }
       if (selectedSlot.dataset.item === "med") {
         hp = Math.min(100, hp + 18);
         renderSpine();
         consumeOne(selectedSlot);
-        sk.toast("Med kit +18 HP", "success");
+        sk.toast("医疗包 +18 生命", "success");
         sk.pulse(sk.$("#spine-bar"));
       } else if (selectedSlot.dataset.item === "key") {
-        sk.toast("Key isn't consumable — try the door", "warning");
+        sk.toast("钥匙不可消耗 — 试试开门", "warning");
       } else {
-        sk.toast("Can't use " + selectedSlot.dataset.label + " here", "warning");
+        sk.toast("此处无法使用 " + selectedSlot.dataset.label, "warning");
       }
     });
 
     sk.on(sk.$("#btn-door"), "click", () => {
       const hasKey = sk.$('.slot[data-item="key"].has');
       if (hasKey) {
-        sk.toast("Door unlocked — escape route open!", "success");
+        sk.toast("门已解锁 — 逃生路线已开启！", "success");
         sk.modal({
-          title: "Maintenance Exit",
-          body: "The key turns with a wet click. Cold air spills in.",
-          onConfirm: () => sk.toast("Saving checkpoint…"),
+          title: "维修通道出口",
+          body: "钥匙湿漉漉地转动了。冷空气涌了进来。",
+          onConfirm: () => sk.toast("正在保存检查点…"),
         });
       } else {
-        sk.toast("Locked — need brass key", "danger");
+        sk.toast("已上锁 — 需要黄铜钥匙", "danger");
       }
     });
 
@@ -164,7 +164,7 @@
       hp = Math.max(0, hp - 15);
       renderSpine();
       flashVignette();
-      sk.toast(hp <= 0 ? "Vital signs failing" : "Injury −15%", "danger");
+      sk.toast(hp <= 0 ? "生命体征衰竭" : "受伤 −15%", "danger");
     });
 
     renderSpine();

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Anime Colorful — Phantom Menu</title>
+  <title>动漫彩色 — 幻影菜单</title>
   <link rel="stylesheet" href="../../lib/components.css" />
   <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/anime-colorful.css" />
@@ -44,62 +44,62 @@
       <div class="poster-float">
         <div class="poster-inner panel-clipped">
           <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
-          <div class="poster-title">PHANTOM BLADE</div>
-          <span class="badge accent">CHAPTER IV</span>
+          <div class="poster-title">幻影之刃</div>
+          <span class="badge accent">第四章</span>
           <img src="../../assets/_shared/kenney/icons/star.png" alt="" style="width:24px;height:24px" />
         </div>
       </div>
 
       <div class="hud-anchor-tr menu-stack">
         <div class="menu-list">
-          <button type="button" class="menu-item-large primary" id="btn-start">START</button>
-          <button type="button" class="menu-item-large" id="btn-load">LOAD</button>
-          <button type="button" class="menu-item-large" id="btn-config">CONFIG</button>
-          <button type="button" class="menu-item-large" id="btn-exit">EXIT</button>
+          <button type="button" class="menu-item-large primary" id="btn-start">开始</button>
+          <button type="button" class="menu-item-large" id="btn-load">读取</button>
+          <button type="button" class="menu-item-large" id="btn-config">设置</button>
+          <button type="button" class="menu-item-large" id="btn-exit">退出</button>
         </div>
       </div>
 
       <div id="config-panel" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">CONFIG</div>
+        <div class="panel-title">设置</div>
         <div class="panel-body">
           <div class="toggle-row">
-            <span>Voice Lines</span>
-            <button type="button" class="btn btn-success" data-toggle="voice" data-on="true">ON</button>
+            <span>语音台词</span>
+            <button type="button" class="btn btn-success" data-toggle="voice" data-on="true">开</button>
           </div>
           <div class="toggle-row">
-            <span>Battle Animations</span>
-            <button type="button" class="btn" data-toggle="anim" data-on="false">OFF</button>
+            <span>战斗动画</span>
+            <button type="button" class="btn" data-toggle="anim" data-on="false">关</button>
           </div>
           <div class="toggle-row">
-            <span>Auto-Save</span>
-            <button type="button" class="btn btn-success" data-toggle="save" data-on="true">ON</button>
+            <span>自动保存</span>
+            <button type="button" class="btn btn-success" data-toggle="save" data-on="true">开</button>
           </div>
-          <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%">Close</button>
+          <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%">关闭</button>
         </div>
       </div>
 
       <div id="load-overlay" hidden>
         <div class="panel frame-brackets" style="min-width:280px">
-          <div class="panel-title">LOAD GAME</div>
+          <div class="panel-title">读取存档</div>
           <div class="panel-body">
-            <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px">Slot 1 · Midgar 14:32</button>
-            <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px">Slot 2 · Empty</button>
-            <button type="button" class="btn btn-ghost" id="load-close" style="width:100%">Cancel</button>
+            <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px">槽位 1 · 米德加 14:32</button>
+            <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px">槽位 2 · 空</button>
+            <button type="button" class="btn btn-ghost" id="load-close" style="width:100%">取消</button>
           </div>
         </div>
       </div>
 
       <div id="loading-overlay" hidden>
         <div class="panel frame-brackets" style="min-width:300px;text-align:center">
-          <div class="panel-title">LOADING</div>
+          <div class="panel-title">加载中</div>
           <div class="progress progress-linear" style="height:14px;margin:16px 0">
             <div id="load-bar" class="progress-fill" style="width:0%"></div>
           </div>
-          <span class="badge" id="load-status">Preparing assets…</span>
+          <span class="badge" id="load-status">正在准备资源…</span>
         </div>
       </div>
 
-      <p class="hint">START · LOAD · CONFIG toggles · EXIT · Esc closes panels</p>
+      <p class="hint">开始 · 读取 · 设置开关 · 退出 · Esc 关闭面板</p>
     </div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
@@ -113,9 +113,9 @@
       sk.on(btn, "click", () => {
         const on = btn.dataset.on !== "true";
         btn.dataset.on = String(on);
-        btn.textContent = on ? "ON" : "OFF";
+        btn.textContent = on ? "开" : "关";
         btn.className = "btn" + (on ? " btn-success" : "");
-        sk.toast(btn.closest(".toggle-row").querySelector("span").textContent + ": " + (on ? "ON" : "OFF"));
+        sk.toast(btn.closest(".toggle-row").querySelector("span").textContent + "：" + (on ? "开" : "关"));
       });
     });
 
@@ -128,8 +128,8 @@
     sk.$all("[data-slot]").forEach((btn) => {
       sk.on(btn, "click", () => {
         sk.$("#load-overlay").hidden = true;
-        if (btn.dataset.slot === "2") sk.toast("Empty slot", "warning");
-        else sk.toast("Loaded slot 1", "success");
+        if (btn.dataset.slot === "2") sk.toast("空槽位", "warning");
+        else sk.toast("已读取槽位 1", "success");
       });
     });
 
@@ -137,7 +137,7 @@
       const overlay = sk.$("#loading-overlay");
       overlay.hidden = false;
       let pct = 0;
-      sk.setText(sk.$("#load-status"), "Preparing assets…");
+      sk.setText(sk.$("#load-status"), "正在准备资源…");
       const tick = setInterval(() => {
         pct += 8 + Math.floor(Math.random() * 6);
         if (pct >= 100) {
@@ -145,19 +145,19 @@
           clearInterval(tick);
           sk.setFill(sk.$("#load-bar"), pct);
           overlay.hidden = true;
-          sk.toast("Welcome back, phantom!", "success");
+          sk.toast("欢迎回来，幻影！", "success");
         } else {
           sk.setFill(sk.$("#load-bar"), pct);
-          if (pct > 50) sk.setText(sk.$("#load-status"), "Syncing party…");
+          if (pct > 50) sk.setText(sk.$("#load-status"), "正在同步队伍…");
         }
       }, 120);
     });
 
     sk.on(sk.$("#btn-exit"), "click", () => {
       sk.modal({
-        title: "Exit game?",
-        body: "Unsaved progress in the current chapter will be lost.",
-        onConfirm: () => sk.toast("Thanks for playing!", "warning"),
+        title: "退出游戏？",
+        body: "当前章节的未保存进度将会丢失。",
+        onConfirm: () => sk.toast("感谢游玩！", "warning"),
       });
     });
   </script>
