@@ -307,7 +307,7 @@ body.help-open .loop-rail { opacity: 0.25; }
 }
 [data-dialect="matrix"] .nav-meta { align-items: flex-end !important; }
 [data-dialect="matrix"] .quest {
-  top: 78px !important;
+  top: 112px !important;
   left: 10px !important;
   right: 96px !important;
   border-left: 0 !important;
@@ -315,6 +315,10 @@ body.help-open .loop-rail { opacity: 0.25; }
   background: transparent !important;
   padding: 6px 0 !important;
   font-family: "IBM Plex Mono", monospace;
+}
+[data-dialect="matrix"] .loop-rail {
+  right: 96px;
+  top: 88px;
 }
 [data-dialect="matrix"] .quest .q-main { font-size: 12px !important; letter-spacing: 0.06em; }
 [data-dialect="matrix"] .pockets {
