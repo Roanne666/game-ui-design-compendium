@@ -246,18 +246,16 @@ infoDensity: low | mid | high
 
 ## 9. 对当前 Demo 的诊断（基于本分析）
 
-`demo/scenes/01-cyberpunk-hud/` 已实现 **子方言切换**（顶栏 NEO / MATRIX / AMBER / NOIR，快捷键 `[` `]`）：
+`demo/scenes/01-cyberpunk-hud/` 为 **9:20 竖屏手机框**，顶栏切换方言时 **配色与布局同时变化**：
 
-| 键 | 方言 | 主信号 |
-|----|------|--------|
-| NEO | Neo Militarism | 红品牌 + 青数据 |
-| MATRIX | Matrix Terminal | 磷光绿 + 等宽 + 代码雨层 |
-| AMBER | Amber Augment | 琥珀 AR（Deus Ex 向） |
-| NOIR | Neon Noir | 品红 + 青霓虹 |
+| 键 | 方言 | 竖屏布局 |
+|----|------|----------|
+| NEO | Neo Militarism | 顶左生命+顶右小地图，底中技能栏，弹药在底右上 |
+| MATRIX | Matrix Terminal | 顶栏终端条，任务在下，技能右列，弹药左下，地图左下中 |
+| AMBER | Amber Augment | 顶角 AR，任务居中括号框，底中弹药+技能坞 |
+| NOIR | Neon Noir | 顶满宽霓虹条，任务左中，地图左下，弹药/技能右下 |
 
-同一套交互与布局，只换 token / 字体 / 少量方言专属层，用来证明「赛博朋克是一族方言」。
-
-仍可加强的 FUI 零件：角括号取景、引导线扫描标签、受击时的单次 glitch（切换方言已有短 flash）。
+快捷键 `[` `]`。样式见 `layout-9x20.css`。
 
 ---
 

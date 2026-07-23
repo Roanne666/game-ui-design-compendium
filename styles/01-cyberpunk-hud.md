@@ -19,7 +19,7 @@
 - 写实军事战术射击(应用 Tactical Military)
 
 **本风格推荐场景包**
-- 主场景:`demo/scenes/01-cyberpunk-hud/index.html`（可玩 HUD + 四子方言切换：NEO / MATRIX / AMBER / NOIR，`[` `]` 循环）
+- 主场景:`demo/scenes/01-cyberpunk-hud/index.html`（9:20 竖屏手机框 + 四子方言切换，各方言布局不同；`[` `]` 循环）
 - 扩展:义体商店、车载 HUD、对话选项条
 
 ## 3. 视觉关键词

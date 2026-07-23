@@ -79,21 +79,37 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: #000;
+  background:
+    radial-gradient(ellipse at 50% 40%, #16161c 0%, #050506 70%);
   font-family: var(--font-ui);
   font-weight: 600;
   color: var(--cp-white);
   cursor: crosshair;
   user-select: none;
   text-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px;
 }
 
+/* 9:20 portrait phone stage */
 #viewport {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  aspect-ratio: 9 / 20;
+  width: min(92vw, calc(96dvh * 9 / 20));
+  height: auto;
+  max-height: 96dvh;
   overflow: hidden;
   background: #050505;
+  border-radius: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 24px 64px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 /* ===== WORLD ===== */
@@ -132,14 +148,14 @@ html, body {
 .entity {
   position: absolute;
   transform: translate(-50%, -100%);
-  width: 110px;
-  height: 210px;
+  width: 72px;
+  height: 140px;
   cursor: crosshair;
   z-index: 2;
   background: transparent !important;
   border: none !important;
   outline: none;
-  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.9));
 }
 .entity img.body,
 .entity .body {
@@ -800,13 +816,10 @@ html, body {
 .scan-on #world { filter: saturate(0.55) contrast(1.25) hue-rotate(-6deg); }
 .scan-on .minimap { border-color: var(--cp-cyan); box-shadow: 0 0 20px rgba(var(--scan-rgb), 0.2); }
 
-/* ===== Dialect switcher ===== */
+/* ===== Dialect switcher (outside phone; layout-9x20 may override) ===== */
 .dialect-bar {
-  position: absolute;
-  left: 50%;
-  top: clamp(10px, 1.6vh, 18px);
-  transform: translateX(-50%);
-  z-index: 25;
+  position: relative;
+  z-index: 50;
   display: flex;
   align-items: center;
   gap: 4px;
