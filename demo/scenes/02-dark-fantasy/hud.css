@@ -324,13 +324,13 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 0;
   background: var(--df-metal);
   border: 1px solid rgba(201, 169, 97, 0.5);
   color: var(--df-gold);
   font-family: "Cinzel", serif;
-  font-size: 9px;
-  letter-spacing: 0.12em;
+  font-size: 0;
+  letter-spacing: 0;
   cursor: pointer;
   pointer-events: auto;
   box-shadow:
@@ -338,6 +338,27 @@ html, body {
     inset 0 1px 0 rgba(232, 220, 196, 0.08),
     0 4px 12px rgba(0, 0, 0, 0.45);
   transition: transform 120ms ease-out, border-color 160ms ease-out, background 160ms ease-out;
+}
+.estus-slot .ico {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--df-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+.estus-slot .n {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--df-bone);
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  font-family: "Cinzel", serif;
 }
 .estus-slot::before,
 .estus-slot::after {
@@ -356,13 +377,6 @@ html, body {
 .estus-slot::after {
   bottom: 3px; right: 3px;
   border-width: 0 1px 1px 0;
-}
-.estus-slot .n {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--df-bone);
-  line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 .estus-slot:active {
   transform: translateX(-50%) scale(0.94);
@@ -528,20 +542,33 @@ html, body {
 .t-btn {
   pointer-events: auto;
   position: absolute;
-  font-family: "Cinzel", serif;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  letter-spacing: 0;
   color: var(--df-bone);
   background: var(--df-metal);
   border: 1px solid rgba(201, 169, 97, 0.48);
   touch-action: manipulation;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
   box-shadow:
     inset 0 0 0 1px rgba(91, 74, 34, 0.5),
     inset 0 1px 0 rgba(232, 220, 196, 0.07),
     inset 0 -12px 20px rgba(0, 0, 0, 0.35),
     0 6px 16px rgba(0, 0, 0, 0.45);
   transition: transform 100ms ease-out, border-color 140ms ease-out, background 140ms ease-out, box-shadow 140ms ease-out;
+}
+.t-btn .ico {
+  width: 26px;
+  height: 26px;
+  display: block;
+  fill: none;
+  stroke: var(--df-bone);
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+  pointer-events: none;
 }
 .t-btn::before,
 .t-btn::after {
@@ -578,7 +605,6 @@ html, body {
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  font-size: 12px;
   border-width: 2px;
   border-color: var(--df-gold-dim);
   box-shadow:
@@ -588,27 +614,33 @@ html, body {
     0 0 0 1px rgba(201, 169, 97, 0.12),
     0 8px 20px rgba(0, 0, 0, 0.5);
 }
+.t-attack .ico {
+  width: 32px;
+  height: 32px;
+  stroke: var(--df-gold);
+  stroke-width: 1.45;
+}
 .t-attack::before,
 .t-attack::after {
   width: 8px;
   height: 8px;
   border-color: var(--df-gold);
 }
-/* Right column stacked above attack — keeps center free for 露滴 */
 .t-roll {
   right: 14px;
   bottom: 98px;
+  width: 64px;
   min-width: 64px;
   height: 44px;
-  font-size: 11px;
-  padding: 0 10px;
+  padding: 0;
 }
 .t-use {
   right: 14px;
   bottom: 148px;
+  width: 64px;
   min-width: 64px;
   height: 40px;
-  font-size: 11px;
+  padding: 0;
 }
 .t-lock {
   left: 12px;
@@ -616,7 +648,11 @@ html, body {
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  font-size: 10px;
+}
+.t-lock .ico {
+  width: 28px;
+  height: 28px;
+  stroke: var(--df-gold);
 }
 
 /* Help sits under place name — never in the thumb zone */
@@ -656,10 +692,10 @@ body.help-open .help {
   width: 28px;
   height: 28px;
   padding: 0;
-  font-family: "Cinzel", serif;
-  font-size: 12px;
-  letter-spacing: 0;
-  color: rgba(201, 169, 97, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 169, 97, 0.55);
   background: rgba(10, 9, 8, 0.45);
   border: 1px solid rgba(201, 169, 97, 0.28);
   border-radius: 50%;
@@ -667,6 +703,17 @@ body.help-open .help {
   pointer-events: auto;
   box-shadow: inset 0 0 0 1px rgba(91, 74, 34, 0.35);
   transition: color 140ms ease-out, border-color 140ms ease-out, transform 100ms ease-out;
+}
+.help-toggle .ico {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+  pointer-events: none;
 }
 .help-toggle:active {
   color: var(--df-gold);
