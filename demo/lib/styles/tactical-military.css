@@ -1,0 +1,89 @@
+/* Style: Tactical Military */
+:root {
+  --bg: #1F1F1C;
+  --surface: #2A2A26;
+  --surface-2: rgba(90, 110, 59, 0.15);
+  --text: #D4CFB8;
+  --text-muted: #8B8675;
+  --accent: #5A6E3B;
+  --accent-2: #D89830;
+  --accent-soft: rgba(90, 110, 59, 0.2);
+  --danger: #A03A2E;
+  --warning: #D89830;
+  --success: #5A8048;
+  --border: #7A7548;
+  --border-strong: #C8C0A0;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --glow: transparent;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --font-display: 'Inter', 'Roboto', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --duration-fast: 80ms;
+  --duration-med: 120ms;
+  --duration-slow: 200ms;
+  --easing: linear;
+  --uppercase: uppercase;
+  --letter-spacing: 0.1em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.panel-title {
+  color: var(--border-strong);
+  font-family: var(--font-mono);
+  letter-spacing: 0.15em;
+}
+.btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.btn:hover { background: var(--accent); color: var(--bg); }
+.btn-primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.btn-danger { border-color: var(--danger); color: var(--danger); }
+.btn-warning { border-color: var(--warning); color: var(--warning); }
+.progress, .progress-linear, .hud-bar-track {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.progress-fill, .hud-bar-fill { border-radius: 0; }
+.stat-row {
+  border-bottom: 1px dashed var(--accent);
+  font-family: var(--font-mono);
+}
+.stat-key { color: var(--accent-2); }
+.dialogue {
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.dialogue-name { color: var(--accent-2); font-family: var(--font-mono); }
+.slot {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.slot.selected { background: var(--accent-soft); border-color: var(--accent); }
+.nav-item.active {
+  color: var(--bg);
+  background: var(--accent);
+  border-left: 2px solid var(--accent-2);
+}

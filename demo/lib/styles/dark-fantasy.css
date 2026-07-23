@@ -1,0 +1,41 @@
+/* Style: Dark Fantasy */
+:root {
+  --bg: #0A0908;
+  --surface: rgba(31, 22, 17, 0.92);
+  --surface-2: rgba(201, 169, 97, 0.08);
+  --text: #E8DCC4;
+  --text-muted: #6B6660;
+  --accent: #C9A961;
+  --accent-2: #8B3A2E;
+  --accent-soft: rgba(201, 169, 97, 0.12);
+  --danger: #8B0000;
+  --warning: #D89830;
+  --success: #5C7548;
+  --border: rgba(201, 169, 97, 0.3);
+  --border-strong: #C9A961;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --glow: transparent;
+  --radius-sm: 0px;
+  --radius: 2px;
+  --radius-lg: 4px;
+  --font-display: 'Cinzel', 'Cormorant Garamond', serif;
+  --font-body: 'Cormorant Garamond', 'Garamond', serif;
+  --font-mono: 'Cormorant Garamond', serif;
+  --duration-fast: 240ms;
+  --duration-med: 480ms;
+  --duration-slow: 600ms;
+  --easing: ease-out;
+  --uppercase: uppercase;
+  --letter-spacing: 0.15em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.panel { border-color: var(--border-strong); }
+.panel-title { color: var(--accent); letter-spacing: 0.25em; }
+.btn { font-family: var(--font-display); text-shadow: none; }
+.btn-primary { background: var(--accent); color: var(--bg); }
+.dialogue { border-color: var(--border-strong); }
+.dialogue-name { color: var(--accent); font-style: italic; }

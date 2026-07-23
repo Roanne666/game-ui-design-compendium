@@ -1,0 +1,74 @@
+/* Style: Cartoon Comic */
+:root {
+  --bg: #FFD900;
+  --surface: #FFF1DC;
+  --surface-2: rgba(255, 215, 0, 0.4);
+  --text: #1A1A1A;
+  --text-muted: #444444;
+  --accent: #E63946;
+  --accent-2: #3DA9FF;
+  --accent-soft: rgba(255, 215, 0, 0.6);
+  --danger: #FF004D;
+  --warning: #FFA300;
+  --success: #7FE85B;
+  --border: #1A1A1A;
+  --border-strong: #1A1A1A;
+  --shadow-color: #1A1A1A;
+  --glow: transparent;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --font-display: 'Bangers', 'Bowlby One', cursive;
+  --font-body: 'Comic Neue', 'Patrick Hand', cursive;
+  --font-mono: 'Bangers', cursive;
+  --duration-fast: 120ms;
+  --duration-med: 200ms;
+  --duration-slow: 320ms;
+  --easing: ease-out;
+  --uppercase: uppercase;
+  --letter-spacing: 0.04em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.panel {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 var(--shadow-color);
+}
+.panel-title { color: var(--text); font-family: var(--font-display); border-bottom: 3px solid var(--border); }
+.btn {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  color: var(--text);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  font-family: var(--font-display);
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow-color); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow-color); }
+.btn-primary { background: var(--accent); color: var(--surface); }
+.btn-danger { background: var(--danger); color: var(--surface); }
+.btn-warning { background: var(--warning); color: var(--text); }
+.progress, .progress-linear, .hud-bar-track {
+  background: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 0;
+}
+.progress-fill, .hud-bar-fill { border-radius: 0; }
+.dialogue {
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 var(--shadow-color);
+  font-family: var(--font-display);
+}
+.dialogue-name { color: var(--accent); -webkit-text-stroke: 0.5px var(--text); }
+.slot {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 0;
+}
+.slot.selected { background: var(--accent); color: var(--surface); }

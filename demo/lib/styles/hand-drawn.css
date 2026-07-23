@@ -1,0 +1,58 @@
+/* Style: Hand-drawn Illustrative */
+:root {
+  --bg: #F5EDD8;
+  --surface: #FFF1DC;
+  --surface-2: rgba(139, 58, 46, 0.06);
+  --text: #1A1410;
+  --text-muted: #5C5440;
+  --accent: #8B3A2E;
+  --accent-2: #D9B36C;
+  --accent-soft: rgba(139, 58, 46, 0.08);
+  --danger: #8B3A2E;
+  --warning: #D89830;
+  --success: #5C7548;
+  --border: #1A1410;
+  --border-strong: #1A1410;
+  --shadow-color: rgba(26, 20, 16, 0.3);
+  --glow: transparent;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 24px;
+  --font-display: 'IM Fell English', 'Cormorant Garamond', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --font-mono: 'Caveat', cursive;
+  --duration-fast: 200ms;
+  --duration-med: 400ms;
+  --duration-slow: 600ms;
+  --easing: ease-out;
+  --uppercase: none;
+  --letter-spacing: 0.05em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.panel {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transform: rotate(-0.5deg);
+}
+.panel:nth-of-type(odd) { transform: rotate(0.3deg); }
+.panel-title { color: var(--accent); font-family: var(--font-display); font-style: italic; }
+.btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+}
+.btn-primary { background: var(--accent); color: var(--surface); border-color: var(--border); }
+.btn:hover { background: var(--accent-2); }
+.dialogue {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  transform: rotate(0.3deg);
+}
+.dialogue-name { color: var(--accent); font-style: italic; }
+.slot { border-radius: var(--radius); }

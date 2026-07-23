@@ -1,0 +1,72 @@
+/* Style: Survival Horror */
+:root {
+  --bg: #0A0A08;
+  --surface: rgba(20, 18, 16, 0.92);
+  --surface-2: rgba(59, 85, 112, 0.25);
+  --text: #D8D0BC;
+  --text-muted: #5A5A55;
+  --accent: #3B5570;
+  --accent-2: #D89830;
+  --accent-soft: rgba(59, 85, 112, 0.25);
+  --danger: #A03838;
+  --warning: #D89830;
+  --success: #5BA85B;
+  --border: #3B5570;
+  --border-strong: #5B7DA0;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --glow: transparent;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-lg: 2px;
+  --font-display: 'Allerta Stencil', 'Stencil Std', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Courier Prime', monospace;
+  --duration-fast: 320ms;
+  --duration-med: 480ms;
+  --duration-slow: 600ms;
+  --easing: ease-out;
+  --uppercase: uppercase;
+  --letter-spacing: 0.2em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+.panel-title { color: var(--accent); font-family: var(--font-display); letter-spacing: 0.3em; }
+.btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0;
+  font-family: var(--font-display);
+}
+.btn:hover { background: var(--surface-2); border-color: var(--text); }
+.btn-primary { background: transparent; color: var(--text); border-color: var(--text); }
+.btn-danger { border-color: var(--danger); color: var(--danger); }
+.btn-warning { border-color: var(--warning); color: var(--warning); }
+.progress, .progress-linear, .hud-bar-track {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+.progress-fill, .hud-bar-fill { border-radius: 0; }
+.hud-bar-fill.danger { background: var(--danger); box-shadow: 0 0 4px var(--danger); }
+.hud-bar-fill.warning { background: var(--warning); }
+.dialogue {
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+.dialogue-name { color: var(--accent); font-family: var(--font-display); }
+.slot {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+.slot.selected { background: var(--accent-soft); border-color: var(--warning); }

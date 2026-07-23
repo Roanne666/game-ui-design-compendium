@@ -1,0 +1,46 @@
+/* Style: Sci-Fi Space Sim */
+:root {
+  --bg: #020817;
+  --surface: rgba(10, 30, 63, 0.45);
+  --surface-2: rgba(91, 217, 255, 0.15);
+  --text: #E8F4FF;
+  --text-muted: #7A8FA8;
+  --accent: #5BD9FF;
+  --accent-2: #FF5BD9;
+  --accent-soft: rgba(91, 217, 255, 0.15);
+  --danger: #FF4848;
+  --warning: #FFA940;
+  --success: #5BFF9F;
+  --border: #5BD9FF;
+  --border-strong: #5BD9FF;
+  --shadow-color: rgba(91, 217, 255, 0.4);
+  --glow: rgba(91, 217, 255, 0.6);
+  --radius-sm: 0px;
+  --radius: 2px;
+  --radius-lg: 4px;
+  --font-display: 'Rajdhani', 'Inter', sans-serif;
+  --font-body: 'Inter', 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --duration-fast: 160ms;
+  --duration-med: 280ms;
+  --duration-slow: 480ms;
+  --easing: ease-out;
+  --uppercase: uppercase;
+  --letter-spacing: 0.12em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.panel {
+  border-color: var(--border);
+  box-shadow: 0 0 12px var(--shadow-color), inset 0 0 12px var(--accent-soft);
+}
+.panel-title { color: var(--accent); text-shadow: 0 0 6px var(--accent); }
+.btn { font-family: var(--font-display); }
+.btn:hover { box-shadow: 0 0 8px var(--glow); }
+.dialogue-name { color: var(--accent); text-shadow: 0 0 4px var(--accent); }
+.ring-fill { stroke: var(--accent); filter: drop-shadow(0 0 4px var(--accent)); }
+.hud-bar-fill { box-shadow: 0 0 4px currentColor; }
+.nav-item.active { color: var(--accent); border-left: 2px solid var(--accent); }

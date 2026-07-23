@@ -1,0 +1,76 @@
+/* Style: Anime Colorful */
+:root {
+  --bg: #0A0A0A;
+  --surface: #FFFFFF;
+  --surface-2: rgba(255, 255, 255, 0.12);
+  --text: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.65);
+  --accent: #E60012;
+  --accent-2: #3DA9FF;
+  --accent-soft: rgba(230, 0, 18, 0.85);
+  --danger: #FF004D;
+  --warning: #FFA300;
+  --success: #00C800;
+  --border: #FFFFFF;
+  --border-strong: #FFFFFF;
+  --shadow-color: #000000;
+  --glow: transparent;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --font-display: 'Impact', 'Arial Black', sans-serif;
+  --font-body: 'Impact', 'Arial Black', sans-serif;
+  --font-mono: 'Impact', 'Arial Black', sans-serif;
+  --duration-fast: 160ms;
+  --duration-med: 280ms;
+  --duration-slow: 480ms;
+  --easing: ease-out;
+  --uppercase: uppercase;
+  --letter-spacing: 0.04em;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+}
+.panel {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  color: var(--bg);
+  transform: skew(-12deg);
+}
+.panel > * { transform: skew(12deg); }
+.panel-title { color: var(--bg); font-style: italic; border-bottom: 3px solid var(--bg); }
+.btn {
+  background: var(--bg);
+  border: 3px solid var(--border);
+  color: var(--text);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  transform: skew(-8deg);
+}
+.btn > * { display: inline-block; transform: skew(8deg); }
+.btn-primary { background: var(--accent); color: var(--surface); }
+.btn:hover { background: var(--accent); box-shadow: 4px 4px 0 var(--shadow-color); }
+.progress, .progress-linear, .hud-bar-track {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 0;
+}
+.progress-fill, .hud-bar-fill { border-radius: 0; }
+.dialogue {
+  border: 3px solid var(--border);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text);
+  transform: skew(-6deg);
+}
+.dialogue > * { transform: skew(6deg); }
+.dialogue-name { color: var(--accent); font-style: italic; }
+.slot {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 0;
+}
+.slot.selected { background: var(--accent); color: var(--surface); }
