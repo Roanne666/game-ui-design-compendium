@@ -33,3 +33,11 @@
 - `demo/scenes/01-cyberpunk-hud/art/street-bg.png` — original night street plate
 - `demo/scenes/01-cyberpunk-hud/art/guard.png` / `civ.png` — original character plates  
 - License: project original for this encyclopedia demo
+
+## Project-generated scene plates (02 Dark Fantasy)
+
+- `demo/scenes/02-dark-fantasy/art/ruins-bg.png` — original ruined gothic landscape plate
+- `demo/scenes/02-dark-fantasy/art/hollow.png` — Ruin Warden character plate (keyed)
+- `demo/scenes/02-dark-fantasy/art/bonfire.png` — bonfire prop plate (keyed)
+- License: project original for this encyclopedia demo
+- **不含**商业魂类 / 空洞骑士等官方或 Rip 素材
