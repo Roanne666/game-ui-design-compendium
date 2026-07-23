@@ -6,7 +6,9 @@
 
 **建材共享,楼型按游戏类型分。**
 
-- 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js`（结构 / Token / 交互）
+场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 `research/synthesis/game-feel-vs-web.md`。
+
+- 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js` + `demo/lib/game-feel.css`
 - 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，布局符合该类型游戏
 - 美术：`demo/assets/`（CC0 / CC-BY 等开放许可，见 `demo/assets/CREDITS.md`）
 - **禁止**用「同一套页面换 CSS」作为风格验收标准；**禁止**商业游戏官方/Rip 素材

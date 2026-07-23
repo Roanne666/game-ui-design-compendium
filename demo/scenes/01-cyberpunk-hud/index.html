@@ -5,30 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cyberpunk — Interactive HUD</title>
   <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/cyberpunk.css" />
   <style>
-    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); overflow:hidden; }
-    .scene { position:relative; width:100vw; height:100vh;
-      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,255,.04) 2px,rgba(0,255,255,.04) 4px); }
     .icon { width:28px; height:28px; image-rendering:pixelated; vertical-align:middle; filter: drop-shadow(0 0 4px var(--glow)); }
     .icon-sm { width:20px; height:20px; }
-    .top { position:absolute; top:16px; left:16px; right:16px; display:flex; justify-content:space-between; gap:16px; }
-    .left { width:300px; }
-    .right { text-align:right; }
-    .quest { position:absolute; top:96px; right:16px; width:280px; display:flex; flex-direction:column; gap:8px; }
-    .bottom { position:absolute; bottom:20px; left:16px; right:16px; display:flex; gap:16px; align-items:flex-end; justify-content:space-between; }
+    .left-stack { display:flex; flex-direction:column; gap:8px; width:300px; }
+    .quest-stack { display:flex; flex-direction:column; gap:8px; width:280px; margin-top:72px; }
+    .bottom-bar { display:flex; gap:16px; align-items:flex-end; }
     .weapons { display:flex; gap:8px; }
     .weapon-btn { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px; border:1px solid var(--border); background:var(--surface); cursor:pointer; min-width:72px; }
     .weapon-btn.selected { border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
     .weapon-btn img { width:32px; height:32px; image-rendering:pixelated; }
     [data-sk-panel] { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(420px,90vw); z-index:20; }
-    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.12em; }
+    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.12em; pointer-events:none; }
   </style>
 </head>
 <body>
-  <div class="scene">
-    <div class="top">
-      <div class="left">
+  <div class="game-root letterbox">
+    <div class="game-world has-grid"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="reticle-center"></div>
+    <div class="game-hud">
+      <div class="hud-anchor-tl left-stack">
         <div class="hud-bar">
           <span class="hud-bar-label">HP</span>
           <div class="hud-bar-track"><div id="hp-fill" class="hud-bar-fill danger" style="width:62%"></div></div>
@@ -40,61 +39,68 @@
           <span id="cyber-val" class="hud-bar-value">40%</span>
         </div>
       </div>
-      <div class="right">
+
+      <div class="hud-anchor-tr" style="text-align:right">
         <div><img class="icon icon-sm" src="../../assets/_shared/kenney/icons/information.png" alt="" /> NIGHT CITY // WATSON</div>
         <button type="button" class="btn btn-secondary" id="btn-scan" style="margin-top:8px">
           <img class="icon icon-sm" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> TOGGLE SCAN
         </button>
       </div>
-    </div>
 
-    <div class="quest">
-      <div class="alert warning" id="quest-line">[ JOB ] Meet fixer at Afterlife</div>
-      <button type="button" class="btn btn-primary" id="btn-accept">ACCEPT JOB</button>
-      <button type="button" class="btn" id="btn-track">TRACK OBJECTIVE</button>
-    </div>
-
-    <div class="bottom">
-      <div class="weapons" id="weapons">
-        <button type="button" class="weapon-btn selected" data-ammo="24" data-max="120" data-name="UNITY">
-          <img src="../../assets/_shared/rpg-icons/gun.png" alt="gun" /><span>UNITY</span>
-        </button>
-        <button type="button" class="weapon-btn" data-ammo="6" data-max="24" data-name="SHOTTY">
-          <img src="../../assets/_shared/rpg-icons/crossbow.png" alt="shotty" /><span>SHOTTY</span>
-        </button>
-        <button type="button" class="weapon-btn" data-ammo="1" data-max="3" data-name="KNIFE">
-          <img src="../../assets/_shared/rpg-icons/knife.png" alt="knife" /><span>MELEE</span>
-        </button>
+      <div class="hud-anchor-tr quest-stack">
+        <div class="alert warning" id="quest-line">[ JOB ] Meet fixer at Afterlife</div>
+        <button type="button" class="btn btn-primary" id="btn-accept">ACCEPT JOB</button>
+        <button type="button" class="btn" id="btn-track">TRACK OBJECTIVE</button>
       </div>
-      <div class="panel" style="min-width:160px">
-        <div class="panel-title">WEAPON</div>
-        <div class="panel-body">
-          <div class="stat-row"><span class="stat-key">NAME</span><span class="stat-val" id="w-name">UNITY</span></div>
-          <div class="stat-row"><span class="stat-key">AMMO</span><span class="stat-val" id="w-ammo">24 / 120</span></div>
+
+      <div class="hud-anchor-bl bottom-bar">
+        <div class="weapons" id="weapons">
+          <button type="button" class="weapon-btn selected" data-ammo="24" data-max="120" data-name="UNITY">
+            <img src="../../assets/_shared/rpg-icons/gun.png" alt="gun" /><span>UNITY</span>
+          </button>
+          <button type="button" class="weapon-btn" data-ammo="6" data-max="24" data-name="SHOTTY">
+            <img src="../../assets/_shared/rpg-icons/crossbow.png" alt="shotty" /><span>SHOTTY</span>
+          </button>
+          <button type="button" class="weapon-btn" data-ammo="1" data-max="3" data-name="KNIFE">
+            <img src="../../assets/_shared/rpg-icons/knife.png" alt="knife" /><span>MELEE</span>
+          </button>
+        </div>
+        <div class="panel frame-brackets" style="min-width:160px">
+          <div class="panel-title">WEAPON</div>
+          <div class="panel-body">
+            <div class="stat-row"><span class="stat-key">NAME</span><span class="stat-val" id="w-name">UNITY</span></div>
+            <div class="stat-row"><span class="stat-key">AMMO</span><span class="stat-val" id="w-ammo">24 / 120</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button type="button" class="btn btn-primary" id="btn-hack">
+            <img class="icon icon-sm" src="../../assets/_shared/kenney/icons/gear.png" alt="" /> QUICKHACK
+          </button>
+          <button type="button" class="btn btn-danger" id="btn-damage">SIM DAMAGE</button>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button type="button" class="btn btn-primary" id="btn-hack">
-          <img class="icon icon-sm" src="../../assets/_shared/kenney/icons/gear.png" alt="" /> QUICKHACK
-        </button>
-        <button type="button" class="btn btn-danger" id="btn-damage">SIM DAMAGE</button>
-      </div>
-    </div>
 
-    <div id="hack-panel" class="panel panel-clipped" data-sk-panel hidden>
-      <div class="panel-title">QUICKHACK · NEURAL LINK</div>
-      <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
-        <button type="button" class="btn" data-hack="distract">Distract Enemies (−15 CYBER)</button>
-        <button type="button" class="btn" data-hack="breach">Breach Protocol (−25 CYBER)</button>
-        <button type="button" class="btn btn-ghost" id="hack-close">Close</button>
+      <div id="hack-panel" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
+        <div class="panel-title">QUICKHACK · NEURAL LINK</div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+          <button type="button" class="btn" data-hack="distract">Distract Enemies (−15 CYBER)</button>
+          <button type="button" class="btn" data-hack="breach">Breach Protocol (−25 CYBER)</button>
+          <button type="button" class="btn btn-ghost" id="hack-close">Close</button>
+        </div>
       </div>
+      <div class="hint">Esc closes panels · accept job · switch weapons · quickhack · sim damage</div>
     </div>
-    <div class="hint">Esc closes panels · accept job · switch weapons · quickhack · sim damage</div>
   </div>
   <script src="../../lib/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
     let hp = 620, cyber = 40, scan = true, tracked = false;
+
+    function flashVignette() {
+      const v = document.getElementById("vignette");
+      v.classList.add("on");
+      setTimeout(() => v.classList.remove("on"), 400);
+    }
 
     function syncBars() {
       sk.setFill(sk.$("#hp-fill"), (hp / 1000) * 100);
@@ -151,6 +157,7 @@
       hp = Math.max(0, hp - 80);
       syncBars();
       sk.pulse(sk.$("#hp-fill"));
+      flashVignette();
       sk.toast(hp <= 0 ? "FLATLINED" : "Took 80 damage", hp <= 0 ? "danger" : "warning");
     });
 

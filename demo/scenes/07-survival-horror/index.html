@@ -5,63 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Survival Horror — Spine Inventory</title>
   <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/game-feel.css" />
   <link rel="stylesheet" href="../../lib/styles/survival-horror.css" />
   <style>
-    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); }
-    .scene { display:grid; grid-template-columns:120px 1fr; gap:24px; padding:24px; min-height:100vh; box-sizing:border-box; max-width:720px; margin:0 auto; }
+    .game-world { background: radial-gradient(ellipse at 55% 50%, #121010 0%, #050404 75%); }
     .spine-col { display:flex; flex-direction:column; align-items:center; gap:12px; }
     .spine-col img { width:32px; height:32px; opacity:.7; }
-    .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:320px; }
+    .inv-panel { width:min(420px,52vw); }
+    .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
     .slot img { width:32px; height:32px; }
     .slot { cursor:pointer; min-height:64px; }
     .detail { margin-top:16px; }
-    .hint { margin-top:12px; font-size:11px; color:var(--text-muted); letter-spacing:.06em; }
+    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.06em; pointer-events:none; }
   </style>
 </head>
 <body>
-  <div class="scene">
-    <div class="spine-col">
-      <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
-      <div class="spine-bar-vertical" id="spine-bar"></div>
-      <span class="badge" id="hp-label">HP 72%</span>
-    </div>
+  <div class="game-root letterbox">
+    <div class="game-world"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="game-hud">
+      <div class="hud-anchor-bl spine-col">
+        <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
+        <div class="spine-bar-vertical" id="spine-bar"></div>
+        <span class="badge" id="hp-label">HP 72%</span>
+      </div>
 
-    <div>
-      <div class="panel">
-        <div class="panel-title">SPINE INVENTORY · 8 SLOTS</div>
-        <div class="panel-body">
-          <div class="inv-grid" id="inv">
-            <button type="button" class="slot has" data-item="med" data-qty="2" data-label="Med Kit">
-              <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
-            </button>
-            <button type="button" class="slot has" data-item="key" data-qty="1" data-label="Brass Key">
-              <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
-            </button>
-            <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="Survival Knife">
-              <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
-            </button>
-            <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm Rounds">
-              <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
-            </button>
-            <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="Broken Shield">
-              <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
-            </button>
-            <button type="button" class="slot"></button>
-            <button type="button" class="slot"></button>
-            <button type="button" class="slot"></button>
-          </div>
-          <div class="detail">
-            <div class="stat-row"><span class="stat-key">SELECTED</span><span class="stat-val" id="sel-name">—</span></div>
-            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-              <button type="button" class="btn btn-primary" id="btn-use">USE ITEM</button>
-              <button type="button" class="btn" id="btn-door">
-                <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> TRY DOOR
+      <div class="hud-anchor-br inv-panel">
+        <div class="panel frame-brackets">
+          <div class="panel-title">SPINE INVENTORY · 8 SLOTS</div>
+          <div class="panel-body">
+            <div class="inv-grid" id="inv">
+              <button type="button" class="slot has" data-item="med" data-qty="2" data-label="Med Kit">
+                <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
               </button>
-              <button type="button" class="btn btn-danger" id="btn-hurt">TAKE DAMAGE</button>
+              <button type="button" class="slot has" data-item="key" data-qty="1" data-label="Brass Key">
+                <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
+              </button>
+              <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="Survival Knife">
+                <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
+              </button>
+              <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm Rounds">
+                <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
+              </button>
+              <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="Broken Shield">
+                <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
+              </button>
+              <button type="button" class="slot"></button>
+              <button type="button" class="slot"></button>
+              <button type="button" class="slot"></button>
+            </div>
+            <div class="detail">
+              <div class="stat-row"><span class="stat-key">SELECTED</span><span class="stat-val" id="sel-name">—</span></div>
+              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                <button type="button" class="btn btn-primary" id="btn-use">USE ITEM</button>
+                <button type="button" class="btn" id="btn-door">
+                  <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> TRY DOOR
+                </button>
+                <button type="button" class="btn btn-danger" id="btn-hurt">TAKE DAMAGE</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
       <p class="hint">Spine reflects HP · select slot · use MED · key on door · sim damage</p>
     </div>
   </div>
@@ -71,6 +77,12 @@
     let hp = 72;
     let selectedSlot = null;
     const SEGMENTS = 10;
+
+    function flashVignette() {
+      const v = document.getElementById("vignette");
+      v.classList.add("on");
+      setTimeout(() => v.classList.remove("on"), 400);
+    }
 
     function renderSpine() {
       const bar = sk.$("#spine-bar");
@@ -151,6 +163,7 @@
     sk.on(sk.$("#btn-hurt"), "click", () => {
       hp = Math.max(0, hp - 15);
       renderSpine();
+      flashVignette();
       sk.toast(hp <= 0 ? "Vital signs failing" : "Injury −15%", "danger");
     });
 

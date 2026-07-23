@@ -1,0 +1,220 @@
+/* ============================================================
+   Game Feel — anti-web-chrome layer
+   ------------------------------------------------------------
+   Research notes (diegetic / non-diegetic / spatial / meta):
+   - Game UI sits ON a playfield, not in a document column
+   - Anchor to screen edges; avoid max-width centered “cards”
+   - Frames, brackets, vignette > Material/SaaS card chrome
+   - Immersion & fiction beat “clean website usability”
+   Refs: Fagerholt & Lorentzon 2009; Gamasutra diegesis; Unity immersion UI
+   ============================================================ */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  cursor: default;
+  user-select: none;
+  -webkit-font-smoothing: none;
+}
+
+/* Fullscreen game viewport (letterbox-ready) */
+.game-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* World / playfield BEHIND HUD (fake diegetic space) */
+.game-world {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 45%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, #000) 0%, var(--bg) 55%, #000 100%);
+}
+.game-world::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.12) 3px,
+      rgba(0, 0, 0, 0.12) 4px
+    );
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+.game-world::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px 40px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+}
+
+/* Optional perspective floor grid (space / synth / cyber) */
+.game-world.has-grid::before {
+  opacity: 0.55;
+  background:
+    linear-gradient(transparent 60%, color-mix(in srgb, var(--accent) 18%, transparent) 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 48px,
+      color-mix(in srgb, var(--accent) 22%, transparent) 48px,
+      color-mix(in srgb, var(--accent) 22%, transparent) 49px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 48px,
+      color-mix(in srgb, var(--accent) 18%, transparent) 48px,
+      color-mix(in srgb, var(--accent) 18%, transparent) 49px
+    );
+  transform: perspective(420px) rotateX(58deg) scale(1.6);
+  transform-origin: 50% 100%;
+  top: 35%;
+  bottom: -20%;
+  mix-blend-mode: screen;
+}
+
+/* HUD layer above world — edge anchored */
+.game-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.game-hud > *,
+.game-hud .hit {
+  pointer-events: auto;
+}
+
+.hud-anchor-tl { position: absolute; top: 18px; left: 18px; }
+.hud-anchor-tr { position: absolute; top: 18px; right: 18px; }
+.hud-anchor-bl { position: absolute; bottom: 18px; left: 18px; }
+.hud-anchor-br { position: absolute; bottom: 18px; right: 18px; }
+.hud-anchor-bc { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); }
+.hud-anchor-tc { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); }
+
+/* Meta damage / alert vignette */
+.meta-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms linear;
+  box-shadow: inset 0 0 80px 30px color-mix(in srgb, var(--danger) 55%, transparent);
+}
+.meta-vignette.on { opacity: 1; }
+
+/* Corner brackets — game frame language, not web cards */
+.frame-brackets {
+  position: relative;
+}
+.frame-brackets::before,
+.frame-brackets::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--border-strong);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 3;
+}
+.frame-brackets::before {
+  top: -1px; left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.frame-brackets::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Soft letterbox bars (cinematic / console feel) */
+.letterbox::before,
+.letterbox::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: min(6vh, 48px);
+  background: #000;
+  z-index: 5;
+  pointer-events: none;
+}
+.letterbox::before { top: 0; }
+.letterbox::after { bottom: 0; }
+
+/* Kill “website column” habits inside scenes */
+.no-web-column {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Crosshair / reticle center — spatial cue */
+.reticle-center {
+  position: absolute;
+  left: 50%; top: 48%;
+  width: 28px; height: 28px;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--glow);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.reticle-center::before,
+.reticle-center::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+  opacity: 0.8;
+}
+.reticle-center::before {
+  left: 50%; top: -6px; bottom: -6px; width: 1px; transform: translateX(-50%);
+}
+.reticle-center::after {
+  top: 50%; left: -6px; right: -6px; height: 1px; transform: translateY(-50%);
+}
+
+/* Prompt / interact cue (Press E) — game convention */
+.interact-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--text);
+  backdrop-filter: none;
+}
+.interact-prompt .key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  box-shadow: 0 0 8px var(--glow);
+}
