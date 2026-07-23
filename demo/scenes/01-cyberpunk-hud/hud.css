@@ -750,13 +750,14 @@ html, body {
 #feed {
   position: absolute;
   left: 50%;
-  top: 18%;
-  transform: translateX(-50%);
-  width: min(420px, 70vw);
+  top: 48%;
+  transform: translate(-50%, -50%);
+  width: min(420px, 78%);
   z-index: 18;
   font-size: 14px;
   letter-spacing: 0.12em;
   text-align: center;
+  pointer-events: none;
 }
 #feed div {
   margin-top: 4px;

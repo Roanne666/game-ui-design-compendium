@@ -221,11 +221,14 @@ html, body {
 }
 
 #feed {
-  top: 168px !important;
-  left: 7% !important;
-  width: 86% !important;
-  font-size: 11px !important;
+  top: 48% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(280px, 78%) !important;
+  font-size: 12px !important;
   z-index: 19;
+  text-align: center !important;
 }
 #journal {
   inset: 6% 5% !important;
@@ -285,7 +288,12 @@ body.help-open .loop-rail { opacity: 0.25; }
 }
 .prompt {
   font-size: 12px !important;
-  top: calc(50% + 28px) !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 52% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 20 !important;
+  text-align: center;
 }
 
 /* ========== MATRIX — terminal header + right rail skills ========== */
