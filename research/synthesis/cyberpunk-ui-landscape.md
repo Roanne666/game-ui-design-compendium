@@ -246,13 +246,18 @@ infoDensity: low | mid | high
 
 ## 9. 对当前 Demo 的诊断（基于本分析）
 
-当前 `01-cyberpunk-hud` 已偏向 **Neo Militarism**（红主色、左上生命、右上小地图），方向正确，但仍偏「干净平面 UI」，FUI 零件与「损坏的未来」不足：
+`demo/scenes/01-cyberpunk-hud/` 已实现 **子方言切换**（顶栏 NEO / MATRIX / AMBER / NOIR，快捷键 `[` `]`）：
 
-- 缺：角括号取景、引导线扫描标签的存在感、离散 RAM 以外的仪表刻度语言、受击/入侵时的 **一次** glitch  
-- 险：若继续只加霓虹和放大字号，会滑向「大号网页 HUD」  
-- 可选下一步：  
-  1. **深耕 Neo Militarism**（加 FUI 零件 + 情境显隐），或  
-  2. **做子方言切换**（Matrix / Amber / Neon Noir），用同一套交互证明「赛博朋克是一族方言」
+| 键 | 方言 | 主信号 |
+|----|------|--------|
+| NEO | Neo Militarism | 红品牌 + 青数据 |
+| MATRIX | Matrix Terminal | 磷光绿 + 等宽 + 代码雨层 |
+| AMBER | Amber Augment | 琥珀 AR（Deus Ex 向） |
+| NOIR | Neon Noir | 品红 + 青霓虹 |
+
+同一套交互与布局，只换 token / 字体 / 少量方言专属层，用来证明「赛博朋克是一族方言」。
+
+仍可加强的 FUI 零件：角括号取景、引导线扫描标签、受击时的单次 glitch（切换方言已有短 flash）。
 
 ---
 

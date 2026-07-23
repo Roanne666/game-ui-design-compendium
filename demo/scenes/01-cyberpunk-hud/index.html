@@ -6,10 +6,11 @@
   <title>01 Cyberpunk — Gameplay HUD</title>
   <link rel="stylesheet" href="hud.css" />
 </head>
-<body>
+<body data-dialect="neo">
   <div id="viewport">
     <div id="world">
       <div id="rain"></div>
+      <div id="code-rain" aria-hidden="true"></div>
       <div class="fog"></div>
 
       <div class="entity hostile" data-id="guard" data-type="hostile" data-name="CORPO GUARD" data-dist="18m"
@@ -42,6 +43,14 @@
     <div id="hurt"></div>
 
     <div id="hud">
+      <div class="dialect-bar hit" id="dialect-bar" title="Cycle with [ ]">
+        <span class="lab">DIALECT</span>
+        <button type="button" data-d="neo" class="on">NEO</button>
+        <button type="button" data-d="matrix">MATRIX</button>
+        <button type="button" data-d="amber">AMBER</button>
+        <button type="button" data-d="noir">NOIR</button>
+      </div>
+
       <div class="crosshair" id="crosshair">
         <i class="h"></i><i class="h2"></i><i class="v"></i><i class="v2"></i>
       </div>
@@ -66,7 +75,7 @@
           <div class="ring"></div>
           <div class="player" id="mm-player"></div>
           <div class="ping" style="left:70%;top:40%"></div>
-          <div class="ping" style="left:30%;top:60%;background:#e60012;box-shadow:0 0 6px #e60012"></div>
+          <div class="ping hostile" style="left:30%;top:60%"></div>
         </div>
         <div class="nav-meta">
           <span id="clock">00:00:00</span>
@@ -107,7 +116,7 @@
       </div>
 
       <div id="feed"></div>
-      <div class="help" id="help" hidden>LMB FIRE · RMB LOCK · E USE · TAB SCAN · 1-3 WEAPON · R RELOAD · J JOURNAL · H HELP · SHIFT SPRINT</div>
+      <div class="help" id="help" hidden>LMB FIRE · RMB LOCK · E USE · TAB SCAN · 1-3 WEAPON · R RELOAD · [ ] DIALECT · J JOURNAL · H HELP · SHIFT SPRINT</div>
     </div>
 
     <div id="journal">
@@ -141,6 +150,14 @@
     { main: "Optional: Flatline guard", sub: "OBJ · Hostile · 18m" },
   ];
 
+  const dialects = ["neo", "matrix", "amber", "noir"];
+  const dialectLabel = {
+    neo: "NEO MILITARISM",
+    matrix: "MATRIX TERMINAL",
+    amber: "AMBER AUGMENT",
+    noir: "NEON NOIR",
+  };
+
   const state = {
     hp: 620, hpMax: 1000,
     st: 100, ar: 40,
@@ -155,11 +172,24 @@
     journal: false,
     shard: false,
     doorOpen: false,
+    dialect: "neo",
   };
 
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
   const world = $("#world");
+
+  function setDialect(id) {
+    if (!dialects.includes(id)) return;
+    state.dialect = id;
+    document.body.dataset.dialect = id;
+    $$("#dialect-bar button").forEach((b) => b.classList.toggle("on", b.dataset.d === id));
+    const hud = $("#hud");
+    hud.classList.remove("dialect-flash");
+    void hud.offsetWidth;
+    hud.classList.add("dialect-flash");
+    feed("DIALECT · " + dialectLabel[id]);
+  }
 
   function feed(msg) {
     const el = document.createElement("div");
@@ -393,6 +423,13 @@
     if (e.code === "Digit1") { state.w = 0; sync(); }
     if (e.code === "Digit2") { state.w = 1; sync(); }
     if (e.code === "Digit3") { state.w = 2; sync(); }
+    if (e.code === "BracketLeft" || e.code === "BracketRight") {
+      const i = dialects.indexOf(state.dialect);
+      const next = e.code === "BracketRight"
+        ? dialects[(i + 1) % dialects.length]
+        : dialects[(i - 1 + dialects.length) % dialects.length];
+      setDialect(next);
+    }
     if (e.code === "ShiftLeft" || e.code === "ShiftRight") state.sprint = true;
   });
   window.addEventListener("keyup", (e) => {
@@ -400,6 +437,9 @@
     if (e.code === "ShiftLeft" || e.code === "ShiftRight") state.sprint = false;
   });
 
+  $$("#dialect-bar button").forEach((b) => {
+    b.addEventListener("click", () => setDialect(b.dataset.d));
+  });
   $$(".pockets .pocket[data-w]").forEach((s) => {
     s.addEventListener("click", () => { state.w = Number(s.dataset.w); sync(); });
   });
