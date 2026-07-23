@@ -96,10 +96,10 @@
       </div>
 
       <div class="pockets">
-        <div class="pocket on hit" data-w="0"><span class="ico">1</span><span class="k">团结</span></div>
-        <div class="pocket hit" data-w="1"><span class="ico">2</span><span class="k">沙塔</span></div>
-        <div class="pocket hit" data-w="2"><span class="ico">3</span><span class="k">悟</span></div>
-        <div class="pocket dim"><span class="ico">+</span><span class="k">伤药</span></div>
+        <div class="pocket on hit" data-w="0" title="团结"><span class="ico">1</span></div>
+        <div class="pocket hit" data-w="1" title="沙塔拉"><span class="ico">2</span></div>
+        <div class="pocket hit" data-w="2" title="悟"><span class="ico">3</span></div>
+        <div class="pocket dim" title="伤药"><span class="ico">+</span></div>
       </div>
 
       <div class="weapon-hud">
@@ -119,14 +119,29 @@
       <div id="feed"></div>
 
       <div class="touch-pad" id="touch-pad">
-        <button type="button" class="t-btn t-sprint hit" id="btn-sprint" aria-label="冲刺">冲刺</button>
-        <button type="button" class="t-btn t-scan hit" id="btn-scan" aria-label="扫描">扫描</button>
-        <button type="button" class="t-btn t-reload hit" id="btn-reload" aria-label="换弹">换弹</button>
-        <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="日志">日志</button>
-        <button type="button" class="t-btn t-action hit" id="btn-action" aria-label="互动">互动</button>
-        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火">开火</button>
+        <button type="button" class="t-btn t-sprint hit" id="btn-sprint" aria-label="冲刺">
+          <img class="ico" src="./art/icons/icon-sprint.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-scan hit" id="btn-scan" aria-label="扫描">
+          <img class="ico" src="./art/icons/icon-scan.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-reload hit" id="btn-reload" aria-label="换弹">
+          <img class="ico" src="./art/icons/icon-reload.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="日志">
+          <img class="ico" src="./art/icons/icon-journal.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-action hit" id="btn-action" aria-label="互动" disabled>
+          <img class="ico" src="./art/icons/icon-action.png" alt="" draggable="false" />
+        </button>
+        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火">
+          <img class="ico" src="./art/icons/icon-fire.png" alt="" draggable="false" />
+        </button>
       </div>
 
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
+        <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
+      </button>
       <div class="help" id="help" hidden>拖动环视 · 点目标 · 右下开火 · 互动/黑客 · 按住冲刺 · 扫描 / 换弹 / 日志</div>
     </div>
 
@@ -249,7 +264,7 @@
     const action = $("#btn-action");
     if (!ent) {
       prompt.classList.remove("show");
-      action.textContent = "互动";
+      action.setAttribute("aria-label", "互动");
       action.disabled = true;
       return;
     }
@@ -264,7 +279,7 @@
     $("#prompt-key").textContent = key;
     $("#prompt-text").textContent = text;
     prompt.classList.add("show");
-    action.textContent = act;
+    action.setAttribute("aria-label", act);
     action.disabled = false;
   }
 
@@ -554,7 +569,17 @@
     if (e.code === "KeyH") {
       const help = $("#help");
       help.hidden = !help.hidden;
+      document.body.classList.toggle("help-open", !help.hidden);
     }
+  });
+
+  const helpEl = $("#help");
+  $("#btn-help").addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const open = helpEl.hidden;
+    helpEl.hidden = !open;
+    document.body.classList.toggle("help-open", open);
   });
 
   // Ambient loop

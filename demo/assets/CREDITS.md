@@ -32,6 +32,7 @@
 
 - `demo/scenes/01-cyberpunk-hud/art/street-bg.png` — original night street plate
 - `demo/scenes/01-cyberpunk-hud/art/guard.png` / `civ.png` — original character plates  
+- `demo/scenes/01-cyberpunk-hud/art/icons/` — HUD touch icons (sprint / scan / reload / journal / action / fire / help), black-keyed
 - License: project original for this encyclopedia demo
 
 ## Project-generated scene plates (02 Dark Fantasy)

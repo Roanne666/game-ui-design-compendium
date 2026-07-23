@@ -19,8 +19,8 @@
 - 写实军事战术射击(应用 Tactical Military)
 
 **本风格推荐场景包**
-- 主场景:`demo/scenes/01-cyberpunk-hud/index.html`（9:20 竖屏触控：拖动环视、点目标、底栏开火/交互；四子方言布局不同）
-- 操作准则:项目全局为移动端竖屏服务，见 `research/synthesis/mobile-portrait-first.md`
+- 主场景:`demo/scenes/01-cyberpunk-hud/index.html`（9:20 竖屏触控：图标主键、左冲刺/扫描、右开火+竖列次要、顶区帮助；四子方言布局不同）
+- 操作准则:`research/synthesis/mobile-portrait-first.md`
 - 扩展:义体商店、车载 HUD、对话选项条
 
 ## 3. 视觉关键词
