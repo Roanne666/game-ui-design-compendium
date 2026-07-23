@@ -19,8 +19,9 @@
 - 信息过载的太空模拟仪表盘
 
 **本风格推荐场景包**
-- 主场景:`souls-hud.html`(极简血条+精力弧/条)
+- 主场景:`demo/scenes/02-dark-fantasy/index.html`（9:20 竖屏触控魂类 HUD：篝火休息 / 锁定攻击 / Estus / 翻滚）
 - 扩展:篝火菜单、装备对比石板
+- 操作准则:`research/synthesis/mobile-portrait-first.md`
 
 ## 3. 视觉关键词
 

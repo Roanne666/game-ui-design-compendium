@@ -1,107 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Dark Fantasy — Bonfire Interactive</title>
-  <link rel="stylesheet" href="../../lib/components.css" />
-  <link rel="stylesheet" href="../../lib/game-feel.css" />
-  <link rel="stylesheet" href="../../lib/styles/dark-fantasy.css" />
-  <style>
-    .game-world { background: radial-gradient(ellipse at 50% 40%, #1a1510 0%, #0a0908 70%); }
-    .icon { width:36px; height:36px; image-rendering:pixelated; }
-    .hud-stack { width:320px; display:flex; flex-direction:column; gap:8px; }
-    .fp-stack { width:140px; text-align:center; }
-    .fp-stack .label { font-family:var(--font-display); color:var(--text-muted); font-size:12px; letter-spacing:.2em; margin-bottom:8px; }
-    .center-prompt { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); text-align:center; pointer-events:auto; }
-    .center-prompt img { width:64px; height:64px; image-rendering:pixelated; filter:sepia(1) saturate(.6); }
-    [data-sk-panel] { position:absolute; left:50%; top:55%; transform:translate(-50%,0); width:min(360px,90vw); }
-    .hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); color:var(--text-muted); font-size:12px; opacity:.6; letter-spacing:.12em; pointer-events:none; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>02 Dark Fantasy — 竖屏魂类 HUD</title>
+  <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
-  <div class="game-root letterbox">
-    <div class="game-world"></div>
-    <div class="meta-vignette" id="vignette"></div>
-    <div class="game-hud">
-      <div class="center-prompt">
-        <img src="../../assets/_shared/rpg-icons/fire.png" alt="bonfire" />
-        <div style="margin-top:12px;letter-spacing:.2em;text-transform:uppercase;font-size:13px;color:var(--accent)">Bonfire ahead</div>
-        <button type="button" class="btn btn-primary" id="btn-rest" style="margin-top:16px">Rest at Bonfire</button>
+  <div id="viewport">
+    <div id="world">
+      <div class="ruin a"></div>
+      <div class="ruin b"></div>
+      <div class="fog"></div>
+
+      <div class="bonfire hit" id="bonfire" data-type="bonfire">
+        <div class="glow"></div>
+        <div class="flame"></div>
+        <div class="logs"></div>
       </div>
 
-      <div class="hud-anchor-bl hud-stack">
-        <div class="hud-bar">
-          <span class="hud-bar-label">HP</span>
-          <div class="hud-bar-track"><div id="hp" class="hud-bar-fill danger" style="width:38%"></div></div>
+      <div class="enemy hit" id="enemy" data-type="enemy" data-name="HOLLOW KNIGHT">
+        <div class="blade"></div>
+        <div class="body"></div>
+      </div>
+
+      <div class="loot hit" id="loot" data-type="loot" hidden></div>
+    </div>
+
+    <div id="hurt"></div>
+
+    <div id="hud">
+      <div class="place" id="place">
+        <div>LIMGRAVE · RUINS</div>
+        <div class="rest-hint">篝火近前 · 点按休息</div>
+      </div>
+
+      <div class="vitals" id="vitals">
+        <div class="vital hp" id="hp-row">
+          <span class="lab">HP</span>
+          <div class="trk"><div class="fill" id="hp-fill"></div></div>
         </div>
-        <div class="hud-bar">
-          <span class="hud-bar-label">FP</span>
-          <div class="hud-bar-track"><div id="fp" class="hud-bar-fill" style="width:70%;background:var(--accent)"></div></div>
+        <div class="vital fp">
+          <span class="lab">FP</span>
+          <div class="trk"><div class="fill" id="fp-fill"></div></div>
         </div>
-        <div class="hud-bar">
-          <span class="hud-bar-label">ST</span>
-          <div class="hud-bar-track"><div id="st" class="hud-bar-fill success" style="width:55%"></div></div>
+        <div class="vital st">
+          <span class="lab">ST</span>
+          <div class="trk"><div class="fill" id="st-fill"></div></div>
         </div>
       </div>
 
-      <div class="hud-anchor-br fp-stack">
-        <div class="label">FLASK <span id="flask-n">2</span></div>
-        <div class="arc-bar">
-          <div class="arc-track"><div id="flask-fill" class="arc-fill" style="height:45%"></div></div>
-          <div class="arc-value" id="flask-v">2</div>
-        </div>
-        <button type="button" class="btn" id="btn-drink" style="margin-top:8px;width:100%">Drink</button>
+      <button type="button" class="estus-slot hit" id="btn-estus" aria-label="Estus">
+        <span class="n" id="estus-n">3</span>
+        <span>ESTUS</span>
+      </button>
+
+      <div class="prompt" id="prompt"></div>
+      <div id="feed"></div>
+
+      <div class="slate" id="slate">
+        <h2>Bonfire</h2>
+        <button type="button" id="slate-rest">Rest</button>
+        <button type="button" id="slate-leave">Leave</button>
       </div>
 
-      <div id="menu" class="panel frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">Bonfire Menu</div>
-        <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
-          <button type="button" class="menu-item-large" id="m-level">Level Up</button>
-          <button type="button" class="menu-item-large" id="m-equip">Equipment</button>
-          <button type="button" class="menu-item-large" id="m-leave">Leave</button>
-        </div>
+      <div class="touch-pad">
+        <button type="button" class="t-btn t-lock hit" id="btn-lock">LOCK</button>
+        <button type="button" class="t-btn t-use hit" id="btn-use">USE</button>
+        <button type="button" class="t-btn t-roll hit" id="btn-roll">ROLL</button>
+        <button type="button" class="t-btn t-attack hit" id="btn-attack">ATTACK</button>
       </div>
-      <div class="hint">Rest · open menu · drink flask · leave</div>
+
+      <div class="help" id="help">拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点 Estus 回血 · 靠近篝火休息</div>
     </div>
   </div>
-  <script src="../../lib/scene-kit.js"></script>
+
   <script>
-    const sk = SceneKit;
-    let hp = 38, fp = 70, st = 55, flask = 2;
+(function () {
+  const state = {
+    hp: 620, hpMax: 1000,
+    fp: 80, fpMax: 100,
+    st: 100, stMax: 100,
+    estus: 3, estusMax: 3,
+    lock: false,
+    nearBonfire: false,
+    slate: false,
+    enemyHp: 180,
+    enemyAlive: true,
+    lookX: 0, lookY: 0,
+    vitalsUntil: 0,
+    iFrames: 0,
+  };
 
-    function sync() {
-      sk.setFill(sk.$("#hp"), hp);
-      sk.setFill(sk.$("#fp"), fp);
-      sk.setFill(sk.$("#st"), st);
-      sk.$("#flask-fill").style.height = (flask / 4) * 100 + "%";
-      sk.setText(sk.$("#flask-n"), String(flask));
-      sk.setText(sk.$("#flask-v"), String(flask));
+  const $ = (s) => document.querySelector(s);
+  const world = $("#world");
+  const enemy = $("#enemy");
+  const loot = $("#loot");
+
+  function feed(msg) {
+    const el = document.createElement("div");
+    el.textContent = msg;
+    $("#feed").prepend(el);
+    setTimeout(() => el.remove(), 2200);
+  }
+
+  function showVitals() {
+    state.vitalsUntil = Date.now() + 2200;
+    $("#vitals").classList.add("show");
+  }
+
+  function sync() {
+    $("#hp-fill").style.width = (state.hp / state.hpMax) * 100 + "%";
+    $("#fp-fill").style.width = (state.fp / state.fpMax) * 100 + "%";
+    $("#st-fill").style.width = (state.st / state.stMax) * 100 + "%";
+    $("#hp-row").classList.toggle("low", state.hp / state.hpMax < 0.28);
+    $("#estus-n").textContent = String(state.estus);
+    $("#btn-estus").disabled = state.estus <= 0;
+    $("#place").classList.toggle("near", state.nearBonfire);
+    $("#slate").classList.toggle("open", state.slate);
+    enemy.classList.toggle("locked", state.lock && state.enemyAlive);
+    enemy.classList.toggle("dead", !state.enemyAlive);
+    if (Date.now() < state.vitalsUntil) $("#vitals").classList.add("show");
+    else $("#vitals").classList.remove("show");
+  }
+
+  function setPrompt(text) {
+    const p = $("#prompt");
+    if (!text) { p.classList.remove("show"); p.textContent = ""; return; }
+    p.textContent = text;
+    p.classList.add("show");
+  }
+
+  function hurt(amount) {
+    if (state.iFrames > 0 || state.slate) return;
+    state.hp = Math.max(0, state.hp - amount);
+    showVitals();
+    $("#hurt").classList.add("on");
+    setTimeout(() => $("#hurt").classList.remove("on"), 280);
+    feed(state.hp <= 0 ? "YOU DIED" : "受伤");
+    if (state.hp <= 0) {
+      setTimeout(() => {
+        state.hp = Math.floor(state.hpMax * 0.4);
+        state.st = state.stMax;
+        state.estus = Math.max(1, state.estus);
+        feed("于废墟中苏醒");
+        showVitals();
+        sync();
+      }, 1600);
     }
-
-    sk.on(sk.$("#btn-rest"), "click", () => {
-      hp = 100; fp = 100; st = 100; flask = 4;
-      sync();
-      sk.openPanel("#menu");
-      sk.toast("Embers restored. Enemies revive in the distance…", "warning");
-    });
-
-    sk.on(sk.$("#btn-drink"), "click", () => {
-      if (flask <= 0) { sk.toast("No flasks left", "danger"); return; }
-      flask -= 1;
-      hp = Math.min(100, hp + 35);
-      sync();
-      sk.pulse(sk.$("#hp"));
-      sk.toast("Flask of Crimson Tears", "success");
-    });
-
-    sk.on(sk.$("#m-level"), "click", () => sk.toast("Not enough runes", "warning"));
-    sk.on(sk.$("#m-equip"), "click", () => sk.toast("Inventory is a stone tablet elsewhere", "warning"));
-    sk.on(sk.$("#m-leave"), "click", () => {
-      sk.closePanel("#menu");
-      sk.toast("You rise from the bonfire");
-    });
-
     sync();
+  }
+
+  function spendStam(n) {
+    if (state.st < n) { feed("耐力不足"); return false; }
+    state.st -= n;
+    showVitals();
+    return true;
+  }
+
+  function attack() {
+    if (state.slate || !state.enemyAlive) return;
+    if (!spendStam(18)) return;
+    if (state.lock) {
+      state.enemyHp -= 35 + Math.random() * 20;
+      feed("命中 · " + Math.max(0, Math.round(state.enemyHp)));
+      if (state.enemyHp <= 0) {
+        state.enemyAlive = false;
+        state.lock = false;
+        loot.hidden = false;
+        feed("敌人倒下 · 光点出现");
+      } else if (Math.random() < 0.35) {
+        setTimeout(() => hurt(40 + Math.random() * 30), 280);
+      }
+    } else {
+      feed("挥空");
+    }
+    sync();
+  }
+
+  function roll() {
+    if (state.slate) return;
+    if (!spendStam(28)) return;
+    state.iFrames = 8;
+    feed("翻滚");
+    sync();
+  }
+
+  function drinkEstus() {
+    if (state.estus <= 0 || state.hp >= state.hpMax) return;
+    state.estus -= 1;
+    state.hp = Math.min(state.hpMax, state.hp + 280);
+    showVitals();
+    feed("喝下琥珀露滴");
+    sync();
+  }
+
+  function useAction() {
+    if (state.nearBonfire) {
+      state.slate = true;
+      setPrompt("");
+      sync();
+      return;
+    }
+    if (!loot.hidden) {
+      loot.hidden = true;
+      state.estus = Math.min(state.estusMax, state.estus + 1);
+      feed("拾取 · Estus 碎片感");
+      sync();
+      return;
+    }
+    if (state.enemyAlive) {
+      state.lock = !state.lock;
+      feed(state.lock ? "锁定 · HOLLOW KNIGHT" : "解除锁定");
+      sync();
+    }
+  }
+
+  function rest() {
+    state.hp = state.hpMax;
+    state.fp = state.fpMax;
+    state.st = state.stMax;
+    state.estus = state.estusMax;
+    state.slate = false;
+    state.enemyHp = 180;
+    state.enemyAlive = true;
+    loot.hidden = true;
+    state.lock = false;
+    showVitals();
+    feed("于篝火旁休息");
+    sync();
+  }
+
+  function applyLook() {
+    world.style.transform = `translate(${-state.lookX}px, ${-state.lookY}px)`;
+  }
+
+  function updateNear() {
+    const dx = Math.abs(state.lookX);
+    const dy = Math.abs(state.lookY + 4);
+    state.nearBonfire = dx < 14 && dy < 12;
+    if (state.nearBonfire && !state.slate) setPrompt("点按 USE · 篝火");
+    else if (!loot.hidden) setPrompt("点按 USE · 拾取");
+    else if (state.lock) setPrompt("锁定中 · ATTACK");
+    else setPrompt("");
+  }
+
+  // Pointer: look / tap
+  const vp = $("#viewport");
+  let drag = null;
+
+  vp.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".hit") || e.target.closest(".slate")) return;
+    drag = {
+      id: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      moved: false,
+      lookX: state.lookX,
+      lookY: state.lookY,
+    };
+    try { vp.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  vp.addEventListener("pointermove", (e) => {
+    if (!drag || drag.id !== e.pointerId) return;
+    const dx = e.clientX - drag.x;
+    const dy = e.clientY - drag.y;
+    if (Math.hypot(dx, dy) > 8) drag.moved = true;
+    state.lookX = Math.max(-30, Math.min(30, drag.lookX - dx * 0.08));
+    state.lookY = Math.max(-18, Math.min(18, drag.lookY - dy * 0.08));
+    applyLook();
+    updateNear();
+  });
+  vp.addEventListener("pointerup", (e) => {
+    if (!drag || drag.id !== e.pointerId) return;
+    drag = null;
+  });
+  vp.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  $("#bonfire").addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    state.nearBonfire = true;
+    useAction();
+  });
+  $("#enemy").addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    if (!state.enemyAlive) return;
+    state.lock = true;
+    feed("锁定 · HOLLOW KNIGHT");
+    sync();
+  });
+  loot.addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    useAction();
+  });
+
+  $("#btn-attack").addEventListener("pointerdown", (e) => {
+    e.preventDefault(); e.stopPropagation(); attack();
+  });
+  $("#btn-roll").addEventListener("pointerdown", (e) => {
+    e.preventDefault(); e.stopPropagation(); roll();
+  });
+  $("#btn-use").addEventListener("pointerdown", (e) => {
+    e.preventDefault(); e.stopPropagation(); useAction();
+  });
+  $("#btn-estus").addEventListener("pointerdown", (e) => {
+    e.preventDefault(); e.stopPropagation(); drinkEstus();
+  });
+
+  const lockBtn = $("#btn-lock");
+  function lockStart(e) {
+    e.preventDefault(); e.stopPropagation();
+    if (!state.enemyAlive) return;
+    state.lock = true;
+    lockBtn.classList.add("pressed");
+    feed("锁定");
+    sync();
+  }
+  function lockEnd(e) {
+    e.preventDefault(); e.stopPropagation();
+    lockBtn.classList.remove("pressed");
+  }
+  lockBtn.addEventListener("pointerdown", lockStart);
+  lockBtn.addEventListener("pointerup", lockEnd);
+  lockBtn.addEventListener("pointerleave", lockEnd);
+  lockBtn.addEventListener("pointercancel", lockEnd);
+
+  $("#slate-rest").addEventListener("click", rest);
+  $("#slate-leave").addEventListener("click", () => {
+    state.slate = false;
+    sync();
+  });
+
+  setInterval(() => {
+    if (state.iFrames > 0) state.iFrames -= 1;
+    if (!state.slate) state.st = Math.min(state.stMax, state.st + 1.1);
+    if (state.st < state.stMax) showVitals();
+    updateNear();
+    sync();
+  }, 100);
+
+  feed("废墟中回响着篝火的噼啪声");
+  showVitals();
+  sync();
+})();
   </script>
 </body>
 </html>

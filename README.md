@@ -47,7 +47,7 @@
 | # | 风格 | 适合的游戏类型 | 本轮主场景 |
 |---|------|----------------|------------|
 | 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `01-cyberpunk-hud/`（9:20 触控） |
-| 02 | Dark Fantasy | 魂类 / 动作 RPG | `souls-hud.html` |
+| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控） |
 | 03 | Sci-Fi Space | 太空模拟 | `bridge-holo.html` |
 | 04 | Pixel Retro | 2D 像素 RPG/平台 | `battle-command.html` |
 | 05 | Hand-drawn | 叙事动作 / Roguelike | `boon-select.html` |
