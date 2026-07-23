@@ -85,10 +85,108 @@ html, body {
 }
 .nav-meta #clock { font-size: 11px !important; }
 
+.pockets {
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  gap: 6px !important;
+  max-width: none;
+  justify-content: center;
+  position: relative !important;
+}
+.pockets .pocket {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  font-size: 8px !important;
+  padding: 4px 2px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.55);
+}
+.pockets .pocket .ico { font-size: 14px !important; line-height: 1; }
+.pockets .pocket .pn {
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pockets .pocket .k { display: none !important; }
+
+.weapon-dock {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 100px !important;
+  transform: translateX(-50%) !important;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: calc(100% - 168px);
+  max-width: 280px;
+  pointer-events: none;
+}
+.weapon-dock .weapon-hud,
+.weapon-dock .pockets {
+  pointer-events: auto;
+}
+
+/* Ammo readout sits above weapon dock */
+.weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  text-align: center !important;
+  min-width: 0 !important;
+  transform: none !important;
+}
+.weapon-hud .ammo { font-size: 20px !important; line-height: 1; }
+.weapon-hud .ammo > span { font-size: 11px !important; }
+.weapon-hud .wname { font-size: 11px !important; }
+.weapon-hud .stance { font-size: 9px !important; }
+
+.loop-rail {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 96px;
+  z-index: 18;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 6px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(242, 242, 242, 0.35);
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+}
+.loop-rail .step.on {
+  color: var(--cp-red, #ff2a6d);
+  text-shadow: 0 0 8px rgba(var(--accent-rgb), 0.55);
+}
+.loop-rail .sep { opacity: 0.4; }
+
 .quest {
   left: 10px !important;
   right: 10px !important;
-  top: 108px !important;
+  top: 118px !important;
   width: auto !important;
   text-align: left !important;
   padding: 8px 10px !important;
@@ -99,54 +197,22 @@ html, body {
 .quest .q-main { font-size: 14px !important; }
 .quest .q-sub { font-size: 10px !important; }
 
-.pockets {
-  left: 50% !important;
-  right: auto !important;
-  bottom: 108px !important;
-  transform: translateX(-50%) !important;
-  gap: 5px !important;
-  max-width: calc(100% - 168px);
-  justify-content: center;
-}
-.pockets .pocket {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  font-size: 8px !important;
-  padding: 4px !important;
-}
-.pockets .pocket .ico { font-size: 14px !important; }
-.pockets .pocket .k { display: none !important; }
-
-/* Ammo readout sits above left scan — never beside fire */
-.weapon-hud {
-  left: 12px !important;
-  right: auto !important;
-  bottom: 140px !important;
-  text-align: left !important;
-  min-width: 0 !important;
-  transform: none !important;
-}
-.weapon-hud .ammo { font-size: 22px !important; line-height: 1; }
-.weapon-hud .ammo > span { font-size: 11px !important; }
-.weapon-hud .wname { font-size: 10px !important; }
-.weapon-hud .stance { font-size: 9px !important; }
-
 .stamina {
-  bottom: 34% !important;
-  width: 48% !important;
+  bottom: 36% !important;
+  width: 42% !important;
   left: 12px !important;
   transform: none !important;
 }
 
 .ram {
-  right: 86px !important;
-  left: 12px !important;
+  left: 10px !important;
+  right: 78px !important;
   top: auto !important;
-  bottom: 248px !important;
+  bottom: 268px !important;
   transform: none !important;
   width: auto !important;
 }
+
 #feed {
   top: 22% !important;
   width: 86% !important;
@@ -242,18 +308,19 @@ body.help-open .help { top: 48px !important; }
 }
 [data-dialect="matrix"] .quest .q-main { font-size: 12px !important; letter-spacing: 0.06em; }
 [data-dialect="matrix"] .pockets {
-  left: 50% !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 108px !important;
-  transform: translateX(-50%) !important;
+  bottom: auto !important;
+  transform: none !important;
   flex-direction: row !important;
-  max-width: calc(100% - 168px);
 }
 [data-dialect="matrix"] .weapon-hud {
-  left: 12px !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 140px !important;
-  text-align: left !important;
+  bottom: auto !important;
+  text-align: center !important;
 }
 [data-dialect="matrix"] .weapon-hud .ammo {
   color: var(--cp-red) !important;
@@ -299,21 +366,22 @@ body.help-open .help { top: 48px !important; }
   align-items: flex-end !important;
 }
 [data-dialect="amber"] .pockets {
-  left: 50% !important;
-  bottom: 108px !important;
-  transform: translateX(-50%) !important;
+  position: relative !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
   flex-direction: row;
-  max-width: calc(100% - 168px);
   padding: 4px 6px;
   background: rgba(8, 6, 0, 0.55);
   border: 1px solid rgba(var(--accent-rgb), 0.3);
 }
 [data-dialect="amber"] .weapon-hud {
-  left: 12px !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 140px !important;
+  bottom: auto !important;
   transform: none !important;
-  text-align: left !important;
+  text-align: center !important;
 }
 [data-dialect="amber"] .weapon-hud .ammo {
   color: var(--cp-red) !important;
@@ -356,22 +424,23 @@ body.help-open .help { top: 48px !important; }
   text-shadow: 0 0 10px rgba(var(--data-rgb), 0.45) !important;
 }
 [data-dialect="noir"] .pockets {
-  left: 50% !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 108px !important;
-  transform: translateX(-50%) !important;
+  bottom: auto !important;
+  transform: none !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   width: auto !important;
-  max-width: calc(100% - 168px);
   justify-content: center;
 }
 [data-dialect="noir"] .weapon-hud {
-  left: 12px !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 140px !important;
+  bottom: auto !important;
   transform: none !important;
-  text-align: left !important;
+  text-align: center !important;
 }
 [data-dialect="noir"] .weapon-hud .ammo {
   color: var(--cp-blue) !important;
@@ -383,7 +452,7 @@ body.help-open .help { top: 48px !important; }
 }
 [data-dialect="noir"] .help { top: 96px !important; bottom: auto !important; }
 
-/* Touch controls — thumb zones (通用竖屏：左辅 / 右主+竖列次要) */
+/* Touch — cyber loop: SCAN primary left · FIRE/HACK right · pockets center dock */
 .touch-pad {
   position: absolute;
   inset: 0;
@@ -420,6 +489,34 @@ body.help-open .help { top: 48px !important; }
   border-color: var(--cp-red);
   transform: scale(0.94);
 }
+
+/* Left: scan = cyber primary (large), sprint = hold secondary */
+.t-scan {
+  left: 12px;
+  bottom: 14px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid rgba(var(--accent-rgb), 0.65);
+  background: rgba(var(--accent-rgb), 0.18);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.28);
+}
+.t-scan .ico { width: 34px; height: 34px; }
+.t-scan.on {
+  border-color: var(--cp-red);
+  background: rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.45);
+}
+.t-sprint {
+  left: 18px;
+  bottom: 100px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+.t-sprint .ico { width: 26px; height: 26px; }
+
+/* Right: fire · hack · reload */
 .t-fire {
   right: 12px;
   bottom: 14px;
@@ -430,103 +527,102 @@ body.help-open .help { top: 48px !important; }
   border: 2px solid var(--cp-red);
   box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.35);
 }
-.t-fire .ico {
-  width: 36px;
-  height: 36px;
-}
-/* Right column stacked above fire */
-.t-action {
+.t-fire .ico { width: 36px; height: 36px; }
+.t-hack {
   right: 14px;
   bottom: 100px;
   width: 64px;
-  height: 44px;
+  height: 48px;
   padding: 0;
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  border-color: rgba(0, 229, 255, 0.55);
 }
-.t-action:disabled {
-  opacity: 0.35;
-}
+.t-hack:disabled { opacity: 0.35; }
 .t-reload {
   right: 14px;
-  bottom: 150px;
+  bottom: 156px;
   width: 64px;
-  height: 40px;
-  padding: 0;
-}
-.t-journal {
-  right: 14px;
-  bottom: 196px;
-  width: 64px;
-  height: 36px;
-  padding: 0;
-}
-.t-sprint {
-  left: 12px;
-  bottom: 14px;
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-}
-.t-sprint .ico {
-  width: 30px;
-  height: 30px;
-}
-.t-scan {
-  left: 12px;
-  bottom: 92px;
-  width: 68px;
   height: 40px;
   padding: 0;
 }
 
-/* Right column: fire ← action ← reload ← journal */
+/* Journal sits with help — top meta, not thumb stack */
 .t-journal {
-  right: 14px;
+  position: absolute;
+  right: 48px;
+  top: 10px;
   left: auto;
-  bottom: 196px;
-  width: 64px;
-  height: 36px;
+  bottom: auto;
+  width: 32px;
+  height: 32px;
   padding: 0;
+  z-index: 24;
+  pointer-events: auto;
+}
+.t-journal .ico { width: 18px; height: 18px; }
+
+.entity.scan-dim {
+  opacity: 0.45;
+  filter: grayscale(0.35);
+}
+.entity.marked .tag {
+  opacity: 1 !important;
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.45);
 }
 
 /* Final band lock — dialects must not drag chrome into thumb zone */
-.pockets {
+.weapon-dock {
   left: 50% !important;
-  bottom: 108px !important;
+  bottom: 100px !important;
   transform: translateX(-50%) !important;
-  gap: 6px !important;
-  max-width: calc(100% - 168px) !important;
+  width: calc(100% - 168px) !important;
+}
+.pockets {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
 }
 .pockets .pocket {
-  min-width: 40px !important;
-  width: 40px !important;
-  height: 40px !important;
-  padding: 4px !important;
+  min-width: 52px !important;
+  width: 52px !important;
+  height: 52px !important;
 }
 .pockets .pocket .k { display: none !important; }
 .weapon-hud {
-  left: 12px !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 140px !important;
-  text-align: left !important;
+  bottom: auto !important;
+  text-align: center !important;
   transform: none !important;
 }
 [data-dialect="matrix"] .pockets,
 [data-dialect="amber"] .pockets,
 [data-dialect="noir"] .pockets {
-  bottom: 108px !important;
-  left: 50% !important;
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
   right: auto !important;
-  transform: translateX(-50%) !important;
+  transform: none !important;
 }
 [data-dialect="matrix"] .weapon-hud,
 [data-dialect="amber"] .weapon-hud,
 [data-dialect="noir"] .weapon-hud {
-  left: 12px !important;
+  position: relative !important;
+  left: auto !important;
   right: auto !important;
-  bottom: 140px !important;
-  text-align: left !important;
+  bottom: auto !important;
+  text-align: center !important;
   transform: none !important;
+}
+[data-dialect="matrix"] .weapon-dock,
+[data-dialect="amber"] .weapon-dock,
+[data-dialect="noir"] .weapon-dock {
+  left: 50% !important;
+  bottom: 100px !important;
+  transform: translateX(-50%) !important;
 }
 [data-dialect="matrix"] .nav-block,
 [data-dialect="amber"] .nav-block,

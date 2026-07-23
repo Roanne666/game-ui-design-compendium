@@ -90,22 +90,39 @@
         <div class="q-sub" id="q-sub">目标 · 寻找入口 · 240米</div>
       </div>
 
+      <div class="loop-rail" id="loop-rail" aria-hidden="true">
+        <span class="step" data-step="scan">扫描</span>
+        <span class="sep">→</span>
+        <span class="step" data-step="mark">标记</span>
+        <span class="sep">→</span>
+        <span class="step" data-step="pocket">切枪</span>
+        <span class="sep">→</span>
+        <span class="step" data-step="act">开火/黑客</span>
+      </div>
+
       <div class="stamina" id="stamina">
         <span class="lab">耐力</span>
         <div class="trk"><div class="fill" id="st-fill"></div></div>
       </div>
 
-      <div class="pockets">
-        <div class="pocket on hit" data-w="0" title="团结"><span class="ico">1</span></div>
-        <div class="pocket hit" data-w="1" title="沙塔拉"><span class="ico">2</span></div>
-        <div class="pocket hit" data-w="2" title="悟"><span class="ico">3</span></div>
-        <div class="pocket dim" title="伤药"><span class="ico">+</span></div>
-      </div>
-
-      <div class="weapon-hud">
-        <div class="stance" id="stance">站立</div>
-        <div class="wname" id="w-name">团结</div>
-        <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
+      <div class="weapon-dock">
+        <div class="weapon-hud">
+          <div class="stance" id="stance">站立</div>
+          <div class="wname" id="w-name">团结</div>
+          <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
+        </div>
+        <div class="pockets" id="pockets">
+          <button type="button" class="pocket on hit" data-w="0" aria-label="团结">
+            <span class="ico">1</span><span class="pn">团结</span>
+          </button>
+          <button type="button" class="pocket hit" data-w="1" aria-label="沙塔拉">
+            <span class="ico">2</span><span class="pn">沙塔拉</span>
+          </button>
+          <button type="button" class="pocket hit" data-w="2" aria-label="悟">
+            <span class="ico">3</span><span class="pn">悟</span>
+          </button>
+          <div class="pocket dim" aria-hidden="true"><span class="ico">+</span><span class="pn">伤药</span></div>
+        </div>
       </div>
 
       <div class="ram" id="ram-menu">
@@ -128,10 +145,7 @@
         <button type="button" class="t-btn t-reload hit" id="btn-reload" aria-label="换弹">
           <img class="ico" src="./art/icons/icon-reload.png" alt="" draggable="false" />
         </button>
-        <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="日志">
-          <img class="ico" src="./art/icons/icon-journal.png" alt="" draggable="false" />
-        </button>
-        <button type="button" class="t-btn t-action hit" id="btn-action" aria-label="互动" disabled>
+        <button type="button" class="t-btn t-hack hit" id="btn-hack" aria-label="黑客" disabled>
           <img class="ico" src="./art/icons/icon-action.png" alt="" draggable="false" />
         </button>
         <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火">
@@ -139,10 +153,13 @@
         </button>
       </div>
 
+      <button type="button" class="t-btn t-journal hit" id="btn-journal" aria-label="日志">
+        <img class="ico" src="./art/icons/icon-journal.png" alt="" draggable="false" />
+      </button>
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
         <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
       </button>
-      <div class="help" id="help" hidden>玩法：开扫描标敌 → 底栏口袋切枪 → 右下开火 / 情境互动黑客 · 按住冲刺 · 换弹与日志在右列 · 密 HUD（任务/小地图/运算力）</div>
+      <div class="help" id="help" hidden>玩法链：点左下开扫描 → 点敌/设备标记 → 底栏口袋切枪 → 右下开火或黑客（耗运算力）· 按住冲刺 · 顶栏日志</div>
     </div>
 
     <div id="journal">
@@ -199,6 +216,7 @@
     shard: false,
     doorOpen: false,
     dialect: "neo",
+    pocketTouched: false,
   };
 
   const $ = (s) => document.querySelector(s);
@@ -251,21 +269,34 @@
     $("#scan-flag").textContent = state.scan ? "扫描开" : "扫描关";
     $("#scan-flag").classList.toggle("on", state.scan);
     $("#scan-flag").classList.toggle("off", !state.scan);
+    $("#btn-scan").classList.toggle("on", state.scan);
     $("#crosshair").classList.toggle("hack", !!state.lock);
     $("#ram-menu").classList.toggle("show", !!state.lock);
     $("#journal").classList.toggle("open", state.journal);
     $("#stamina").classList.toggle("show", state.sprint || state.st < 99);
     $("#stance").textContent = state.sprint ? "冲刺中" : "站立";
+    $$(".entity").forEach((ent) => {
+      const markable = ent.dataset.type === "hostile" || ent.dataset.type === "device";
+      ent.classList.toggle("scan-dim", !state.scan && markable);
+      ent.classList.toggle("marked", state.scan && markable && !ent.hidden);
+    });
+    const rail = $("#loop-rail");
+    if (rail) {
+      rail.querySelector('[data-step="scan"]').classList.toggle("on", state.scan);
+      rail.querySelector('[data-step="mark"]').classList.toggle("on", !!state.lock || !!state.focus);
+      rail.querySelector('[data-step="pocket"]').classList.toggle("on", state.w > 0 || state.pocketTouched);
+      rail.querySelector('[data-step="act"]').classList.toggle("on", !!state.lock);
+    }
   }
 
   function setFocus(ent) {
     state.focus = ent;
     const prompt = $("#prompt");
-    const action = $("#btn-action");
+    const hackBtn = $("#btn-hack");
     if (!ent) {
       prompt.classList.remove("show");
-      action.setAttribute("aria-label", "互动");
-      action.disabled = true;
+      hackBtn.setAttribute("aria-label", "黑客");
+      hackBtn.disabled = true;
       return;
     }
     const type = ent.dataset.type;
@@ -279,8 +310,8 @@
     $("#prompt-key").textContent = key;
     $("#prompt-text").textContent = text;
     prompt.classList.add("show");
-    action.setAttribute("aria-label", act);
-    action.disabled = false;
+    hackBtn.setAttribute("aria-label", act);
+    hackBtn.disabled = false;
   }
 
   function nearestEntity(clientX, clientY) {
@@ -349,6 +380,11 @@
   }
 
   function lockEntity(ent) {
+    const markable = ent.dataset.type === "hostile" || ent.dataset.type === "device";
+    if (markable && !state.scan) {
+      feed("先开启扫描再标记目标");
+      return;
+    }
     $$(".entity").forEach((e) => e.classList.remove("locked"));
     if (state.lock === ent) {
       state.lock = null;
@@ -358,7 +394,7 @@
     state.lock = ent;
     ent.classList.add("locked");
     if (!ent.dataset.hp) ent.dataset.hp = ent.dataset.type === "hostile" ? "100" : "40";
-    feed("锁定 · " + ent.dataset.name);
+    feed("标记 · " + ent.dataset.name);
     sync();
   }
 
@@ -404,6 +440,10 @@
 
   function fire() {
     if (state.journal) return;
+    if (!state.scan) {
+      feed("扫描离线 · 无法精确交火");
+      return;
+    }
     const w = weapons[state.w];
     if (!w.melee && w.cur <= 0) { feed("空仓 · 点换弹"); return; }
     if (!w.melee) w.cur -= 1;
@@ -419,16 +459,24 @@
         setFocus(null);
       }
     } else {
-      feed(w.melee ? "挥砍" : "射击");
+      feed(state.lock ? (w.melee ? "挥砍" : "射击") : "未标记目标 · 弹药已耗");
     }
   }
 
-  function doAction() {
+  function doHackOrInteract() {
     const ent = state.focus;
     if (!ent) return;
     const type = ent.dataset.type;
-    if (type === "hostile" || type === "device") lockEntity(ent);
-    else useFocus();
+    if (type === "hostile" || type === "device") {
+      if (state.lock === ent) {
+        /* already locked — ram menu visible */
+        feed("选择快速黑客");
+      } else {
+        lockEntity(ent);
+      }
+    } else {
+      useFocus();
+    }
   }
 
   // —— Touch / pointer (mobile primary) ——
@@ -484,10 +532,10 @@
     e.stopPropagation();
     fire();
   });
-  $("#btn-action").addEventListener("pointerdown", (e) => {
+  $("#btn-hack").addEventListener("pointerdown", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    doAction();
+    doHackOrInteract();
   });
   $("#btn-reload").addEventListener("pointerdown", (e) => {
     e.preventDefault();
@@ -498,7 +546,11 @@
     e.preventDefault();
     e.stopPropagation();
     state.scan = !state.scan;
-    feed(state.scan ? "扫描仪在线" : "扫描仪离线");
+    if (!state.scan && state.lock) {
+      state.lock = null;
+      $$(".entity").forEach((x) => x.classList.remove("locked"));
+    }
+    feed(state.scan ? "扫描仪在线 · 可标记目标" : "扫描仪离线");
     sync();
   });
   $("#btn-journal").addEventListener("pointerdown", (e) => {
@@ -531,7 +583,12 @@
     b.addEventListener("click", () => setDialect(b.dataset.d));
   });
   $$(".pockets .pocket[data-w]").forEach((s) => {
-    s.addEventListener("click", () => { state.w = Number(s.dataset.w); sync(); });
+    s.addEventListener("click", () => {
+      state.w = Number(s.dataset.w);
+      state.pocketTouched = true;
+      feed("已装备 · " + weapons[state.w].name);
+      sync();
+    });
   });
   $$("#ram-menu button").forEach((b) => {
     b.addEventListener("click", () => hack(b.dataset.hack, Number(b.dataset.cost)));
@@ -600,7 +657,7 @@
     sync();
   }, 100);
 
-  feed("链路已建立 · 沃森区");
+  feed("链路已建立 · 先开扫描再标记");
   setFocus(null);
   sync();
 })();

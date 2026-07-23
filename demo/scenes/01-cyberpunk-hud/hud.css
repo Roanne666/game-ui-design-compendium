@@ -598,11 +598,29 @@ html, body {
   transition: width 90ms linear;
 }
 
-/* --- Bottom-left: pockets / quick items --- */
-.pockets {
+/* --- Weapon dock: ammo + pockets (portrait cyber loop) --- */
+.weapon-dock {
   position: absolute;
-  left: clamp(18px, 2vw, 32px);
-  bottom: clamp(20px, 3vh, 36px);
+  left: 50%;
+  bottom: 100px;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: calc(100% - 168px);
+  max-width: 280px;
+  pointer-events: none;
+}
+.weapon-dock .pockets,
+.weapon-dock .weapon-hud {
+  pointer-events: auto;
+}
+.pockets {
+  position: relative;
+  left: auto;
+  bottom: auto;
   display: flex;
   gap: 8px;
   z-index: 15;
@@ -645,14 +663,14 @@ html, body {
 }
 .pockets .pocket.dim .ico { color: var(--cp-red); opacity: 0.55; }
 
-/* --- Bottom-right: weapon / ammo --- */
+/* --- Weapon / ammo (inside weapon-dock) --- */
 .weapon-hud {
-  position: absolute;
-  right: clamp(18px, 2vw, 32px);
-  bottom: clamp(20px, 3vh, 36px);
-  text-align: right;
+  position: relative;
+  right: auto;
+  bottom: auto;
+  text-align: center;
   z-index: 15;
-  min-width: 180px;
+  min-width: 0;
 }
 .weapon-hud .stance {
   font-size: 12px;
