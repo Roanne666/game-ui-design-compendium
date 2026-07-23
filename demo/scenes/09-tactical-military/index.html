@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tactical Military — HUD</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/tactical-military.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); overflow:hidden; }
+    .hud { position:relative; width:100vw; height:100vh; padding:16px; box-sizing:border-box; }
+    .top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+    .compass {
+      width:100px; height:100px; border:2px solid var(--border); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; position:relative;
+      font-family:var(--font-mono); font-size:12px;
+    }
+    .compass img { width:20px; height:20px; position:absolute; top:8px; }
+    .compass .deg { font-size:18px; font-weight:700; }
+    .stance-group { display:flex; gap:6px; flex-wrap:wrap; }
+    .stance-group .btn.active { border-color:var(--accent); background:var(--accent-soft); }
+    .bottom { position:absolute; bottom:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; }
+    .ammo-panel { min-width:200px; }
+    .icon { width:22px; height:22px; vertical-align:middle; }
+    .hint { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--text-muted); letter-spacing:.08em; }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="top">
+      <div class="panel" style="min-width:240px">
+        <div class="panel-title">STANCE</div>
+        <div class="panel-body stance-group" id="stance-group">
+          <button type="button" class="btn active" data-stance="STAND">STAND</button>
+          <button type="button" class="btn" data-stance="CROUCH">CROUCH</button>
+          <button type="button" class="btn" data-stance="PRONE">PRONE</button>
+        </div>
+      </div>
+      <button type="button" class="compass" id="btn-compass" title="Tick bearing">
+        <img src="../../assets/_shared/kenney/icons/information.png" alt="" />
+        <span class="deg" id="compass-deg">274°</span>
+        <span style="position:absolute;bottom:10px;font-size:9px;color:var(--text-muted)">N</span>
+      </button>
+      <div class="panel ammo-panel">
+        <div class="panel-title">
+          <img class="icon" src="../../assets/_shared/rpg-icons/gun.png" alt="" /> WEAPON
+        </div>
+        <div class="panel-body">
+          <div class="stat-row"><span class="stat-key">MAGAZINE</span><span class="stat-val" id="ammo-val">24 / 120</span></div>
+          <button type="button" class="btn btn-primary" id="btn-reload" style="margin-top:8px;width:100%">RELOAD</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div style="flex:1;max-width:320px">
+        <div class="hud-bar">
+          <span class="hud-bar-label">STM</span>
+          <div class="hud-bar-track"><div id="stm-fill" class="hud-bar-fill success" style="width:100%"></div></div>
+          <span id="stm-val" class="hud-bar-value">100</span>
+        </div>
+        <button type="button" class="btn btn-warning" id="btn-sprint" style="margin-top:8px">
+          <img class="icon" src="../../assets/_shared/kenney/icons/play.png" alt="" /> SPRINT
+        </button>
+      </div>
+      <div class="panel" style="min-width:180px">
+        <div class="panel-title">STATUS</div>
+        <div class="panel-body">
+          <div class="stat-row"><span class="stat-key">STANCE</span><span class="stat-val" id="stance-val">STAND</span></div>
+          <div class="stat-row"><span class="stat-key">BEARING</span><span class="stat-val" id="bearing-val">274° W</span></div>
+        </div>
+      </div>
+      <button type="button" class="btn" id="btn-fire" style="align-self:center">
+        <img class="icon" src="../../assets/_shared/rpg-icons/bow.png" alt="" /> FIRE BURST
+      </button>
+    </div>
+    <p class="hint">Stance · reload · compass · sprint drains stamina · fire burst</p>
+  </div>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let mag = 24, reserve = 120, stamina = 100, bearing = 274;
+    const bearings = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+
+    function syncAmmo() {
+      sk.setText(sk.$("#ammo-val"), mag + " / " + reserve);
+    }
+    function syncStamina() {
+      sk.setFill(sk.$("#stm-fill"), stamina);
+      sk.setText(sk.$("#stm-val"), String(stamina));
+      sk.$("#stm-fill").className = "hud-bar-fill " + (stamina > 40 ? "success" : stamina > 15 ? "warning" : "danger");
+    }
+    function syncBearing() {
+      sk.setText(sk.$("#compass-deg"), bearing + "°");
+      const idx = Math.round(bearing / 45) % 8;
+      sk.setText(sk.$("#bearing-val"), bearing + "° " + bearings[idx]);
+    }
+
+    sk.$all("[data-stance]").forEach((btn) => {
+      sk.on(btn, "click", () => {
+        sk.$all("[data-stance]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        sk.setText(sk.$("#stance-val"), btn.dataset.stance);
+        sk.toast("Stance: " + btn.dataset.stance);
+        sk.pulse(btn);
+      });
+    });
+
+    sk.on(sk.$("#btn-reload"), "click", () => {
+      if (reserve <= 0) {
+        sk.toast("No reserve ammo", "danger");
+        return;
+      }
+      const need = 30 - mag;
+      const take = Math.min(need, reserve);
+      mag += take;
+      reserve -= take;
+      syncAmmo();
+      sk.toast("Reloaded +" + take, "success");
+      sk.pulse(sk.$("#btn-reload"));
+    });
+
+    sk.on(sk.$("#btn-compass"), "click", () => {
+      bearing = (bearing + 15) % 360;
+      syncBearing();
+      sk.pulse(sk.$("#btn-compass"));
+      sk.toast("Bearing updated");
+    });
+
+    sk.on(sk.$("#btn-sprint"), "click", () => {
+      if (stamina < 12) {
+        sk.toast("Exhausted — catch breath", "danger");
+        return;
+      }
+      stamina = Math.max(0, stamina - 12);
+      syncStamina();
+      sk.toast("Sprinting −12 STM", "warning");
+    });
+
+    sk.on(sk.$("#btn-fire"), "click", () => {
+      if (mag <= 0) {
+        sk.toast("Empty mag — reload!", "danger");
+        return;
+      }
+      const burst = Math.min(3, mag);
+      mag -= burst;
+      syncAmmo();
+      sk.toast("Burst fire −" + burst + " rounds");
+    });
+
+    syncAmmo();
+    syncStamina();
+    syncBearing();
+  </script>
+</body>
+</html>

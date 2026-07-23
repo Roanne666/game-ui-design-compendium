@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anime Colorful — Phantom Menu</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/anime-colorful.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); overflow:hidden; }
+    .layout { display:grid; grid-template-columns:1fr minmax(280px,360px); min-height:100vh; }
+    .poster {
+      position:relative; overflow:hidden;
+      background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, var(--bg)), var(--bg));
+      display:flex; align-items:center; justify-content:center;
+    }
+    .poster-inner {
+      width:min(420px,80%); aspect-ratio:3/4;
+      border:3px solid var(--accent); clip-path:polygon(0 16px,16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+      background:var(--surface); box-shadow:0 0 40px var(--glow);
+    }
+    .poster-inner img { width:80px; height:80px; }
+    .poster-title { font-family:var(--font-display); font-size:22px; letter-spacing:.15em; }
+    .menu-col { padding:40px 28px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+    .toggle-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border); }
+    .toggle-row button { min-width:64px; }
+    #load-overlay, #loading-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; z-index:30;
+    }
+    #load-overlay[hidden], #loading-overlay[hidden] { display:none; }
+    .hint { position:fixed; bottom:8px; right:16px; font-size:11px; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="poster">
+      <div class="poster-inner panel-clipped">
+        <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
+        <div class="poster-title">PHANTOM BLADE</div>
+        <span class="badge accent">CHAPTER IV</span>
+        <img src="../../assets/_shared/kenney/icons/star.png" alt="" style="width:24px;height:24px" />
+      </div>
+    </div>
+    <div class="menu-col">
+      <div class="menu-list">
+        <button type="button" class="menu-item-large primary" id="btn-start">START</button>
+        <button type="button" class="menu-item-large" id="btn-load">LOAD</button>
+        <button type="button" class="menu-item-large" id="btn-config">CONFIG</button>
+        <button type="button" class="menu-item-large" id="btn-exit">EXIT</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="config-panel" class="panel panel-clipped" data-sk-panel hidden style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,92vw);z-index:20">
+    <div class="panel-title">CONFIG</div>
+    <div class="panel-body">
+      <div class="toggle-row">
+        <span>Voice Lines</span>
+        <button type="button" class="btn btn-success" data-toggle="voice" data-on="true">ON</button>
+      </div>
+      <div class="toggle-row">
+        <span>Battle Animations</span>
+        <button type="button" class="btn" data-toggle="anim" data-on="false">OFF</button>
+      </div>
+      <div class="toggle-row">
+        <span>Auto-Save</span>
+        <button type="button" class="btn btn-success" data-toggle="save" data-on="true">ON</button>
+      </div>
+      <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%">Close</button>
+    </div>
+  </div>
+
+  <div id="load-overlay" hidden>
+    <div class="panel" style="min-width:280px">
+      <div class="panel-title">LOAD GAME</div>
+      <div class="panel-body">
+        <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px">Slot 1 · Midgar 14:32</button>
+        <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px">Slot 2 · Empty</button>
+        <button type="button" class="btn btn-ghost" id="load-close" style="width:100%">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading-overlay" hidden>
+    <div class="panel" style="min-width:300px;text-align:center">
+      <div class="panel-title">LOADING</div>
+      <div class="progress progress-linear" style="height:14px;margin:16px 0">
+        <div id="load-bar" class="progress-fill" style="width:0%"></div>
+      </div>
+      <span class="badge" id="load-status">Preparing assets…</span>
+    </div>
+  </div>
+
+  <p class="hint">START · LOAD · CONFIG toggles · EXIT · Esc closes panels</p>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+
+    sk.on(sk.$("#btn-config"), "click", () => sk.openPanel("#config-panel"));
+    sk.on(sk.$("#config-close"), "click", () => sk.closePanel("#config-panel"));
+
+    sk.$all("[data-toggle]").forEach((btn) => {
+      sk.on(btn, "click", () => {
+        const on = btn.dataset.on !== "true";
+        btn.dataset.on = String(on);
+        btn.textContent = on ? "ON" : "OFF";
+        btn.className = "btn" + (on ? " btn-success" : "");
+        sk.toast(btn.closest(".toggle-row").querySelector("span").textContent + ": " + (on ? "ON" : "OFF"));
+      });
+    });
+
+    sk.on(sk.$("#btn-load"), "click", () => {
+      sk.$("#load-overlay").hidden = false;
+    });
+    sk.on(sk.$("#load-close"), "click", () => {
+      sk.$("#load-overlay").hidden = true;
+    });
+    sk.$all("[data-slot]").forEach((btn) => {
+      sk.on(btn, "click", () => {
+        sk.$("#load-overlay").hidden = true;
+        if (btn.dataset.slot === "2") sk.toast("Empty slot", "warning");
+        else sk.toast("Loaded slot 1", "success");
+      });
+    });
+
+    sk.on(sk.$("#btn-start"), "click", () => {
+      const overlay = sk.$("#loading-overlay");
+      overlay.hidden = false;
+      let pct = 0;
+      sk.setText(sk.$("#load-status"), "Preparing assets…");
+      const tick = setInterval(() => {
+        pct += 8 + Math.floor(Math.random() * 6);
+        if (pct >= 100) {
+          pct = 100;
+          clearInterval(tick);
+          sk.setFill(sk.$("#load-bar"), pct);
+          overlay.hidden = true;
+          sk.toast("Welcome back, phantom!", "success");
+        } else {
+          sk.setFill(sk.$("#load-bar"), pct);
+          if (pct > 50) sk.setText(sk.$("#load-status"), "Syncing party…");
+        }
+      }, 120);
+    });
+
+    sk.on(sk.$("#btn-exit"), "click", () => {
+      sk.modal({
+        title: "Exit game?",
+        body: "Unsaved progress in the current chapter will be lost.",
+        onConfirm: () => sk.toast("Thanks for playing!", "warning"),
+      });
+    });
+  </script>
+</body>
+</html>

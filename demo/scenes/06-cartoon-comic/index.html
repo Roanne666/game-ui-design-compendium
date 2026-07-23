@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cartoon Comic — Gun Shop</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/cartoon-comic.css" />
+  <style>
+    body { min-height:100vh; background:var(--bg); margin:0; color:var(--text); }
+    .wrap { max-width:640px; margin:0 auto; padding:32px 20px; }
+    .title { font-family:var(--font-display); font-size:42px; margin:0 0 8px; text-shadow:4px 4px 0 var(--shadow-color); display:flex; align-items:center; gap:12px; }
+    .title img { width:48px; height:48px; }
+    .cash { font-family:var(--font-mono); margin-bottom:20px; display:flex; align-items:center; gap:8px; font-size:18px; }
+    .cash img { width:28px; height:28px; }
+    .list { display:flex; flex-direction:column; gap:12px; }
+    .store-item { cursor:pointer; }
+    .store-item.selected { outline:3px solid var(--accent); transform:scale(1.01); }
+    .store-item .icon img { width:36px; height:36px; }
+    .store-item .icon { display:flex; align-items:center; justify-content:center; }
+    .footer { margin-top:20px; display:flex; gap:12px; flex-wrap:wrap; }
+    .hint { margin-top:16px; font-size:11px; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="title">
+      <img src="../../assets/_shared/rpg-icons/shop.png" alt="" /> GUN SHOP!!
+    </h1>
+    <div class="cash">
+      <img src="../../assets/_shared/rpg-icons/coins.png" alt="" />
+      <span class="badge accent">CASH</span>
+      <strong id="cash-val">$12,450</strong>
+    </div>
+
+    <div class="list" id="shop-list">
+      <div class="store-item affordable selected" data-id="boom" data-price="800" data-name="Boomstick">
+        <div class="icon"><img src="../../assets/_shared/rpg-icons/gun.png" alt="" /></div>
+        <div class="info">
+          <div class="name">Boomstick</div>
+          <div class="desc">Big knockback. Bigger bang.</div>
+        </div>
+        <div class="price">$800</div>
+      </div>
+      <div class="store-item affordable" data-id="kaboom" data-price="250" data-name="Kaboom Grenade">
+        <div class="icon"><img src="../../assets/_shared/rpg-icons/fire.png" alt="" /></div>
+        <div class="info">
+          <div class="name">Kaboom Grenade</div>
+          <div class="desc">Throw. Run. Smile.</div>
+        </div>
+        <div class="price">$250</div>
+      </div>
+      <div class="store-item locked" data-id="riot" data-price="2000" data-name="Riot Jacket">
+        <div class="icon"><img src="../../assets/_shared/kenney/icons/locked.png" alt="" /></div>
+        <div class="info">
+          <div class="name">Riot Jacket</div>
+          <div class="desc">Locked — beat boss 2</div>
+        </div>
+        <div class="price">$2,000</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button type="button" class="btn btn-primary" id="btn-buy">BUY SELECTED</button>
+      <button type="button" class="btn" id="btn-haggle">HAGGLE (−10%)</button>
+      <button type="button" class="btn btn-danger" id="btn-exit">EXIT SHOP</button>
+    </div>
+    <p class="hint">Select item · buy · haggle once · locked items toast · exit</p>
+  </div>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let cash = 12450;
+    let haggled = false;
+    let selected = sk.$(".store-item.selected");
+
+    function syncCash() {
+      sk.setText(sk.$("#cash-val"), "$" + cash.toLocaleString());
+    }
+
+    sk.$all(".store-item").forEach((item) => {
+      sk.on(item, "click", () => {
+        if (item.classList.contains("locked")) {
+          sk.toast("Locked — beat boss 2 first!", "danger");
+          return;
+        }
+        sk.$all(".store-item").forEach((i) => i.classList.remove("selected"));
+        item.classList.add("selected");
+        selected = item;
+        sk.toast("Selected: " + item.dataset.name);
+      });
+    });
+
+    function priceOf(item) {
+      let p = parseInt(item.dataset.price, 10);
+      if (haggled && item.dataset.id !== "riot") p = Math.floor(p * 0.9);
+      return p;
+    }
+
+    sk.on(sk.$("#btn-buy"), "click", () => {
+      if (!selected || selected.classList.contains("locked")) {
+        sk.toast("Pick an affordable item", "warning");
+        return;
+      }
+      const price = priceOf(selected);
+      if (cash < price) {
+        sk.toast("Not enough cash!", "danger");
+        return;
+      }
+      cash -= price;
+      syncCash();
+      selected.querySelector(".price").textContent = "OWNED";
+      selected.querySelector(".price").classList.add("owned");
+      selected.classList.remove("affordable");
+      sk.toast("Purchased " + selected.dataset.name + " (−$" + price + ")", "success");
+      sk.pulse(selected);
+    });
+
+    sk.on(sk.$("#btn-haggle"), "click", () => {
+      if (haggled) {
+        sk.toast("Shopkeeper refuses further haggling", "warning");
+        return;
+      }
+      haggled = true;
+      sk.toast("Deal! 10% off today only", "success");
+    });
+
+    sk.on(sk.$("#btn-exit"), "click", () => {
+      sk.modal({
+        title: "Leave shop?",
+        body: "Unsaved purchases are kept. Return to the comic strip?",
+        onConfirm: () => sk.toast("See you next level!", "warning"),
+      });
+    });
+
+    syncCash();
+  </script>
+</body>
+</html>

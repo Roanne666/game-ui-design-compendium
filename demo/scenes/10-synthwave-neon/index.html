@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Synthwave Neon — Title</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/synthwave-neon.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); overflow:hidden; }
+    .title-scene {
+      min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:24px; padding:24px; position:relative;
+      background:linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--accent-2) 25%, transparent));
+    }
+    .logo { font-family:var(--font-display); font-size:clamp(36px,8vw,72px); letter-spacing:.2em; text-shadow:0 0 20px var(--glow),0 0 40px var(--accent-2); margin:0; }
+    .logo img { width:48px; height:48px; vertical-align:middle; margin-right:12px; filter:drop-shadow(0 0 8px var(--accent)); }
+    .menu { display:flex; flex-direction:column; gap:10px; min-width:260px; z-index:2; }
+    .menu .btn { width:100%; letter-spacing:.15em; }
+    .side-panels { position:fixed; top:0; right:0; width:min(320px,90vw); height:100%; padding:20px; box-sizing:border-box; overflow:auto; }
+    [data-sk-panel] { margin-bottom:16px; }
+    .score-list { list-style:none; margin:0; padding:0; }
+    .score-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border); font-family:var(--font-mono); font-size:12px; }
+    .score-list li.top { color:var(--accent); text-shadow:0 0 8px var(--glow); }
+    .vol-row { display:flex; align-items:center; gap:8px; margin:10px 0; }
+    .vol-row span { flex:1; font-size:12px; }
+    #loading-bar-wrap { width:min(400px,90vw); opacity:0; transition:opacity .2s; }
+    #loading-bar-wrap.visible { opacity:1; }
+    .hint { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="title-scene">
+    <h1 class="logo">
+      <img src="../../assets/_shared/kenney/icons/star.png" alt="" />NEON DRIFT
+    </h1>
+    <div id="loading-bar-wrap">
+      <div class="progress progress-linear" style="height:12px">
+        <div id="title-load-bar" class="progress-fill" style="width:0%;background:var(--accent-2)"></div>
+      </div>
+      <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">INSERT COIN</span></div>
+    </div>
+    <div class="menu">
+      <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">START</button>
+      <button type="button" class="btn menu-item-large" id="btn-scores">HIGH SCORES</button>
+      <button type="button" class="btn menu-item-large" id="btn-options">OPTIONS</button>
+      <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">QUIT</button>
+    </div>
+  </div>
+
+  <div class="side-panels">
+    <div id="scores-panel" class="panel" data-sk-panel hidden>
+      <div class="panel-title">HIGH SCORES</div>
+      <div class="panel-body">
+        <ul class="score-list">
+          <li class="top"><span>1. VAPOR_KID</span><span>984,200</span></li>
+          <li><span>2. RETRO_FOX</span><span>812,050</span></li>
+          <li><span>3. SYNTH_RON</span><span>640,880</span></li>
+          <li><span>4. YOU</span><span id="your-score">000,000</span></li>
+        </ul>
+        <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">Close</button>
+      </div>
+    </div>
+
+    <div id="options-panel" class="panel" data-sk-panel hidden>
+      <div class="panel-title">OPTIONS</div>
+      <div class="panel-body">
+        <div class="vol-row">
+          <span>Master Volume</span>
+          <button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button>
+          <span id="vol-master" class="badge">70</span>
+          <button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button>
+        </div>
+        <div class="vol-row">
+          <span>Music Volume</span>
+          <button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button>
+          <span id="vol-music" class="badge">80</span>
+          <button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button>
+        </div>
+        <div class="vol-row">
+          <span>SFX Volume</span>
+          <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button>
+          <span id="vol-sfx" class="badge">90</span>
+          <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button>
+        </div>
+        <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint">START fills bar · HIGH SCORES · OPTIONS volume · QUIT · Esc closes</p>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    const vol = { master: 70, music: 80, sfx: 90 };
+
+    function syncVol(key) {
+      sk.setText(sk.$("#vol-" + key), String(vol[key]));
+    }
+
+    sk.on(sk.$("#btn-start"), "click", () => {
+      const wrap = sk.$("#loading-bar-wrap");
+      wrap.classList.add("visible");
+      sk.setText(sk.$("#load-label"), "LOADING…");
+      let pct = 0;
+      const bar = sk.$("#title-load-bar");
+      const timer = setInterval(() => {
+        pct += 4 + Math.floor(Math.random() * 5);
+        if (pct >= 100) {
+          pct = 100;
+          clearInterval(timer);
+          sk.setFill(bar, pct);
+          sk.setText(sk.$("#load-label"), "READY");
+          sk.toast("Stage 1 — Midnight Highway", "success");
+          sk.pulse(wrap);
+        } else {
+          sk.setFill(bar, pct);
+        }
+      }, 80);
+    });
+
+    sk.on(sk.$("#btn-scores"), "click", () => {
+      sk.closePanel("#options-panel");
+      sk.togglePanel("#scores-panel");
+    });
+    sk.on(sk.$("#scores-close"), "click", () => sk.closePanel("#scores-panel"));
+
+    sk.on(sk.$("#btn-options"), "click", () => {
+      sk.closePanel("#scores-panel");
+      sk.togglePanel("#options-panel");
+    });
+    sk.on(sk.$("#options-close"), "click", () => sk.closePanel("#options-panel"));
+
+    sk.$all("[data-vol]").forEach((btn) => {
+      if (!btn.dataset.delta) return;
+      sk.on(btn, "click", () => {
+        const key = btn.dataset.vol;
+        vol[key] = Math.max(0, Math.min(100, vol[key] + parseInt(btn.dataset.delta, 10)));
+        syncVol(key);
+        sk.toast(key.toUpperCase() + " " + vol[key]);
+      });
+    });
+
+    sk.on(sk.$("#btn-quit"), "click", () => {
+      sk.modal({
+        title: "Quit to desktop?",
+        body: "Your high score is saved locally.",
+        onConfirm: () => sk.toast("See you on the grid!", "warning"),
+      });
+    });
+
+    Object.keys(vol).forEach(syncVol);
+  </script>
+</body>
+</html>

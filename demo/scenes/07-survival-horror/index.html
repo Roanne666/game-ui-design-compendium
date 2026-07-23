@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Survival Horror — Spine Inventory</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/survival-horror.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); }
+    .scene { display:grid; grid-template-columns:120px 1fr; gap:24px; padding:24px; min-height:100vh; box-sizing:border-box; max-width:720px; margin:0 auto; }
+    .spine-col { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .spine-col img { width:32px; height:32px; opacity:.7; }
+    .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:320px; }
+    .slot img { width:32px; height:32px; }
+    .slot { cursor:pointer; min-height:64px; }
+    .detail { margin-top:16px; }
+    .hint { margin-top:12px; font-size:11px; color:var(--text-muted); letter-spacing:.06em; }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="spine-col">
+      <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
+      <div class="spine-bar-vertical" id="spine-bar"></div>
+      <span class="badge" id="hp-label">HP 72%</span>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-title">SPINE INVENTORY · 8 SLOTS</div>
+        <div class="panel-body">
+          <div class="inv-grid" id="inv">
+            <button type="button" class="slot has" data-item="med" data-qty="2" data-label="Med Kit">
+              <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
+            </button>
+            <button type="button" class="slot has" data-item="key" data-qty="1" data-label="Brass Key">
+              <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
+            </button>
+            <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="Survival Knife">
+              <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
+            </button>
+            <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm Rounds">
+              <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
+            </button>
+            <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="Broken Shield">
+              <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
+            </button>
+            <button type="button" class="slot"></button>
+            <button type="button" class="slot"></button>
+            <button type="button" class="slot"></button>
+          </div>
+          <div class="detail">
+            <div class="stat-row"><span class="stat-key">SELECTED</span><span class="stat-val" id="sel-name">—</span></div>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+              <button type="button" class="btn btn-primary" id="btn-use">USE ITEM</button>
+              <button type="button" class="btn" id="btn-door">
+                <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> TRY DOOR
+              </button>
+              <button type="button" class="btn btn-danger" id="btn-hurt">TAKE DAMAGE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="hint">Spine reflects HP · select slot · use MED · key on door · sim damage</p>
+    </div>
+  </div>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let hp = 72;
+    let selectedSlot = null;
+    const SEGMENTS = 10;
+
+    function renderSpine() {
+      const bar = sk.$("#spine-bar");
+      bar.innerHTML = "";
+      const lit = Math.round((hp / 100) * SEGMENTS);
+      for (let i = 0; i < SEGMENTS; i++) {
+        const seg = document.createElement("div");
+        seg.className = "spine-seg vertical";
+        const idx = SEGMENTS - 1 - i;
+        if (idx < lit) {
+          if (hp <= 25) seg.classList.add("danger");
+          else if (hp <= 50) seg.classList.add("warn");
+          else seg.classList.add("on");
+        }
+        bar.appendChild(seg);
+      }
+      sk.setText(sk.$("#hp-label"), "HP " + hp + "%");
+    }
+
+    sk.bindSlots("#inv", (slot) => {
+      if (!slot.classList.contains("has")) {
+        sk.setText(sk.$("#sel-name"), "Empty slot");
+        selectedSlot = null;
+        return;
+      }
+      selectedSlot = slot;
+      sk.setText(sk.$("#sel-name"), slot.dataset.label + (slot.dataset.qty ? " ×" + slot.dataset.qty : ""));
+    });
+
+    function consumeOne(slot) {
+      let q = parseInt(slot.dataset.qty || "1", 10);
+      q -= 1;
+      if (q <= 0) {
+        slot.classList.remove("has");
+        slot.innerHTML = "";
+        slot.removeAttribute("data-item");
+        selectedSlot = null;
+        sk.setText(sk.$("#sel-name"), "—");
+      } else {
+        slot.dataset.qty = String(q);
+        const qtyEl = slot.querySelector(".qty");
+        if (qtyEl) qtyEl.textContent = "×" + q;
+      }
+    }
+
+    sk.on(sk.$("#btn-use"), "click", () => {
+      if (!selectedSlot || !selectedSlot.dataset.item) {
+        sk.toast("Select an item", "warning");
+        return;
+      }
+      if (selectedSlot.dataset.item === "med") {
+        hp = Math.min(100, hp + 18);
+        renderSpine();
+        consumeOne(selectedSlot);
+        sk.toast("Med kit +18 HP", "success");
+        sk.pulse(sk.$("#spine-bar"));
+      } else if (selectedSlot.dataset.item === "key") {
+        sk.toast("Key isn't consumable — try the door", "warning");
+      } else {
+        sk.toast("Can't use " + selectedSlot.dataset.label + " here", "warning");
+      }
+    });
+
+    sk.on(sk.$("#btn-door"), "click", () => {
+      const hasKey = sk.$('.slot[data-item="key"].has');
+      if (hasKey) {
+        sk.toast("Door unlocked — escape route open!", "success");
+        sk.modal({
+          title: "Maintenance Exit",
+          body: "The key turns with a wet click. Cold air spills in.",
+          onConfirm: () => sk.toast("Saving checkpoint…"),
+        });
+      } else {
+        sk.toast("Locked — need brass key", "danger");
+      }
+    });
+
+    sk.on(sk.$("#btn-hurt"), "click", () => {
+      hp = Math.max(0, hp - 15);
+      renderSpine();
+      sk.toast(hp <= 0 ? "Vital signs failing" : "Injury −15%", "danger");
+    });
+
+    renderSpine();
+  </script>
+</body>
+</html>

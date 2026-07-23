@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sci-Fi Space — Bridge Holo</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/scifi-space.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); overflow:hidden; }
+    .bridge { display:grid; grid-template-columns:minmax(260px,1fr) minmax(280px,1.2fr) minmax(260px,1fr); gap:16px; padding:20px; min-height:100vh; box-sizing:border-box; }
+    .icon { width:24px; height:24px; vertical-align:middle; filter:drop-shadow(0 0 4px var(--glow)); }
+    .center { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
+    .reticle { width:200px; height:200px; border:1px solid var(--accent); border-radius:50%; position:relative; box-shadow:0 0 32px var(--glow); transition:border-color .24s ease-out; }
+    .reticle.locked { border-color:var(--danger); box-shadow:0 0 40px color-mix(in srgb, var(--danger) 60%, transparent); }
+    .reticle::after { content:""; position:absolute; inset:18%; border:1px dashed var(--border); border-radius:50%; }
+    .reticle img { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:48px; height:48px; opacity:.85; }
+    .pwr-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+    .pwr-row label { min-width:72px; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; }
+    .pwr-row input[type=range] { flex:1; accent-color:var(--accent); }
+    .pwr-val { min-width:42px; text-align:right; font-family:var(--font-mono); font-size:12px; }
+    .pwr-btns { display:flex; gap:4px; }
+    .pwr-btns button { padding:2px 8px; font-size:11px; }
+    [data-sk-panel] { position:absolute; right:20px; top:50%; transform:translateY(-50%); width:min(300px,90vw); z-index:20; }
+    .hint { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); letter-spacing:.08em; }
+  </style>
+</head>
+<body>
+  <div class="bridge">
+    <div class="sys">
+      <div class="panel">
+        <div class="panel-title">
+          <span>PWR DIST</span>
+          <img class="icon" src="../../assets/_shared/kenney/icons/power.png" alt="" />
+        </div>
+        <div class="panel-body" id="pwr-panel">
+          <div class="pwr-row" data-sys="engines">
+            <label>ENGINES</label>
+            <input type="range" min="0" max="100" value="42" />
+            <span class="pwr-val">42</span>
+            <div class="pwr-btns">
+              <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
+              <button type="button" class="btn btn-ghost" data-delta="5">+</button>
+            </div>
+          </div>
+          <div class="pwr-row" data-sys="shields">
+            <label>SHIELDS</label>
+            <input type="range" min="0" max="100" value="33" />
+            <span class="pwr-val">33</span>
+            <div class="pwr-btns">
+              <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
+              <button type="button" class="btn btn-ghost" data-delta="5">+</button>
+            </div>
+          </div>
+          <div class="pwr-row" data-sys="weapons">
+            <label>WEAPONS</label>
+            <input type="range" min="0" max="100" value="25" />
+            <span class="pwr-val">25</span>
+            <div class="pwr-btns">
+              <button type="button" class="btn btn-ghost" data-delta="-5">−</button>
+              <button type="button" class="btn btn-ghost" data-delta="5">+</button>
+            </div>
+          </div>
+          <div class="stat-row"><span class="stat-key">TOTAL</span><span class="stat-val" id="pwr-total">100%</span></div>
+        </div>
+      </div>
+      <div class="hud-bar">
+        <span class="hud-bar-label">HULL</span>
+        <div class="hud-bar-track"><div id="hull-fill" class="hud-bar-fill success" style="width:88%"></div></div>
+        <span id="hull-val" class="hud-bar-value">88%</span>
+      </div>
+      <button type="button" class="btn btn-danger" id="btn-hull-dmg" style="margin-top:8px">
+        <img class="icon" src="../../assets/_shared/rpg-icons/fire.png" alt="" /> SIM HULL HIT
+      </button>
+    </div>
+
+    <div class="center">
+      <div class="reticle" id="reticle">
+        <img src="../../assets/_shared/rpg-icons/gun.png" alt="target" />
+      </div>
+      <button type="button" class="btn btn-primary" id="btn-lock">
+        <img class="icon" src="../../assets/_shared/kenney/icons/zoomIn.png" alt="" /> TARGET LOCK
+      </button>
+      <span class="badge" id="target-badge">TARGET · 12.4 km · UNLOCKED</span>
+      <div class="ring" style="width:72px;height:72px">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="15.5" />
+          <circle id="lock-ring" class="ring-fill" cx="18" cy="18" r="15.5" stroke-dasharray="20 100" />
+        </svg>
+        <div class="ring-label" id="lock-label">0%</div>
+      </div>
+    </div>
+
+    <div class="sys">
+      <button type="button" class="btn btn-secondary" id="btn-nav-toggle" style="width:100%;margin-bottom:8px">
+        <img class="icon" src="../../assets/_shared/kenney/icons/information.png" alt="" /> TOGGLE NAV
+      </button>
+      <div id="nav-panel" class="panel" data-sk-panel>
+        <div class="panel-title">NAV · BRIDGE</div>
+        <div class="panel-body">
+          <div class="stat-row"><span class="stat-key">SYS</span><span class="stat-val">LHS 3447</span></div>
+          <div class="stat-row"><span class="stat-key">MODE</span><span class="stat-val" id="nav-mode">SUPERCRUISE</span></div>
+          <div class="stat-row"><span class="stat-key">FUEL</span><span class="stat-val">16.2 T</span></div>
+          <button type="button" class="btn" id="btn-mode" style="margin-top:10px;width:100%">CYCLE DRIVE MODE</button>
+        </div>
+      </div>
+      <div class="alert" style="margin-top:12px">COMMS · ATC CLEARANCE GRANTED</div>
+    </div>
+  </div>
+  <p class="hint">Adjust power · lock target · toggle nav · sim hull damage · Esc closes nav</p>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    const pwr = { engines: 42, shields: 33, weapons: 25 };
+    let hull = 88, locked = false, lockPct = 0, navOpen = true;
+    const modes = ["SUPERCRUISE", "CRUISE", "MANUAL"];
+
+    function syncPwr(changedKey, newVal) {
+      newVal = Math.max(0, Math.min(100, newVal));
+      const others = Object.keys(pwr).filter((k) => k !== changedKey);
+      const otherSum = others.reduce((s, k) => s + pwr[k], 0);
+      const maxForChanged = 100 - otherSum;
+      if (newVal > maxForChanged) newVal = maxForChanged;
+      pwr[changedKey] = newVal;
+      const total = pwr.engines + pwr.shields + pwr.weapons;
+      if (total < 100) {
+        const spare = 100 - total;
+        const target = others[0];
+        pwr[target] = Math.min(100, pwr[target] + spare);
+      }
+      sk.$all(".pwr-row").forEach((row) => {
+        const key = row.dataset.sys;
+        row.querySelector("input").value = pwr[key];
+        row.querySelector(".pwr-val").textContent = pwr[key];
+      });
+      sk.setText(sk.$("#pwr-total"), (pwr.engines + pwr.shields + pwr.weapons) + "%");
+    }
+
+    sk.$all(".pwr-row").forEach((row) => {
+      const key = row.dataset.sys;
+      const input = row.querySelector("input");
+      sk.on(input, "input", () => syncPwr(key, parseInt(input.value, 10)));
+      row.querySelectorAll("[data-delta]").forEach((btn) => {
+        sk.on(btn, "click", () => syncPwr(key, pwr[key] + parseInt(btn.dataset.delta, 10)));
+      });
+    });
+
+    function syncHull() {
+      sk.setFill(sk.$("#hull-fill"), hull);
+      sk.setText(sk.$("#hull-val"), hull + "%");
+      sk.$("#hull-fill").className = "hud-bar-fill " + (hull > 50 ? "success" : hull > 25 ? "warning" : "danger");
+    }
+
+    sk.on(sk.$("#btn-hull-dmg"), "click", () => {
+      hull = Math.max(0, hull - 12);
+      syncHull();
+      sk.pulse(sk.$("#hull-fill"));
+      sk.toast(hull <= 0 ? "HULL BREACH" : "Hull −12%", hull <= 25 ? "danger" : "warning");
+    });
+
+    sk.on(sk.$("#btn-lock"), "click", () => {
+      if (locked) {
+        locked = false;
+        lockPct = 0;
+        sk.$("#reticle").classList.remove("locked");
+        sk.setText(sk.$("#target-badge"), "TARGET · 12.4 km · UNLOCKED");
+        sk.toast("Lock released");
+      } else {
+        lockPct = Math.min(100, lockPct + 25);
+        sk.$("#lock-ring").setAttribute("stroke-dasharray", lockPct + " 100");
+        sk.setText(sk.$("#lock-label"), lockPct + "%");
+        if (lockPct >= 100) {
+          locked = true;
+          sk.$("#reticle").classList.add("locked");
+          sk.setText(sk.$("#target-badge"), "TARGET · LOCKED · FIRE READY");
+          sk.toast("Target locked", "success");
+          sk.pulse(sk.$("#reticle"));
+        } else {
+          sk.toast("Acquiring lock… " + lockPct + "%");
+        }
+      }
+    });
+
+    sk.on(sk.$("#btn-nav-toggle"), "click", () => {
+      navOpen = !navOpen;
+      if (navOpen) sk.openPanel("#nav-panel");
+      else sk.closePanel("#nav-panel");
+      sk.toast(navOpen ? "Nav panel open" : "Nav panel hidden");
+    });
+
+    let modeIdx = 0;
+    sk.on(sk.$("#btn-mode"), "click", () => {
+      modeIdx = (modeIdx + 1) % modes.length;
+      sk.setText(sk.$("#nav-mode"), modes[modeIdx]);
+      sk.toast("Drive: " + modes[modeIdx]);
+    });
+
+    syncPwr("engines", pwr.engines);
+    syncHull();
+    sk.openPanel("#nav-panel");
+  </script>
+</body>
+</html>

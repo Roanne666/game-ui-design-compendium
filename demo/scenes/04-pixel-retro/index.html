@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Retro — Battle Command</title>
+  <link rel="stylesheet" href="../../lib/components.css" />
+  <link rel="stylesheet" href="../../lib/styles/pixel-retro.css" />
+  <style>
+    body { margin:0; min-height:100vh; background:var(--bg); image-rendering:pixelated; }
+    .stage { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:16px; box-sizing:border-box; gap:12px; }
+    .enemies { flex:1; display:flex; align-items:center; justify-content:space-around; padding-top:32px; flex-wrap:wrap; gap:12px; }
+    .foe {
+      font-family:var(--font-mono); font-size:11px; color:var(--text);
+      border:2px solid var(--border); padding:16px 12px; background:var(--surface);
+      cursor:pointer; text-align:center; min-width:100px; transition:border-color .12s;
+    }
+    .foe img { width:40px; height:40px; image-rendering:pixelated; display:block; margin:0 auto 8px; }
+    .foe.selected { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+    .foe.dead { opacity:.35; pointer-events:none; }
+    .party { display:grid; grid-template-columns:1fr minmax(180px,220px); gap:8px; }
+    .cmds { display:flex; flex-direction:column; gap:4px; }
+    .cmds .btn { width:100%; image-rendering:pixelated; }
+    .icon-sm { width:18px; height:18px; image-rendering:pixelated; vertical-align:middle; }
+    .hint { text-align:center; font-size:10px; color:var(--text-muted); letter-spacing:.1em; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="enemies" id="enemies">
+      <button type="button" class="foe" data-id="slime" data-hp="30" data-name="SLIME">
+        <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>SLIME</span>
+        <div class="badge" data-hp-label>HP 30</div>
+      </button>
+      <button type="button" class="foe selected" data-id="bat" data-hp="22" data-name="BAT">
+        <img src="../../assets/_shared/rpg-icons/bow.png" alt="" /><span>BAT</span>
+        <div class="badge" data-hp-label>HP 22</div>
+      </button>
+      <button type="button" class="foe" data-id="orc" data-hp="45" data-name="ORC">
+        <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>ORC</span>
+        <div class="badge" data-hp-label>HP 45</div>
+      </button>
+    </div>
+    <div class="party">
+      <div class="panel">
+        <div class="panel-title">HERO · RYU</div>
+        <div class="panel-body">
+          <div class="hud-bar">
+            <span class="hud-bar-label">HP</span>
+            <div class="hud-bar-track"><div id="hp-fill" class="hud-bar-fill danger" style="width:72%"></div></div>
+            <span id="hp-val" class="hud-bar-value">72</span>
+          </div>
+          <div class="hud-bar">
+            <span class="hud-bar-label">MP</span>
+            <div class="hud-bar-track"><div id="mp-fill" class="hud-bar-fill" style="width:40%;background:var(--accent-2)"></div></div>
+            <span id="mp-val" class="hud-bar-value">18</span>
+          </div>
+        </div>
+      </div>
+      <div class="cmds panel">
+        <div class="panel-title">CMD</div>
+        <button type="button" class="btn btn-primary" id="cmd-fight">FIGHT</button>
+        <button type="button" class="btn" id="cmd-magic">MAGIC</button>
+        <button type="button" class="btn" id="cmd-item">ITEM</button>
+        <button type="button" class="btn btn-danger" id="cmd-run">RUN</button>
+      </div>
+    </div>
+    <p class="hint">Select foe · FIGHT/MAGIC/ITEM/RUN · damage shows as toast</p>
+  </div>
+  <script src="../../lib/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let hp = 72, mp = 18, target = sk.$(".foe.selected");
+
+    function syncBars() {
+      sk.setFill(sk.$("#hp-fill"), hp);
+      sk.setText(sk.$("#hp-val"), String(hp));
+      sk.setFill(sk.$("#mp-fill"), (mp / 30) * 100);
+      sk.setText(sk.$("#mp-val"), String(mp));
+    }
+
+    function selectedEnemy() {
+      return sk.$(".foe.selected:not(.dead)");
+    }
+
+    sk.$all(".foe").forEach((foe) => {
+      sk.on(foe, "click", () => {
+        if (foe.classList.contains("dead")) return;
+        sk.$all(".foe").forEach((f) => f.classList.remove("selected"));
+        foe.classList.add("selected");
+        target = foe;
+        sk.toast("Target: " + foe.dataset.name);
+      });
+    });
+
+    function dealToTarget(dmg, label) {
+      const foe = selectedEnemy();
+      if (!foe) {
+        sk.toast("No valid target", "warning");
+        return;
+      }
+      let ehp = parseInt(foe.dataset.hp, 10) - dmg;
+      foe.dataset.hp = String(Math.max(0, ehp));
+      foe.querySelector("[data-hp-label]").textContent = "HP " + foe.dataset.hp;
+      sk.toast(label + " −" + dmg + "!", "success");
+      sk.pulse(foe);
+      if (parseInt(foe.dataset.hp, 10) <= 0) {
+        foe.classList.add("dead");
+        sk.toast(foe.dataset.name + " defeated!", "success");
+      }
+    }
+
+    sk.on(sk.$("#cmd-fight"), "click", () => {
+      if (!selectedEnemy()) return;
+      const dmg = 8 + Math.floor(Math.random() * 5);
+      dealToTarget(dmg, "Strike");
+    });
+
+    sk.on(sk.$("#cmd-magic"), "click", () => {
+      if (mp < 6) {
+        sk.toast("Not enough MP", "danger");
+        return;
+      }
+      if (!selectedEnemy()) return;
+      mp -= 6;
+      syncBars();
+      dealToTarget(14, "Fire");
+    });
+
+    sk.on(sk.$("#cmd-item"), "click", () => {
+      hp = Math.min(99, hp + 20);
+      syncBars();
+      sk.toast("Potion +20 HP", "success");
+      sk.pulse(sk.$("#hp-fill"));
+    });
+
+    sk.on(sk.$("#cmd-run"), "click", () => {
+      sk.modal({
+        title: "Flee battle?",
+        body: "You may drop 50 gold if you run now.",
+        onConfirm: () => sk.toast("Got away safely!", "warning"),
+      });
+    });
+
+    syncBars();
+  </script>
+</body>
+</html>
