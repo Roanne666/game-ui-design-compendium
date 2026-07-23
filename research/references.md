@@ -112,3 +112,10 @@
 - [Color Picker Code: Miami Synthwave Palette](https://colorpickercode.com/color-palette/website-color-palettes/miami-synthwave/) — 调色板分析
 - [Hotline Miami 官方](https://hotlinemiami.com/) — 视觉风格代表
 - [NovusGFX: retro-design-system](https://github.com/NovusGFX/retro-design-system/blob/main/README.md) — 54 个复古系统参考
+
+## 研究综合 / 项目准则
+
+- [风格互斥边界](./synthesis/style-boundaries.md)
+- [游戏感 vs 网页感](./synthesis/game-feel-vs-web.md)
+- [赛博朋克 UI 全景](./synthesis/cyberpunk-ui-landscape.md)
+- [移动端竖屏优先](./synthesis/mobile-portrait-first.md) — 本仓库默认交付：9:20 竖屏 + 触控

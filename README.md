@@ -2,26 +2,29 @@
 
 10 套游戏 UI 风格：每套 = Spec 文档 + CSS Token + **该类型游戏**的参考场景。
 
+**交付目标：移动端竖屏（默认 9:20）+ 触控操作。** 桌面仅作预览。准则见 [`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
+
 ## 核心原则
 
-**建材共享,楼型按游戏类型分。**
+**建材共享,楼型按游戏类型分；先为拇指设计。**
 
 场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 `research/synthesis/game-feel-vs-web.md`。
 
 - 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js` + `demo/lib/game-feel.css`
-- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，布局符合该类型游戏
+- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，**竖屏触控**，布局符合该类型游戏
 - 美术：`demo/assets/`（CC0 / CC-BY 等开放许可，见 `demo/assets/CREDITS.md`）
 - **禁止**用「同一套页面换 CSS」作为风格验收标准；**禁止**商业游戏官方/Rip 素材
+- **禁止**以键鼠快捷键为玩家主操作路径（调试捷径可保留）
 
 ```
 游戏UI设计大全/
 ├── styles/                        ← 10 套风格 spec（含适用游戏类型）
 ├── demo/
 │   ├── lib/                       ← 共享组件 + Token
-│   └── scenes/                    ← 每风格独占主场景
+│   └── scenes/                    ← 每风格独占主场景（竖屏）
 │       ├── index.html
 │       └── <nn-style>/<main>.html
-├── research/                      ← 研究与互斥边界
+├── research/                      ← 研究与互斥边界 / 竖屏准则
 └── tools/                         ← 截图等工具
 ```
 
@@ -31,19 +34,19 @@
 
 打开 `styles/01-cyberpunk-hud.md`，先看「适用游戏类型」再看色彩/几何/动效。
 
-### 2. 玩对应游戏类型的交互场景
+### 2. 用手机或 DevTools 竖屏玩场景
 
-打开 `demo/scenes/index.html`，点进某风格的 `index.html`（可点菜单、背包、买东西、换弹等）。素材署名见 `demo/assets/CREDITS.md`。
+打开 `demo/scenes/index.html` → 某风格 `index.html`。优先用 **手机框竖屏 + 触控**（点按/拖动），不要按桌面键鼠习惯验收。
 
 ### 3. 用组件库做建材
 
-复制 `demo/lib/components.css` + 目标 `lib/styles/<name>.css`，按**该类型游戏**的信息架构写页面，复用类名即可。
+复制 `demo/lib/components.css` + 目标 `lib/styles/<name>.css`，按**该类型游戏**的信息架构写页面，复用类名即可；控件热区按触控尺寸设计。
 
 ## 10 套风格 × 锚定游戏类型
 
 | # | 风格 | 适合的游戏类型 | 本轮主场景 |
 |---|------|----------------|------------|
-| 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `gameplay-hud.html` |
+| 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `01-cyberpunk-hud/`（9:20 触控） |
 | 02 | Dark Fantasy | 魂类 / 动作 RPG | `souls-hud.html` |
 | 03 | Sci-Fi Space | 太空模拟 | `bridge-holo.html` |
 | 04 | Pixel Retro | 2D 像素 RPG/平台 | `battle-command.html` |
@@ -55,6 +58,7 @@
 | 10 | Synthwave Neon | 复古动作 / 街机 | `neon-title.html` |
 
 代表作与互斥规则见各 Spec 与 `research/synthesis/style-boundaries.md`。
+竖屏触控总则见 `research/synthesis/mobile-portrait-first.md`。
 
 ## 组件库清单(35+)
 

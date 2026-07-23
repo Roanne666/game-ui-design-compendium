@@ -2,6 +2,8 @@
 
 **角色：建材层。** 场景布局在 `demo/scenes/<style>/`，按游戏类型独占编写。
 
+**交付形态：移动端竖屏 + 触控**（见仓库根 `research/synthesis/mobile-portrait-first.md`）。共享组件的热区与状态应以触控为准，不依赖 hover。
+
 ## 架构
 
 ```
@@ -12,15 +14,15 @@ demo/
 │   └── README.md
 └── scenes/
     ├── index.html               # 风格入口
-    └── <nn-style>/<main>.html   # 每风格类型正确的主场景
+    └── <nn-style>/<main>.html   # 每风格类型正确的主场景（竖屏触控）
 ```
 
 不要生成或维护「10 页面 × 10 风格」矩阵。换 Token 仅用于调试建材，不能代替类型正确的场景。
 
 ## 使用方式
 
-1. 打开 `demo/scenes/index.html` 选风格 → 进入该类型主场景
-2. 自建页面：引用 `components.css` + 一套 `styles/<name>.css`，按 Spec「适用游戏类型」设计信息架构
+1. 打开 `demo/scenes/index.html` 选风格 → 用手机或 DevTools **竖屏**进入主场景
+2. 自建页面：引用 `components.css` + 一套 `styles/<name>.css`，按 Spec「适用游戏类型」设计信息架构；控件 ≥44px 热区
 3. 新风格：加 Token + 新场景目录 + 登记 index；**不要**复制其他风格的整页 DOM 再换 link
 
 ## 组件速查(35+)
