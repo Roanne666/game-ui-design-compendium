@@ -19,12 +19,15 @@
 ## Style 01 — Cyberpunk HUD
 
 - [Behance: Cyberpunk 2077 UI Part 2](https://www.behance.net/gallery/133185623/Cyberpunk-2077User-Interface-%28Part-2%29) — UI Art Bible
-- [Behance: Cyberpunk 2077 UI Part 1](https://www.behance.net/gallery/118663901/Cyberpunk-2077User-Interface-(Part-1)) — 字体 + 调色板演化
+- [Behance: Cyberpunk 2077 UI Part 1](https://www.behance.net/gallery/118663901/Cyberpunk-2077User-Interface-(Part-1)) — 字体 + 调色板演化；Entropism / Kitsch / Neo Militarism / Neo Kitsch
 - [opacity.ru: Cyberpunk 2077 UI Art](https://opacity.ru/Cyberpunk-2077-UI-Art) — 部件分类
-- [Benoit Perreault: Deus Ex Mankind Divided UI](https://www.benoitperreault.com/deusex) — UI Director 方法论
-- [Design.md: Cyberpunk UI](https://designmd.app/library/cyberpunk-ui) — 设计 token 拆解
+- [Benoit Perreault: Deus Ex Mankind Divided UI](https://www.benoitperreault.com/deusex) — UI Director；义眼 AR / Smart Vision
+- [Design.md: Cyberpunk UI](https://designmd.app/library/cyberpunk-ui) — 设计 token 拆解；glitch 克制原则
+- [stellae: Cyberpunk UI Guide](https://www.stellae.design/en/learn/cyberpunk-ui-design) — 网页向五原则（暗底/霓虹/等宽/故障/切角）
+- [HUDS+GUIS: Cyberpunk 2077](https://www.hudsandguis.com/home/2019/cyberpunk-2077) — 预告片 HUD = off-red low-fi / Terminator 气质
 - [Game UI Database: Cyberpunk 2077](https://www.gameuidatabase.com/gameData.php?id=439) — 颜色吸取
 - [Protypr: UX Analysis CP2077 HUD](https://prototypr.io/post/a-ux-analysis-of-cyberpunk-2077s-hud) — 实战分析
+- [研究综合: 赛博朋克 UI 全景](./synthesis/cyberpunk-ui-landscape.md) — 子方言图谱 + FUI 零件 + 媒介差异（2026-07）
 
 ## Style 02 — Dark Fantasy
 
