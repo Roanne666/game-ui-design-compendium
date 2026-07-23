@@ -66,7 +66,8 @@
         <button type="button" class="t-btn t-attack hit" id="btn-attack">攻击</button>
       </div>
 
-      <div class="help" id="help">拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点露滴回血 · 靠近篝火休息</div>
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">?</button>
+      <div class="help" id="help" hidden>拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点露滴回血 · 靠近篝火休息</div>
     </div>
   </div>
 
@@ -324,6 +325,16 @@
   $("#slate-leave").addEventListener("click", () => {
     state.slate = false;
     sync();
+  });
+
+  const help = $("#help");
+  const helpBtn = $("#btn-help");
+  helpBtn.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const open = help.hidden;
+    help.hidden = !open;
+    document.body.classList.toggle("help-open", open);
   });
 
   setInterval(() => {

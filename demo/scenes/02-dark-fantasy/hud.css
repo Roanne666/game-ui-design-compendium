@@ -1,18 +1,27 @@
 /* Style 02 — Dark Fantasy souls HUD
-   Mobile 9:20 · touch-first · no shared web chrome */
+   Mobile 9:20 · touch-first · restrained FromSoft polish
+   double gold frame · corner marks · inset metal · no web chrome */
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap");
 
 :root {
   --df-gold: #c9a961;
   --df-gold-dim: #8b7332;
+  --df-gold-deep: #5c4a22;
   --df-bone: #e8dcc4;
   --df-mute: #6b6660;
   --df-ink: #0a0908;
   --df-panel: #1f1611;
+  --df-panel-2: #16110d;
   --df-blood: #8b0000;
   --df-fp: #3d5a6c;
   --df-stam: #c9a961;
+  --df-metal: linear-gradient(
+    165deg,
+    rgba(48, 38, 28, 0.92) 0%,
+    rgba(18, 14, 11, 0.94) 42%,
+    rgba(28, 22, 16, 0.92) 100%
+  );
 }
 
 * { box-sizing: border-box; }
@@ -41,9 +50,10 @@ html, body {
   overflow: hidden;
   background: #0a0908;
   border-radius: 28px;
-  border: 2px solid rgba(201, 169, 97, 0.22);
+  border: 2px solid rgba(201, 169, 97, 0.28);
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 1px rgba(201, 169, 97, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.65);
   touch-action: none;
 }
@@ -124,20 +134,23 @@ html, body {
 .enemy.locked::before {
   content: "";
   position: absolute;
-  inset: -6px -4px;
-  border: 1px solid rgba(201, 169, 97, 0.65);
+  inset: -8px -6px;
+  border: 1px solid rgba(201, 169, 97, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 115, 50, 0.35),
+    0 0 10px rgba(201, 169, 97, 0.18);
   pointer-events: none;
-  box-shadow: 0 0 12px rgba(201, 169, 97, 0.25);
 }
 .enemy.locked::after {
   content: "◆";
   position: absolute;
-  top: -24px;
+  top: -26px;
   left: 50%;
   transform: translateX(-50%);
   color: var(--df-gold);
-  font-size: 14px;
+  font-size: 12px;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0;
 }
 .enemy.dead {
   opacity: 0.3;
@@ -159,10 +172,45 @@ html, body {
   cursor: pointer;
   z-index: 2;
   animation: lootPulse 1.6s ease-in-out infinite;
-  box-shadow: 0 0 16px rgba(201, 169, 97, 0.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 115, 50, 0.4),
+    0 0 16px rgba(201, 169, 97, 0.4);
 }
 @keyframes lootPulse {
-  50% { box-shadow: 0 0 12px rgba(201, 169, 97, 0.35); }
+  50% { box-shadow: inset 0 0 0 1px rgba(139, 115, 50, 0.4), 0 0 12px rgba(201, 169, 97, 0.35); }
+}
+
+/* ===== Shared ornate frame helpers ===== */
+.ornate {
+  position: relative;
+  background: var(--df-metal);
+  border: 1px solid rgba(201, 169, 97, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(91, 74, 34, 0.55),
+    inset 0 1px 0 rgba(232, 220, 196, 0.06),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.35),
+    0 4px 14px rgba(0, 0, 0, 0.45);
+}
+.ornate::before,
+.ornate::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: var(--df-gold-dim);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 2;
+}
+.ornate::before {
+  top: 3px;
+  left: 3px;
+  border-width: 1px 0 0 1px;
+}
+.ornate::after {
+  bottom: 3px;
+  right: 3px;
+  border-width: 0 1px 1px 0;
 }
 
 /* ===== HUD ===== */
@@ -192,60 +240,77 @@ html, body {
   font-family: "Cinzel", serif;
   font-size: 11px;
   letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(232, 220, 196, 0.45);
+  color: rgba(232, 220, 196, 0.5);
   text-align: center;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
 }
 .place .rest-hint {
   display: none;
-  margin-top: 6px;
+  margin-top: 8px;
+  padding: 4px 10px;
   color: var(--df-gold);
-  letter-spacing: 0.2em;
-  font-size: 12px;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  border-top: 1px solid rgba(201, 169, 97, 0.28);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.28);
 }
-.place.near .rest-hint { display: block; }
+.place.near .rest-hint { display: inline-block; }
 
 /* Vitals — fade when idle */
 .vitals {
   position: absolute;
   left: 14px;
   bottom: 148px;
-  width: 42%;
+  width: 44%;
   z-index: 15;
   opacity: 0;
   transition: opacity 0.6s ease-out;
   pointer-events: none;
+  padding: 8px 8px 6px;
+  background: rgba(10, 9, 8, 0.55);
+  border: 1px solid rgba(201, 169, 97, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(91, 74, 34, 0.35);
 }
 .vitals.show { opacity: 1; }
 .vital {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
+.vital:last-child { margin-bottom: 0; }
 .vital .lab {
-  width: 18px;
+  width: 28px;
   font-family: "Cinzel", serif;
   font-size: 8px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--df-mute);
 }
 .vital .trk {
   flex: 1;
-  height: 6px;
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(201, 169, 97, 0.25);
+  height: 5px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(201, 169, 97, 0.28);
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 .vital .fill {
   height: 100%;
   width: 100%;
   transition: width 100ms linear, background 200ms ease;
 }
-.vital.hp .fill { background: var(--df-bone); }
-.vital.hp.low .fill { background: var(--df-blood); }
-.vital.fp .fill { background: var(--df-fp); }
-.vital.st .fill { background: var(--df-stam); }
+.vital.hp .fill {
+  background: linear-gradient(180deg, #f0e6d0, var(--df-bone) 55%, #c4b89a);
+}
+.vital.hp.low .fill {
+  background: linear-gradient(180deg, #b01010, var(--df-blood));
+}
+.vital.fp .fill {
+  background: linear-gradient(180deg, #5a7a8c, var(--df-fp));
+}
+.vital.st .fill {
+  background: linear-gradient(180deg, #dfc57a, var(--df-stam) 60%, #8b7332);
+}
 
 .estus-slot {
   position: absolute;
@@ -253,26 +318,56 @@ html, body {
   bottom: 148px;
   transform: translateX(-50%);
   z-index: 16;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 12, 10, 0.7);
-  border: 1px solid rgba(201, 169, 97, 0.4);
+  gap: 2px;
+  background: var(--df-metal);
+  border: 1px solid rgba(201, 169, 97, 0.5);
   color: var(--df-gold);
   font-family: "Cinzel", serif;
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 9px;
+  letter-spacing: 0.12em;
   cursor: pointer;
   pointer-events: auto;
+  box-shadow:
+    inset 0 0 0 1px rgba(91, 74, 34, 0.55),
+    inset 0 1px 0 rgba(232, 220, 196, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.45);
+  transition: transform 120ms ease-out, border-color 160ms ease-out, background 160ms ease-out;
+}
+.estus-slot::before,
+.estus-slot::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: var(--df-gold);
+  border-style: solid;
+  pointer-events: none;
+}
+.estus-slot::before {
+  top: 3px; left: 3px;
+  border-width: 1px 0 0 1px;
+}
+.estus-slot::after {
+  bottom: 3px; right: 3px;
+  border-width: 0 1px 1px 0;
 }
 .estus-slot .n {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--df-bone);
   line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.estus-slot:active {
+  transform: translateX(-50%) scale(0.94);
+  border-color: var(--df-gold);
+  background: rgba(139, 115, 50, 0.28);
 }
 .estus-slot:disabled {
   opacity: 0.35;
@@ -286,17 +381,38 @@ html, body {
   transform: translate(-50%, -50%);
   z-index: 18;
   display: none;
-  padding: 8px 14px;
-  border: 1px solid rgba(201, 169, 97, 0.45);
-  background: rgba(10, 9, 8, 0.72);
+  min-width: 58%;
+  padding: 12px 16px 11px;
   font-family: "Cinzel", serif;
   font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--df-bone);
+  letter-spacing: 0.16em;
+  color: var(--df-gold);
   text-align: center;
   pointer-events: none;
+  background: rgba(14, 11, 9, 0.82);
+  border: 1px solid rgba(201, 169, 97, 0.48);
+  box-shadow:
+    inset 0 0 0 1px rgba(91, 74, 34, 0.5),
+    0 8px 28px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
 }
+.prompt::before,
+.prompt::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 169, 97, 0.45),
+    transparent
+  );
+  pointer-events: none;
+}
+.prompt::before { top: 5px; }
+.prompt::after { bottom: 5px; }
 .prompt.show { display: block; }
 
 /* Bonfire slate menu */
@@ -309,38 +425,60 @@ html, body {
   z-index: 30;
   display: none;
   pointer-events: auto;
-  padding: 18px 16px;
-  background: rgba(31, 22, 17, 0.94);
+  padding: 22px 18px 16px;
+  background:
+    linear-gradient(180deg, rgba(42, 32, 24, 0.96), rgba(22, 16, 12, 0.96));
   border: 2px solid var(--df-gold-dim);
-  box-shadow: inset 0 0 0 1px rgba(201, 169, 97, 0.25), 0 12px 40px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 169, 97, 0.28),
+    inset 0 0 40px rgba(0, 0, 0, 0.35),
+    0 16px 48px rgba(0, 0, 0, 0.65);
 }
 .slate.open { display: block; }
+.slate::before,
+.slate::after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--df-gold-dim);
+  font-size: 8px;
+  line-height: 1;
+  pointer-events: none;
+}
+.slate::before { top: 8px; }
+.slate::after { bottom: 8px; }
 .slate h2 {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   font-family: "Cinzel", serif;
   font-size: 14px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.28em;
   text-align: center;
   color: var(--df-gold);
   font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.28);
 }
 .slate button {
   display: block;
   width: 100%;
   margin-bottom: 8px;
-  padding: 12px 10px;
+  padding: 13px 10px;
   font-family: "Cinzel", serif;
   font-size: 13px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  letter-spacing: 0.18em;
   color: var(--df-bone);
-  background: transparent;
-  border: 1px solid rgba(201, 169, 97, 0.35);
+  background: rgba(10, 9, 8, 0.35);
+  border: 1px solid rgba(201, 169, 97, 0.38);
+  box-shadow: inset 0 0 0 1px rgba(91, 74, 34, 0.35);
   cursor: pointer;
+  transition: background 140ms ease-out, border-color 140ms ease-out, transform 100ms ease-out;
 }
+.slate button:last-child { margin-bottom: 0; }
 .slate button:active {
-  background: rgba(139, 115, 50, 0.25);
+  background: rgba(139, 115, 50, 0.28);
   border-color: var(--df-gold);
+  transform: scale(0.98);
 }
 
 #feed {
@@ -356,6 +494,7 @@ html, body {
   letter-spacing: 0.16em;
   color: var(--df-gold);
   pointer-events: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }
 #feed div {
   margin-top: 4px;
@@ -379,7 +518,7 @@ html, body {
 }
 #hurt.on { opacity: 1; }
 
-/* Touch pad */
+/* Touch pad — metal plates */
 .touch-pad {
   position: absolute;
   inset: 0;
@@ -391,16 +530,47 @@ html, body {
   position: absolute;
   font-family: "Cinzel", serif;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--df-bone);
-  background: rgba(10, 9, 8, 0.55);
-  border: 1px solid rgba(201, 169, 97, 0.4);
+  background: var(--df-metal);
+  border: 1px solid rgba(201, 169, 97, 0.48);
   touch-action: manipulation;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+  box-shadow:
+    inset 0 0 0 1px rgba(91, 74, 34, 0.5),
+    inset 0 1px 0 rgba(232, 220, 196, 0.07),
+    inset 0 -12px 20px rgba(0, 0, 0, 0.35),
+    0 6px 16px rgba(0, 0, 0, 0.45);
+  transition: transform 100ms ease-out, border-color 140ms ease-out, background 140ms ease-out, box-shadow 140ms ease-out;
+}
+.t-btn::before,
+.t-btn::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: var(--df-gold-dim);
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0.9;
+}
+.t-btn::before {
+  top: 4px; left: 4px;
+  border-width: 1px 0 0 1px;
+}
+.t-btn::after {
+  bottom: 4px; right: 4px;
+  border-width: 0 1px 1px 0;
 }
 .t-btn:active,
 .t-btn.pressed {
-  background: rgba(139, 115, 50, 0.35);
+  background: rgba(139, 115, 50, 0.32);
   border-color: var(--df-gold);
+  transform: scale(0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 169, 97, 0.35),
+    inset 0 4px 12px rgba(0, 0, 0, 0.45),
+    0 0 10px rgba(201, 169, 97, 0.12);
 }
 .t-attack {
   right: 12px;
@@ -411,20 +581,32 @@ html, body {
   font-size: 12px;
   border-width: 2px;
   border-color: var(--df-gold-dim);
+  box-shadow:
+    inset 0 0 0 1px rgba(91, 74, 34, 0.55),
+    inset 0 1px 0 rgba(232, 220, 196, 0.08),
+    inset 0 -14px 22px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(201, 169, 97, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.5);
+}
+.t-attack::before,
+.t-attack::after {
+  width: 8px;
+  height: 8px;
+  border-color: var(--df-gold);
 }
 .t-roll {
   right: 100px;
   bottom: 28px;
-  min-width: 64px;
+  min-width: 68px;
   height: 48px;
   font-size: 11px;
-  padding: 0 10px;
+  padding: 0 12px;
 }
 .t-use {
   right: 100px;
   bottom: 84px;
-  min-width: 64px;
-  height: 40px;
+  min-width: 68px;
+  height: 42px;
   font-size: 11px;
 }
 .t-lock {
@@ -439,15 +621,52 @@ html, body {
 .help {
   position: absolute;
   left: 50%;
-  bottom: 100px;
+  bottom: 108px;
   transform: translateX(-50%);
   z-index: 15;
   max-width: 86%;
+  padding: 8px 10px;
   text-align: center;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: var(--df-mute);
-  line-height: 1.4;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(232, 220, 196, 0.55);
+  line-height: 1.45;
   pointer-events: none;
+  background: rgba(10, 9, 8, 0.72);
+  border: 1px solid rgba(201, 169, 97, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(91, 74, 34, 0.3);
 }
 .help[hidden] { display: none !important; }
+
+.help-toggle {
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  z-index: 16;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: rgba(201, 169, 97, 0.5);
+  background: rgba(10, 9, 8, 0.45);
+  border: 1px solid rgba(201, 169, 97, 0.28);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: inset 0 0 0 1px rgba(91, 74, 34, 0.35);
+  transition: color 140ms ease-out, border-color 140ms ease-out, transform 100ms ease-out;
+}
+.help-toggle:active {
+  color: var(--df-gold);
+  border-color: var(--df-gold);
+  transform: scale(0.94);
+}
+body.help-open .help-toggle {
+  color: var(--df-gold);
+  border-color: rgba(201, 169, 97, 0.55);
+}
