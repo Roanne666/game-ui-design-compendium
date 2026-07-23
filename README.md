@@ -2,7 +2,10 @@
 
 10 套游戏 UI 风格：每套 = Spec 文档 + CSS Token + **该类型游戏**的参考场景。
 
-**交付目标：移动端竖屏（默认 9:20）+ 触控操作；玩家可见 UI 文案一律中文。** 桌面仅作预览。准则见 [`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
+**交付目标：移动端竖屏（默认 9:20）+ 触控操作；玩家可见 UI 文案一律中文。** 桌面仅作预览。
+
+通用 HUD 思路（分层、图标主键、避网页感）：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。  
+Style 02 案例附录：[`research/synthesis/dark-fantasy-mobile-hud.md`](research/synthesis/dark-fantasy-mobile-hud.md)。
 
 ## 核心原则
 
@@ -47,7 +50,7 @@
 | # | 风格 | 适合的游戏类型 | 本轮主场景 |
 |---|------|----------------|------------|
 | 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `01-cyberpunk-hud/`（9:20 触控） |
-| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控）· [HUD 优化参考](research/synthesis/dark-fantasy-mobile-hud.md) |
+| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控）· [案例](research/synthesis/dark-fantasy-mobile-hud.md) |
 | 03 | Sci-Fi Space | 太空模拟 | `bridge-holo.html` |
 | 04 | Pixel Retro | 2D 像素 RPG/平台 | `battle-command.html` |
 | 05 | Hand-drawn | 叙事动作 / Roguelike | `boon-select.html` |
@@ -58,7 +61,7 @@
 | 10 | Synthwave Neon | 复古动作 / 街机 | `neon-title.html` |
 
 代表作与互斥规则见各 Spec 与 `research/synthesis/style-boundaries.md`。
-竖屏触控总则见 `research/synthesis/mobile-portrait-first.md`。
+竖屏触控总则与通用 HUD 思路见 `research/synthesis/mobile-portrait-first.md`。
 
 ## 组件库清单(35+)
 
