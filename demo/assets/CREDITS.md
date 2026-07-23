@@ -39,5 +39,6 @@
 - `demo/scenes/02-dark-fantasy/art/ruins-bg.png` — original ruined gothic landscape plate
 - `demo/scenes/02-dark-fantasy/art/hollow.png` — Ruin Warden character plate (keyed)
 - `demo/scenes/02-dark-fantasy/art/bonfire.png` — bonfire prop plate (keyed)
+- `demo/scenes/02-dark-fantasy/art/icons/` — HUD touch icons (lock / use / roll / attack / estus / help), black-keyed
 - License: project original for this encyclopedia demo
 - **不含**商业魂类 / 空洞骑士等官方或 Rip 素材
