@@ -119,4 +119,3 @@
 - [游戏感 vs 网页感](./synthesis/game-feel-vs-web.md)
 - [赛博朋克 UI 全景](./synthesis/cyberpunk-ui-landscape.md)
 - [移动端竖屏优先 — 通用 HUD 思路](./synthesis/mobile-portrait-first.md) — 本仓库默认交付：9:20 竖屏 + 触控分层 + 图标主键
-- [案例：02 黑暗奇幻](./synthesis/dark-fantasy-mobile-hud.md) — 通用思路在魂类 Demo 上的映射
