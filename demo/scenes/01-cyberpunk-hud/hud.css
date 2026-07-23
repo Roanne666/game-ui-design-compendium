@@ -602,15 +602,15 @@ html, body {
 .weapon-dock {
   position: absolute;
   left: 50%;
-  bottom: 100px;
+  bottom: 208px;
   transform: translateX(-50%);
   z-index: 15;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  width: calc(100% - 168px);
-  max-width: 280px;
+  gap: 4px;
+  width: calc(100% - 176px);
+  max-width: 240px;
   pointer-events: none;
 }
 .weapon-dock .pockets,
@@ -685,7 +685,7 @@ html, body {
   margin-bottom: 2px;
 }
 .weapon-hud .ammo {
-  font-size: clamp(40px, 4.2vw, 54px);
+  font-size: 22px;
   line-height: 0.92;
   font-weight: 700;
   color: var(--cp-blue);
@@ -693,7 +693,7 @@ html, body {
   text-shadow: 0 0 18px rgba(var(--data-rgb), 0.35);
 }
 .weapon-hud .ammo > span {
-  font-size: clamp(18px, 1.8vw, 22px);
+  font-size: 12px;
   font-weight: 600;
   color: var(--cp-red);
   text-shadow: none;
