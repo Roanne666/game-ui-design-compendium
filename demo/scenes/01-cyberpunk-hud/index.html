@@ -47,12 +47,31 @@
       </div>
       <div class="prompt" id="prompt"><span class="key" id="prompt-key">E</span><span id="prompt-text">INTERACT</span></div>
 
-      <div class="minimap">
-        <div class="grid"></div>
-        <div class="player" id="mm-player"></div>
-        <div class="ping" style="left:70%;top:40%"></div>
-        <div class="ping" style="left:30%;top:60%;background:#e60012;box-shadow:0 0 6px #e60012"></div>
-        <div class="label">WATSON</div>
+      <div class="player-vitals">
+        <div class="lvl">12</div>
+        <div class="bars">
+          <div class="hp-row">
+            <div class="hp-trk"><div class="fill" id="hp-fill"></div></div>
+            <span class="hp-num" id="hp-num">620</span>
+          </div>
+          <div class="ram-row" id="ram-ticks" aria-label="RAM"></div>
+          <div class="xp-trk"><div class="fill" id="xp-fill"></div></div>
+          <div class="scan-rail off" id="scan-flag">SCAN OFF · [TAB]</div>
+        </div>
+      </div>
+
+      <div class="nav-block">
+        <div class="minimap">
+          <div class="grid"></div>
+          <div class="ring"></div>
+          <div class="player" id="mm-player"></div>
+          <div class="ping" style="left:70%;top:40%"></div>
+          <div class="ping" style="left:30%;top:60%;background:#e60012;box-shadow:0 0 6px #e60012"></div>
+        </div>
+        <div class="nav-meta">
+          <span id="clock">00:00:00</span>
+          <span class="district">WATSON</span>
+        </div>
       </div>
 
       <div class="quest" id="quest">
@@ -61,39 +80,22 @@
         <div class="q-sub" id="q-sub">OBJ · Locate entrance · 240m</div>
       </div>
 
-      <div class="sys">
-        <div class="row" id="clock">00:00:00</div>
-        <div class="row">NIGHT CITY // WATSON</div>
-        <div class="row scan-flag off" id="scan-flag">SCAN OFF · [TAB]</div>
-        <div class="row">RAM <span id="ram-val">6</span>/6</div>
+      <div class="stamina" id="stamina">
+        <span class="lab">STAMINA</span>
+        <div class="trk"><div class="fill" id="st-fill"></div></div>
       </div>
 
-      <div class="vitals">
-        <div class="vital hp">
-          <span class="lab">HP</span>
-          <div class="trk"><div class="fill" id="hp-fill"></div></div>
-          <span class="num" id="hp-num">620</span>
-        </div>
-        <div class="vital st">
-          <span class="lab">ST</span>
-          <div class="trk"><div class="fill" id="st-fill"></div></div>
-          <span class="num" id="st-num">100</span>
-        </div>
-        <div class="vital ar">
-          <span class="lab">AR</span>
-          <div class="trk"><div class="fill" id="ar-fill"></div></div>
-          <span class="num" id="ar-num">40</span>
-        </div>
+      <div class="pockets">
+        <div class="pocket on hit" data-w="0"><span class="ico">1</span><span class="k">UNITY</span></div>
+        <div class="pocket hit" data-w="1"><span class="ico">2</span><span class="k">SATARA</span></div>
+        <div class="pocket hit" data-w="2"><span class="ico">3</span><span class="k">SATORI</span></div>
+        <div class="pocket dim"><span class="ico">+</span><span class="k">INJ</span></div>
       </div>
 
       <div class="weapon-hud">
+        <div class="stance" id="stance">STANDING</div>
         <div class="wname" id="w-name">UNITY</div>
         <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
-        <div class="slots">
-          <div class="slot on hit" data-w="0">1</div>
-          <div class="slot hit" data-w="1">2</div>
-          <div class="slot hit" data-w="2">3</div>
-        </div>
       </div>
 
       <div class="ram" id="ram-menu">
@@ -122,7 +124,7 @@
         <div class="t">Flatline Optional</div>
         <div class="d">Neutralize the corpo guard — or leave him breathing.</div>
       </div>
-      <p style="font-size:10px;letter-spacing:.12em;color:rgba(246,199,59,.45);margin-top:16px">[J] / [ESC] CLOSE</p>
+      <p style="font-size:12px;letter-spacing:.12em;color:rgba(242,242,242,.42);margin-top:16px">[J] / [ESC] CLOSE</p>
     </div>
   </div>
 
@@ -166,25 +168,38 @@
     setTimeout(() => el.remove(), 2200);
   }
 
+  function renderRamTicks() {
+    const row = $("#ram-ticks");
+    row.innerHTML = "";
+    for (let i = 0; i < state.ramMax; i++) {
+      const t = document.createElement("div");
+      t.className = "tick" + (i < state.ram ? " on" : "");
+      row.appendChild(t);
+    }
+  }
+
   function sync() {
     const w = weapons[state.w];
     $("#hp-fill").style.width = (state.hp / state.hpMax) * 100 + "%";
     $("#st-fill").style.width = state.st + "%";
-    $("#ar-fill").style.width = state.ar + "%";
     $("#hp-num").textContent = String(Math.round(state.hp));
-    $("#st-num").textContent = String(Math.round(state.st));
-    $("#ar-num").textContent = String(Math.round(state.ar));
     $("#w-name").textContent = w.name;
     $("#ammo-cur").textContent = String(w.cur);
     $("#ammo-res").textContent = String(w.res);
-    $("#ram-val").textContent = String(state.ram);
-    $$(".weapon-hud .slot").forEach((s, i) => s.classList.toggle("on", i === state.w));
+    renderRamTicks();
+    $$(".pockets .pocket[data-w]").forEach((s) => {
+      const i = Number(s.dataset.w);
+      s.classList.toggle("on", i === state.w);
+    });
     document.body.classList.toggle("scan-on", state.scan);
     $("#scan-flag").textContent = state.scan ? "SCAN ON · [TAB]" : "SCAN OFF · [TAB]";
+    $("#scan-flag").classList.toggle("on", state.scan);
     $("#scan-flag").classList.toggle("off", !state.scan);
     $("#crosshair").classList.toggle("hack", !!state.lock);
     $("#ram-menu").classList.toggle("show", !!state.lock);
     $("#journal").classList.toggle("open", state.journal);
+    $("#stamina").classList.toggle("show", state.sprint || state.st < 99);
+    $("#stance").textContent = state.sprint ? "SPRINTING" : "STANDING";
   }
 
   function setFocus(ent) {
@@ -385,7 +400,7 @@
     if (e.code === "ShiftLeft" || e.code === "ShiftRight") state.sprint = false;
   });
 
-  $$(".weapon-hud .slot").forEach((s) => {
+  $$(".pockets .pocket[data-w]").forEach((s) => {
     s.addEventListener("click", () => { state.w = Number(s.dataset.w); sync(); });
   });
   $$("#ram-menu button").forEach((b) => {
