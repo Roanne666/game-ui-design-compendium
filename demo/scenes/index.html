@@ -7,32 +7,73 @@
   <style>
     body { font-family: system-ui, sans-serif; background: #111; color: #eee; margin: 0; padding: 32px; }
     h1 { font-size: 22px; margin: 0 0 8px; }
-    p { color: #999; margin: 0 0 24px; max-width: 52ch; }
+    p { color: #999; margin: 0 0 24px; max-width: 60ch; }
     a { color: #7ec8ff; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    table { border-collapse: collapse; width: 100%; max-width: 820px; }
-    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #333; font-size: 14px; }
+    table { border-collapse: collapse; width: 100%; max-width: 960px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #333; font-size: 14px; vertical-align: top; }
     th { color: #888; font-weight: 600; }
+    .muted { color: #888; font-size: 12px; }
   </style>
 </head>
 <body>
   <h1>演示场景</h1>
-  <p>每套风格 = 适合该类型游戏的<strong>可交互</strong>完整场景（菜单/背包/战斗指令等）。建材 <code>../lib/</code>，美术 <code>../assets/</code>（见 CREDITS）。玩家可见文案一律中文。</p>
+  <p>画幅一律 <strong>9:20 竖屏</strong>。楼型与玩法按游戏类型区分（见 <code>research/synthesis/mobile-portrait-first.md</code>），禁止统一「锁定+开火」模板。玩家可见文案一律中文。</p>
   <table>
     <thead>
-      <tr><th>#</th><th>风格</th><th>游戏类型</th><th>主场景</th></tr>
+      <tr><th>#</th><th>风格</th><th>类型</th><th>布局 / 玩法</th><th>主场景</th></tr>
     </thead>
     <tbody>
-      <tr><td>01</td><td>赛博朋克 HUD</td><td>赛博 RPG / 潜入</td><td><a href="01-cyberpunk-hud/index.html">可玩 HUD（扫描/射击/黑客）</a></td></tr>
-      <tr><td>02</td><td>黑暗奇幻</td><td>魂类 / 动作 RPG</td><td><a href="02-dark-fantasy/index.html">打开场景</a></td></tr>
-      <tr><td>03</td><td>科幻太空</td><td>太空模拟</td><td><a href="03-scifi-space/index.html">竖屏舰桥 HUD（锁定/开火/能量）</a></td></tr>
-      <tr><td>04</td><td>像素复古</td><td>像素 RPG / 平台</td><td><a href="04-pixel-retro/index.html">打开场景</a></td></tr>
-      <tr><td>05</td><td>手绘插画</td><td>叙事动作 / Roguelike</td><td><a href="05-hand-drawn/index.html">打开场景</a></td></tr>
-      <tr><td>06</td><td>卡通漫画</td><td>射击 / 节奏动作</td><td><a href="06-cartoon-comic/index.html">打开场景</a></td></tr>
-      <tr><td>07</td><td>生存恐怖</td><td>生存恐怖</td><td><a href="07-survival-horror/index.html">打开场景</a></td></tr>
-      <tr><td>08</td><td>二次元彩绘</td><td>JRPG / 社交</td><td><a href="08-anime-colorful/index.html">打开场景</a></td></tr>
-      <tr><td>09</td><td>战术军事</td><td>战术射击</td><td><a href="09-tactical-military/index.html">打开场景</a></td></tr>
-      <tr><td>10</td><td>合成波霓虹</td><td>复古动作 / 街机</td><td><a href="10-synthwave-neon/index.html">打开场景</a></td></tr>
+      <tr>
+        <td>01</td><td>赛博朋克</td><td>赛博 RPG / 潜入</td>
+        <td>密 HUD + 口袋<br><span class="muted">扫描 → 切枪 → 开火/黑客</span></td>
+        <td><a href="01-cyberpunk-hud/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>02</td><td>黑暗奇幻</td><td>魂类</td>
+        <td>极简底栏 + 露滴<br><span class="muted">篝火 / 锁定 / 翻滚攻击</span></td>
+        <td><a href="02-dark-fantasy/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>03</td><td>科幻太空</td><td>太空模拟</td>
+        <td>仪表 + 下半能量台<br><span class="muted">配电 → 点环锁定 → 射击</span></td>
+        <td><a href="03-scifi-space/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>04</td><td>像素复古</td><td>像素 RPG</td>
+        <td>下半指令窗<br><span class="muted">攻击/技能/道具/逃跑</span></td>
+        <td><a href="04-pixel-retro/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>05</td><td>手绘插画</td><td>Roguelike 叙事</td>
+        <td>三选一恩赐卡<br><span class="muted">选一张带走</span></td>
+        <td><a href="05-hand-drawn/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>06</td><td>卡通漫画</td><td>射击 / 节奏</td>
+        <td>单一大拍键<br><span class="muted">点按开火（无锁定）</span></td>
+        <td><a href="06-cartoon-comic/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>07</td><td>生存恐怖</td><td>恐怖</td>
+        <td>稀疏 + 背包模态<br><span class="muted">打开 spine 管理</span></td>
+        <td><a href="07-survival-horror/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>08</td><td>二次元彩绘</td><td>JRPG</td>
+        <td>菜单栈 / 战斗指令<br><span class="muted">菜单导航</span></td>
+        <td><a href="08-anime-colorful/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>09</td><td>战术军事</td><td>战术射击</td>
+        <td>姿态 + 罗盘分区<br><span class="muted">切姿态 → 开火</span></td>
+        <td><a href="09-tactical-military/index.html">打开</a></td>
+      </tr>
+      <tr>
+        <td>10</td><td>合成波霓虹</td><td>街机</td>
+        <td>标题 → 得分<br><span class="muted">开始 → 结束重开</span></td>
+        <td><a href="10-synthwave-neon/index.html">打开</a></td>
+      </tr>
     </tbody>
   </table>
 </body>

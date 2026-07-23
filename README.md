@@ -2,20 +2,21 @@
 
 10 套游戏 UI 风格：每套 = Spec 文档 + CSS Token + **该类型游戏**的参考场景。
 
-**交付目标：移动端竖屏（默认 9:20）+ 触控操作；玩家可见 UI 文案一律中文。** 桌面仅作预览。
+**交付目标：移动端竖屏 9:20（画幅定死）+ 触控；玩家可见 UI 文案一律中文。**  
+**楼型与玩法按游戏类型区分**，禁止全库统一「锁定 + 开火」模板。桌面仅作预览。
 
-通用 HUD 思路：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)。
+通用准则：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)（含类型 → 布局/玩法矩阵）。
 
 ## 核心原则
 
-**建材共享,楼型按游戏类型分；先为拇指设计。**
+**建材共享,楼型按游戏类型分；画幅统一 9:20，玩法不统一。**
 
 场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 `research/synthesis/game-feel-vs-web.md`。
 
 - 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js` + `demo/lib/game-feel.css`
-- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，**竖屏触控**，布局符合该类型游戏
+- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
 - 美术：`demo/assets/`（CC0 / CC-BY 等开放许可，见 `demo/assets/CREDITS.md`）
-- **禁止**用「同一套页面换 CSS」作为风格验收标准；**禁止**商业游戏官方/Rip 素材
+- **禁止**用「同一套页面换 CSS」或统一动作条作为风格验收标准；**禁止**商业游戏官方/Rip 素材
 - **禁止**以键鼠快捷键为玩家主操作路径（调试捷径可保留）
 
 ```
@@ -38,7 +39,7 @@
 
 ### 2. 用手机或 DevTools 竖屏玩场景
 
-打开 `demo/scenes/index.html` → 某风格 `index.html`。优先用 **手机框竖屏 + 触控**（点按/拖动），不要按桌面键鼠习惯验收。
+打开 `demo/scenes/index.html` → 某风格 `index.html`。优先用 **手机框 9:20 + 触控**；验收看该类型玩法是否成立，不要按「每套都是锁定开火」习惯验收。
 
 ### 3. 用组件库做建材
 
@@ -46,21 +47,21 @@
 
 ## 10 套风格 × 锚定游戏类型
 
-| # | 风格 | 适合的游戏类型 | 本轮主场景 |
-|---|------|----------------|------------|
-| 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | `01-cyberpunk-hud/`（9:20 触控） |
-| 02 | Dark Fantasy | 魂类 / 动作 RPG | `02-dark-fantasy/`（9:20 触控） |
-| 03 | Sci-Fi Space | 太空模拟 | `03-scifi-space/`（9:20 触控舰桥） |
-| 04 | Pixel Retro | 2D 像素 RPG/平台 | `battle-command.html` |
-| 05 | Hand-drawn | 叙事动作 / Roguelike | `boon-select.html` |
-| 06 | Cartoon Comic | 射击 / 节奏动作 | `comic-shop.html` |
-| 07 | Survival Horror | 生存恐怖 | `spine-inventory.html` |
-| 08 | Anime Colorful | 日式 JRPG / 社交 | `phantom-menu.html` |
-| 09 | Tactical Military | 战术射击 / 军事模拟 | `tactical-hud.html` |
-| 10 | Synthwave Neon | 复古动作 / 街机 | `neon-title.html` |
+| # | 风格 | 适合的游戏类型 | 布局 / 玩法 | 主场景 |
+|---|------|----------------|-------------|--------|
+| 01 | Cyberpunk HUD | 赛博 RPG / 潜入 | 密 HUD + 口袋；扫描→开火/黑客 | `01-cyberpunk-hud/` |
+| 02 | Dark Fantasy | 魂类 / 动作 RPG | 极简底栏 + 露滴；篝火/锁定/翻滚 | `02-dark-fantasy/` |
+| 03 | Sci-Fi Space | 太空模拟 | 仪表+能量台；配电→锁定→射击 | `03-scifi-space/` |
+| 04 | Pixel Retro | 2D 像素 RPG/平台 | 下半指令窗 | `04-pixel-retro/` |
+| 05 | Hand-drawn | 叙事动作 / Roguelike | 三选一恩赐卡 | `05-hand-drawn/` |
+| 06 | Cartoon Comic | 射击 / 节奏动作 | 单一大拍键 | `06-cartoon-comic/` |
+| 07 | Survival Horror | 生存恐怖 | 稀疏 + 背包模态 | `07-survival-horror/` |
+| 08 | Anime Colorful | 日式 JRPG / 社交 | 菜单栈 / 战斗指令 | `08-anime-colorful/` |
+| 09 | Tactical Military | 战术射击 / 军事模拟 | 姿态+罗盘+开火分区 | `09-tactical-military/` |
+| 10 | Synthwave Neon | 复古动作 / 街机 | 标题→得分 | `10-synthwave-neon/` |
 
-代表作与互斥规则见各 Spec 与 `research/synthesis/style-boundaries.md`。
-竖屏触控总则与通用 HUD 思路见 `research/synthesis/mobile-portrait-first.md`。
+代表作与互斥规则见各 Spec 与 `research/synthesis/style-boundaries.md`。  
+9:20 + 类型矩阵见 `research/synthesis/mobile-portrait-first.md`。
 
 ## 组件库清单(35+)
 

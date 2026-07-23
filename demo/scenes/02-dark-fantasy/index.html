@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>02 黑暗奇幻 — 竖屏魂类 HUD</title>
+  <title>02 黑暗奇幻 — 极简魂类</title>
   <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
@@ -63,9 +63,6 @@
         <button type="button" class="t-btn t-lock hit" id="btn-lock" aria-label="锁定">
           <img class="ico" src="./art/icons/icon-lock.png" alt="" draggable="false" />
         </button>
-        <button type="button" class="t-btn t-use hit" id="btn-use" aria-label="互动">
-          <img class="ico" src="./art/icons/icon-use.png" alt="" draggable="false" />
-        </button>
         <button type="button" class="t-btn t-roll hit" id="btn-roll" aria-label="翻滚">
           <img class="ico" src="./art/icons/icon-roll.png" alt="" draggable="false" />
         </button>
@@ -77,7 +74,7 @@
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
         <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
       </button>
-      <div class="help" id="help" hidden>拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点露滴回血 · 靠近篝火休息</div>
+      <div class="help" id="help" hidden>拖动环视 · 点敌人锁定 · 右下攻击/翻滚 · 左下按住锁定 · 点露滴回血 · 点篝火休息（无口袋、无小地图）</div>
     </div>
   </div>
 
@@ -245,8 +242,8 @@
     const dx = Math.abs(state.lookX);
     const dy = Math.abs(state.lookY + 4);
     state.nearBonfire = dx < 14 && dy < 12;
-    if (state.nearBonfire && !state.slate) setPrompt("点按「互动」· 篝火");
-    else if (!loot.hidden) setPrompt("点按「互动」· 拾取");
+    if (state.nearBonfire && !state.slate) setPrompt("点篝火 · 休息");
+    else if (!loot.hidden) setPrompt("点残渣 · 拾取");
     else if (state.lock) setPrompt("锁定中 · 点按攻击");
     else setPrompt("");
   }
@@ -305,9 +302,6 @@
   });
   $("#btn-roll").addEventListener("pointerdown", (e) => {
     e.preventDefault(); e.stopPropagation(); roll();
-  });
-  $("#btn-use").addEventListener("pointerdown", (e) => {
-    e.preventDefault(); e.stopPropagation(); useAction();
   });
   $("#btn-estus").addEventListener("pointerdown", (e) => {
     e.preventDefault(); e.stopPropagation(); drinkEstus();

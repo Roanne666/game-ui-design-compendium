@@ -620,18 +620,10 @@ html, body {
 }
 .t-roll {
   right: 14px;
-  bottom: 98px;
+  bottom: 102px;
   width: 64px;
   min-width: 64px;
   height: 44px;
-  padding: 0;
-}
-.t-use {
-  right: 14px;
-  bottom: 148px;
-  width: 64px;
-  min-width: 64px;
-  height: 40px;
   padding: 0;
 }
 .t-lock {

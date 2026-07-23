@@ -3,55 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>03 科幻太空 — 竖屏舰桥 HUD</title>
+  <title>03 科幻太空 — 竖屏舰桥仪表</title>
   <link rel="stylesheet" href="hud.css" />
 </head>
 <body>
   <div id="viewport">
     <div id="world">
       <div class="grid-overlay" aria-hidden="true"></div>
-      <div class="target hit" id="target" data-type="hostile">
+      <div class="target hit" id="target" aria-label="敌方目标">
         <img src="./art/hostile-ship.png" alt="" draggable="false" />
       </div>
     </div>
-
     <div id="hurt"></div>
 
     <div id="hud">
-      <div class="place" id="place">
-        <div class="sys">LHS 3447</div>
-        <div class="meta"><span id="nav-mode">超巡航</span> · 燃料 16.2 T</div>
+      <div class="top-strip">
+        <div class="place">
+          <div class="sys">LHS 3447</div>
+          <div><span id="nav-mode">超巡航</span> · 燃料 16.2 T</div>
+        </div>
+        <div class="top-actions">
+          <button type="button" class="icon-btn hit" id="btn-nav" aria-label="导航面板">
+            <img class="ico" src="./art/icons/icon-nav.png" alt="" draggable="false" />
+          </button>
+          <button type="button" class="icon-btn hit" id="btn-mode" aria-label="驱动模式">
+            <img class="ico" src="./art/icons/icon-mode.png" alt="" draggable="false" />
+          </button>
+          <button type="button" class="icon-btn hit" id="btn-help" aria-label="操作指引">
+            <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
+          </button>
+        </div>
       </div>
 
-      <div class="target-badge" id="target-badge">目标 · 12.4 公里 · 未锁定</div>
-      <div class="prompt" id="prompt">点按锁定 · 再开火</div>
       <div id="feed"></div>
+      <div class="help" id="help" hidden>下半台调能量（总和 100%）· 点瞄准环推进锁定 · 武器能量≥20 且锁定后环下可射击 · 顶栏打开导航</div>
 
-      <div class="vitals" id="vitals">
-        <div class="vital hull">
-          <span class="lab">船体</span>
-          <div class="trk"><div class="fill ok" id="hull-fill"></div></div>
-          <span class="n" id="hull-n">88%</span>
-        </div>
-        <div class="vital shield">
-          <span class="lab">护盾</span>
-          <div class="trk"><div class="fill" id="shield-fill"></div></div>
-          <span class="n" id="shield-n">33%</span>
-        </div>
-      </div>
-
-      <div class="pwr-dock" id="pwr-dock">
-        <button type="button" class="pwr-chip hit on" data-sys="engines" aria-label="引擎能量">
-          <span class="lab">引擎</span>
-          <span class="val" id="pwr-engines">42</span>
+      <div class="stage">
+        <div class="target-card" id="target-badge">目标 · 12.4 公里 · 未锁定</div>
+        <button type="button" class="reticle hit" id="reticle" aria-label="推进目标锁定">
+          <svg class="lock-ring" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="trk" cx="50" cy="50" r="46" />
+            <circle class="fill" id="lock-arc" cx="50" cy="50" r="46"
+              stroke-dasharray="0 289" pathLength="289" />
+          </svg>
+          <span class="lock-label" id="lock-label">锁定 0%</span>
         </button>
-        <button type="button" class="pwr-chip hit" data-sys="shields" aria-label="护盾能量">
-          <span class="lab">护盾</span>
-          <span class="val" id="pwr-shields">33</span>
-        </button>
-        <button type="button" class="pwr-chip hit" data-sys="weapons" aria-label="武器能量">
-          <span class="lab">武器</span>
-          <span class="val" id="pwr-weapons">25</span>
+        <button type="button" class="fire-chip hit" id="btn-fire" aria-label="开火" disabled>
+          <img class="ico" src="./art/icons/icon-fire.png" alt="" draggable="false" />
+          <span>射击</span>
         </button>
       </div>
 
@@ -67,49 +66,66 @@
         </div>
       </div>
 
-      <div class="touch-pad">
-        <button type="button" class="t-btn t-lock hit" id="btn-lock" aria-label="锁定目标">
-          <img class="ico" src="./art/icons/icon-lock.png" alt="" draggable="false" />
-        </button>
-        <button type="button" class="t-btn t-mode hit" id="btn-mode" aria-label="驱动模式">
-          <img class="ico" src="./art/icons/icon-mode.png" alt="" draggable="false" />
-        </button>
-        <button type="button" class="t-btn t-nav hit" id="btn-nav" aria-label="导航面板">
-          <img class="ico" src="./art/icons/icon-nav.png" alt="" draggable="false" />
-        </button>
-        <button type="button" class="t-btn t-fire hit" id="btn-fire" aria-label="开火" disabled>
-          <img class="ico" src="./art/icons/icon-fire.png" alt="" draggable="false" />
-        </button>
+      <div class="console" id="console">
+        <div class="console-head">
+          <span>能量分配</span>
+          <span class="hull">船体 <strong id="hull-n">88%</strong></span>
+        </div>
+        <div class="pwr-row" data-sys="engines">
+          <span class="lab">引擎</span>
+          <input type="range" min="0" max="100" value="42" id="rng-engines" aria-label="引擎能量" />
+          <span class="val" id="pwr-engines">42</span>
+          <div class="pwr-btns">
+            <button type="button" data-delta="-5" aria-label="引擎减">−</button>
+            <button type="button" data-delta="5" aria-label="引擎加">+</button>
+          </div>
+        </div>
+        <div class="pwr-row" data-sys="shields">
+          <span class="lab">护盾</span>
+          <input type="range" min="0" max="100" value="33" id="rng-shields" aria-label="护盾能量" />
+          <span class="val" id="pwr-shields">33</span>
+          <div class="pwr-btns">
+            <button type="button" data-delta="-5" aria-label="护盾减">−</button>
+            <button type="button" data-delta="5" aria-label="护盾加">+</button>
+          </div>
+        </div>
+        <div class="pwr-row" data-sys="weapons">
+          <span class="lab">武器</span>
+          <input type="range" min="0" max="100" value="25" id="rng-weapons" aria-label="武器能量" />
+          <span class="val" id="pwr-weapons">25</span>
+          <div class="pwr-btns">
+            <button type="button" data-delta="-5" aria-label="武器减">−</button>
+            <button type="button" data-delta="5" aria-label="武器加">+</button>
+          </div>
+        </div>
+        <div class="console-foot">
+          <span>总计 <strong id="pwr-total">100</strong>%</span>
+          <span id="fire-hint" class="warn">射击需武器 ≥20 且锁定</span>
+        </div>
       </div>
-
-      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
-        <img class="ico" src="./art/icons/icon-help.png" alt="" draggable="false" />
-      </button>
-      <div class="help" id="help" hidden>拖动环视 · 点目标或左下锁定 · 锁定后右下开火 · 中下点能量格调配 · 右侧导航/模式</div>
     </div>
   </div>
 
   <script>
 (function () {
+  const WEAPON_MIN = 20;
+  const CIRC = 289;
   const pwr = { engines: 42, shields: 33, weapons: 25 };
   const modes = ["超巡航", "巡航", "手动"];
   let modeIdx = 0;
   let hull = 88;
   let locked = false;
   let lockPct = 0;
-  let lookX = 0, lookY = 0;
-  let vitalsUntil = 0;
 
   const $ = (s) => document.querySelector(s);
-  const world = $("#world");
-  const target = $("#target");
-  const badge = $("#target-badge");
-  const prompt = $("#prompt");
+  const reticle = $("#reticle");
   const fireBtn = $("#btn-fire");
-  const lockBtn = $("#btn-lock");
+  const badge = $("#target-badge");
+  const lockLabel = $("#lock-label");
+  const lockArc = $("#lock-arc");
+  const fireHint = $("#fire-hint");
   const feed = $("#feed");
   const hurt = $("#hurt");
-  const vitals = $("#vitals");
 
   function toast(msg, cls) {
     const line = document.createElement("div");
@@ -119,98 +135,94 @@
     while (feed.children.length > 4) feed.lastChild.remove();
   }
 
-  function showVitals(ms) {
-    vitalsUntil = performance.now() + (ms || 2800);
-    vitals.classList.remove("dim");
-  }
-
-  function syncPwr() {
+  function syncPwrUI() {
     ["engines", "shields", "weapons"].forEach((k) => {
-      const el = $("#pwr-" + k);
-      if (el) el.textContent = String(pwr[k]);
+      $("#pwr-" + k).textContent = String(pwr[k]);
+      $("#rng-" + k).value = String(pwr[k]);
     });
-    const shieldFill = $("#shield-fill");
-    const shieldN = $("#shield-n");
-    if (shieldFill) shieldFill.style.transform = "scaleX(" + (pwr.shields / 100) + ")";
-    if (shieldN) shieldN.textContent = pwr.shields + "%";
+    $("#pwr-total").textContent = String(pwr.engines + pwr.shields + pwr.weapons);
+    updateFireGate();
   }
 
-  function boostSys(key) {
+  function setPwr(key, newVal) {
+    newVal = Math.max(0, Math.min(100, newVal));
     const others = Object.keys(pwr).filter((k) => k !== key);
-    let take = 8;
-    others.forEach((k) => {
-      const give = Math.min(take, pwr[k]);
-      pwr[k] -= give;
-      take -= give;
-      pwr[key] += give;
-    });
-    document.querySelectorAll(".pwr-chip").forEach((c) => {
-      c.classList.toggle("on", c.dataset.sys === key);
-    });
-    syncPwr();
-    showVitals();
-    const names = { engines: "引擎", shields: "护盾", weapons: "武器" };
-    toast(names[key] + " +" + (8 - take) + "%", "ok");
+    const otherSum = others.reduce((s, k) => s + pwr[k], 0);
+    const maxFor = 100 - otherSum;
+    if (newVal > maxFor) newVal = maxFor;
+    pwr[key] = newVal;
+    let total = pwr.engines + pwr.shields + pwr.weapons;
+    if (total < 100) {
+      pwr[others[0]] = Math.min(100, pwr[others[0]] + (100 - total));
+    }
+    syncPwrUI();
   }
 
-  function syncHull() {
-    const fill = $("#hull-fill");
-    const n = $("#hull-n");
-    fill.style.transform = "scaleX(" + (hull / 100) + ")";
-    n.textContent = hull + "%";
-    fill.className = "fill " + (hull > 50 ? "ok" : hull > 25 ? "warn" : "danger");
+  function canFire() {
+    return locked && pwr.weapons >= WEAPON_MIN && hull > 0;
   }
 
-  function setLock(on) {
-    locked = on;
-    if (!on) lockPct = 0;
-    target.classList.toggle("locked", on);
-    lockBtn.classList.toggle("on", on);
-    fireBtn.disabled = !on;
-    fireBtn.classList.toggle("armed", on);
-    badge.classList.toggle("hot", on);
-    badge.textContent = on
-      ? "目标 · 已锁定 · 可开火"
+  function updateFireGate() {
+    const ok = canFire();
+    fireBtn.classList.toggle("show", locked);
+    fireBtn.disabled = !ok;
+    if (!locked) {
+      fireHint.className = "warn";
+      fireHint.textContent = "射击需武器 ≥" + WEAPON_MIN + " 且锁定";
+    } else if (pwr.weapons < WEAPON_MIN) {
+      fireHint.className = "need";
+      fireHint.textContent = "武器能量不足 · 请上调";
+    } else {
+      fireHint.className = "ok";
+      fireHint.textContent = "武器就绪 · 可射击";
+    }
+  }
+
+  function setLockVisual() {
+    const dash = (lockPct / 100) * CIRC;
+    lockArc.setAttribute("stroke-dasharray", dash + " " + CIRC);
+    lockLabel.textContent = locked ? "已锁定" : ("锁定 " + lockPct + "%");
+    reticle.classList.toggle("locked", locked);
+    badge.classList.toggle("hot", locked);
+    badge.textContent = locked
+      ? "目标 · 已锁定 · 检查武器能量"
       : (lockPct > 0 ? "目标 · 锁定中 " + lockPct + "%" : "目标 · 12.4 公里 · 未锁定");
-    prompt.classList.toggle("show", !on);
-    prompt.textContent = on ? "右下开火" : "点按锁定 · 再开火";
+    updateFireGate();
   }
 
   function progressLock() {
     if (locked) {
-      setLock(false);
+      locked = false;
+      lockPct = 0;
+      setLockVisual();
       toast("锁定已解除");
       return;
     }
-    lockPct = Math.min(100, lockPct + 34);
-    badge.textContent = "目标 · 锁定中 " + lockPct + "%";
+    lockPct = Math.min(100, lockPct + 25);
     if (lockPct >= 100) {
-      setLock(true);
+      locked = true;
       toast("目标已锁定", "ok");
     } else {
-      toast("正在锁定… " + lockPct + "%");
+      toast("锁定进度 " + lockPct + "%");
     }
-  }
-
-  function flashHurt() {
-    hurt.classList.add("on");
-    setTimeout(() => hurt.classList.remove("on"), 320);
+    setLockVisual();
   }
 
   function fire() {
-    if (!locked) {
-      toast("未锁定目标", "warn");
+    if (!canFire()) {
+      toast(pwr.weapons < WEAPON_MIN ? "武器能量不足" : "未锁定", "warn");
       return;
     }
-    const dmg = 8 + Math.floor(pwr.weapons / 10);
+    const dmg = 6 + Math.floor(pwr.weapons / 8);
     toast("命中 · 伤害 " + dmg, "ok");
-    if (Math.random() < 0.45) {
-      const ret = Math.max(4, 14 - Math.floor(pwr.shields / 10));
+    if (Math.random() < 0.4) {
+      const ret = Math.max(3, 12 - Math.floor(pwr.shields / 12));
       hull = Math.max(0, hull - ret);
-      syncHull();
-      showVitals();
-      flashHurt();
+      $("#hull-n").textContent = hull + "%";
+      hurt.classList.add("on");
+      setTimeout(() => hurt.classList.remove("on"), 320);
       toast(hull <= 0 ? "船体破裂" : "敌方回击 −" + ret + "%", hull <= 25 ? "danger" : "warn");
+      updateFireGate();
     }
   }
 
@@ -222,61 +234,34 @@
     toast("驱动：" + m);
   }
 
-  /* Power chips */
-  document.querySelectorAll(".pwr-chip").forEach((btn) => {
-    btn.addEventListener("click", () => boostSys(btn.dataset.sys));
+  document.querySelectorAll(".pwr-row").forEach((row) => {
+    const key = row.dataset.sys;
+    const input = row.querySelector("input");
+    input.addEventListener("input", () => setPwr(key, parseInt(input.value, 10)));
+    row.querySelectorAll("[data-delta]").forEach((btn) => {
+      btn.addEventListener("click", () => setPwr(key, pwr[key] + parseInt(btn.dataset.delta, 10)));
+    });
   });
 
-  lockBtn.addEventListener("click", progressLock);
-  target.addEventListener("click", progressLock);
+  reticle.addEventListener("click", progressLock);
+  $("#target").addEventListener("click", (e) => {
+    e.stopPropagation();
+    progressLock();
+  });
   fireBtn.addEventListener("click", fire);
 
-  $("#btn-mode").addEventListener("click", () => setMode((modeIdx + 1) % modes.length));
-  $("#btn-nav").addEventListener("click", () => {
-    $("#nav-slate").classList.toggle("open");
-  });
+  $("#btn-nav").addEventListener("click", () => $("#nav-slate").classList.toggle("open"));
   $("#slate-close").addEventListener("click", () => $("#nav-slate").classList.remove("open"));
+  $("#btn-mode").addEventListener("click", () => setMode((modeIdx + 1) % modes.length));
   $("#slate-mode-btn").addEventListener("click", () => setMode((modeIdx + 1) % modes.length));
-
   $("#btn-help").addEventListener("click", () => {
     const h = $("#help");
     if (h.hasAttribute("hidden")) h.removeAttribute("hidden");
     else h.setAttribute("hidden", "");
   });
 
-  /* Drag look */
-  let dragging = false, lx = 0, ly = 0;
-  const vp = $("#viewport");
-  function onDown(e) {
-    if (e.target.closest(".hit")) return;
-    dragging = true;
-    const t = e.touches ? e.touches[0] : e;
-    lx = t.clientX; ly = t.clientY;
-  }
-  function onMove(e) {
-    if (!dragging) return;
-    const t = e.touches ? e.touches[0] : e;
-    lookX = Math.max(-18, Math.min(18, lookX + (t.clientX - lx) * 0.08));
-    lookY = Math.max(-12, Math.min(12, lookY + (t.clientY - ly) * 0.08));
-    lx = t.clientX; ly = t.clientY;
-    world.style.transform = "translate(" + lookX + "px," + lookY + "px)";
-  }
-  function onUp() { dragging = false; }
-  vp.addEventListener("pointerdown", onDown);
-  vp.addEventListener("pointermove", onMove);
-  vp.addEventListener("pointerup", onUp);
-  vp.addEventListener("pointercancel", onUp);
-
-  function tick(now) {
-    if (now > vitalsUntil) vitals.classList.add("dim");
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-
-  syncPwr();
-  syncHull();
-  setLock(false);
-  showVitals(4000);
+  syncPwrUI();
+  setLockVisual();
 })();
   </script>
 </body>
