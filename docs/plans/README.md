@@ -6,7 +6,7 @@
 
 | 文件 | 说明 | 状态 |
 |------|------|------|
-| [`2026-07-25-agent-plugin-pack-design.md`](./2026-07-25-agent-plugin-pack-design.md) | Agent Plugin + `library/packs` 收拢设计 | 待审阅 |
-| （待写）implementation | P0–P3 实施任务拆解 | 设计确认后 |
+| [`2026-07-25-agent-plugin-pack-design.md`](./2026-07-25-agent-plugin-pack-design.md) | Agent Plugin + `library/packs` 收拢设计 | 已确认 |
+| [`2026-07-25-agent-plugin-pack-implementation.md`](./2026-07-25-agent-plugin-pack-implementation.md) | P0–P3 实施任务（checkbox） | 待执行 |
 
 重大改造（如 pack 迁移、Skill 接线）以本目录文件为准；硬规则仍以 `docs/rules/` 为权威。
