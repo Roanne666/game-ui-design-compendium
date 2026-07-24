@@ -6,34 +6,118 @@
   <title>像素复古 — 战斗指令</title>
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
-    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/pixel-retro.css" />
   <style>
-    .game-world { image-rendering:pixelated; }
+    .game-world {
+      image-rendering: pixelated;
+      background:
+        linear-gradient(180deg, #1a2840 0%, #0c1220 42%, #243018 42%, #1a2410 100%);
+    }
+    .game-world::before { opacity: 0.2; }
+    .stage {
+      position: absolute; top: 48px; left: 0; right: 0; bottom: 168px;
+      pointer-events: none;
+    }
+    .party {
+      position: absolute; left: 8%; bottom: 8%;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .party img { width: 48px; height: 48px; image-rendering: pixelated; }
+    .party .tag {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+      color: var(--text); background: var(--surface); border: 2px solid var(--border);
+      padding: 2px 6px;
+    }
     .enemies {
-      position:absolute; top:12%; left:8%; right:8%;
-      display:flex; align-items:flex-start; justify-content:space-around; flex-wrap:wrap; gap:12px;
-      pointer-events:none;
+      position: absolute; top: 10%; right: 6%; left: 38%;
+      display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+      pointer-events: none;
     }
-    .enemies .foe { pointer-events:auto; }
+    .enemies .foe { pointer-events: auto; }
     .foe {
-      font-family:var(--font-mono); font-size:11px; color:var(--text);
-      border:2px solid var(--border); padding:16px 12px; background:var(--surface);
-      cursor:pointer; text-align:center; min-width:100px; transition:border-color .12s;
+      position: relative;
+      font-family: var(--font-mono); font-size: 10px; color: var(--text);
+      border: 2px solid var(--border); padding: 8px 10px 8px 12px;
+      background: var(--surface); cursor: pointer; text-align: center;
+      min-width: 96px; image-rendering: pixelated;
+      transition: border-color 80ms linear, transform 80ms ease-out;
     }
-    .foe img { width:40px; height:40px; image-rendering:pixelated; display:block; margin:0 auto 8px; }
-    .foe.selected { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
-    .foe.dead { opacity:.35; pointer-events:none; }
+    .foe img { width: 36px; height: 36px; image-rendering: pixelated; display: block; margin: 0 auto 4px; }
+    .foe.selected {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
+    .foe.selected::before {
+      content: "▶";
+      position: absolute; left: -18px; top: 50%; transform: translateY(-50%);
+      color: var(--accent); font-size: 12px;
+    }
+    .foe.dead { opacity: 0.35; pointer-events: none; }
+    .foe:active { transform: scale(0.96); }
+
     .battle-window {
-      position:absolute; left:0; right:0; bottom:0;
-      display:grid; grid-template-columns:1fr minmax(180px,220px); gap:0;
-      border-top:4px solid var(--border-strong); background:var(--surface);
-      box-shadow:0 -4px 0 var(--shadow-color);
+      position: absolute; left: 0; right: 0; bottom: 0;
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 0;
+      border-top: 4px solid var(--border-strong); background: var(--surface);
+      box-shadow: 0 -4px 0 var(--shadow-color);
+      z-index: 5;
     }
-    .cmds { display:flex; flex-direction:column; gap:4px; border-left:4px solid var(--border); }
-    .cmds .btn { width:100%; image-rendering:pixelated; border-radius:0; }
-    .battle-window .panel { border:none; border-radius:0; box-shadow:none; }
-    .hint { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--text-muted); letter-spacing:.1em; pointer-events:none; z-index:3; }
+    .battle-window .panel { border: none; border-radius: 0; box-shadow: none; }
+    .log-box {
+      font-family: var(--font-mono); font-size: 11px; line-height: 1.45;
+      min-height: 52px; max-height: 64px; overflow: hidden;
+      color: var(--text); letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--border); margin-bottom: 8px; padding-bottom: 4px;
+    }
+    .cmds {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+      border-left: 4px solid var(--border); padding: 8px !important;
+    }
+    .cmds .cmd {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; min-height: 48px; padding: 6px 4px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+      background: var(--bg); border: 2px solid var(--border); color: var(--text);
+      border-radius: 0; cursor: pointer; image-rendering: pixelated;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cmds .cmd img { width: 20px; height: 20px; image-rendering: pixelated; }
+    .cmds .cmd:active { transform: scale(0.94); background: var(--accent-soft); }
+    .cmds .cmd.primary { border-color: var(--accent); color: var(--accent); }
+    .cmds .cmd.danger { border-color: var(--danger); color: var(--danger); }
+
+    .feed {
+      position: absolute; top: 52px; left: 10px; width: 42%;
+      z-index: 8; pointer-events: none;
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+    }
+    .feed div {
+      background: rgba(0,0,0,.55); border: 1px solid var(--border);
+      padding: 3px 6px; margin-bottom: 4px; color: var(--text);
+      animation: fadeFeed 2.2s ease-out forwards;
+    }
+    @keyframes fadeFeed {
+      0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; }
+    }
+
+    .help-toggle {
+      position: absolute; top: 52px; right: 10px; z-index: 16;
+      width: 36px; height: 36px; min-width: 36px; padding: 0;
+      border-radius: 0; border: 2px solid var(--border);
+      background: var(--surface); color: var(--text);
+      font-family: var(--font-mono); font-size: 14px; cursor: pointer;
+    }
+    .help-toggle:active { transform: scale(0.94); }
+    .help {
+      position: absolute; top: 94px; left: 10px; right: 10px; z-index: 15;
+      padding: 8px 10px; text-align: center;
+      font-family: var(--font-mono); font-size: 10px; line-height: 1.45;
+      letter-spacing: 0.06em; color: var(--text-muted);
+      background: rgba(0,0,0,.82); border: 2px solid var(--border);
+      pointer-events: none;
+    }
+    .help[hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -41,25 +125,36 @@
     <div class="game-world"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
-      <div class="enemies" id="enemies">
-        <button type="button" class="foe" data-id="slime" data-hp="30" data-name="史莱姆">
-          <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>史莱姆</span>
-          <div class="badge" data-hp-label>生命 30</div>
-        </button>
-        <button type="button" class="foe selected" data-id="bat" data-hp="22" data-name="蝙蝠">
-          <img src="../../assets/_shared/rpg-icons/bow.png" alt="" /><span>蝙蝠</span>
-          <div class="badge" data-hp-label>生命 22</div>
-        </button>
-        <button type="button" class="foe" data-id="orc" data-hp="45" data-name="兽人">
-          <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>兽人</span>
-          <div class="badge" data-hp-label>生命 45</div>
-        </button>
+      <div class="stage">
+        <div class="party">
+          <img src="../../assets/_shared/rpg-icons/brave.png" alt="" />
+          <span class="tag">隆</span>
+        </div>
+        <div class="enemies" id="enemies">
+          <button type="button" class="foe" data-id="slime" data-hp="30" data-name="史莱姆" aria-label="选择史莱姆">
+            <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>史莱姆</span>
+            <div class="badge" data-hp-label>生命 30</div>
+          </button>
+          <button type="button" class="foe selected" data-id="bat" data-hp="22" data-name="蝙蝠" aria-label="选择蝙蝠">
+            <img src="../../assets/_shared/rpg-icons/bow.png" alt="" /><span>蝙蝠</span>
+            <div class="badge" data-hp-label>生命 22</div>
+          </button>
+          <button type="button" class="foe" data-id="orc" data-hp="45" data-name="兽人" aria-label="选择兽人">
+            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>兽人</span>
+            <div class="badge" data-hp-label>生命 45</div>
+          </button>
+        </div>
       </div>
+
+      <div class="feed" id="feed" aria-live="polite"></div>
+
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>点敌人选定 · 底栏指令：攻击 / 魔法 / 道具 / 逃跑 · 战斗日志在左上</div>
 
       <div class="battle-window">
         <div class="panel">
-          <div class="panel-title">英雄 · 隆</div>
-          <div class="panel-body">
+          <div class="panel-body" style="padding:10px">
+            <div class="log-box" id="battle-log">遭遇战开始。选定目标后下达指令。</div>
             <div class="hud-bar">
               <span class="hud-bar-label">生命</span>
               <div class="hud-bar-track"><div id="hp-fill" class="hud-bar-fill danger" style="width:72%"></div></div>
@@ -67,26 +162,44 @@
             </div>
             <div class="hud-bar">
               <span class="hud-bar-label">魔法</span>
-              <div class="hud-bar-track"><div id="mp-fill" class="hud-bar-fill" style="width:40%;background:var(--accent-2)"></div></div>
+              <div class="hud-bar-track"><div id="mp-fill" class="hud-bar-fill" style="width:60%;background:var(--accent-2)"></div></div>
               <span id="mp-val" class="hud-bar-value">18</span>
             </div>
           </div>
         </div>
         <div class="cmds panel">
-          <div class="panel-title">指令</div>
-          <button type="button" class="btn btn-primary" id="cmd-fight">攻击</button>
-          <button type="button" class="btn" id="cmd-magic">魔法</button>
-          <button type="button" class="btn" id="cmd-item">道具</button>
-          <button type="button" class="btn btn-danger" id="cmd-run">逃跑</button>
+          <button type="button" class="cmd primary" id="cmd-fight" aria-label="攻击">
+            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>攻击</span>
+          </button>
+          <button type="button" class="cmd" id="cmd-magic" aria-label="魔法">
+            <img src="../../assets/_shared/rpg-icons/fire.png" alt="" /><span>魔法</span>
+          </button>
+          <button type="button" class="cmd" id="cmd-item" aria-label="道具">
+            <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>道具</span>
+          </button>
+          <button type="button" class="cmd danger" id="cmd-run" aria-label="逃跑">
+            <img src="../../assets/_shared/rpg-icons/boots.png" alt="" /><span>逃跑</span>
+          </button>
         </div>
       </div>
-      <p class="hint">选择敌人 · 攻击/魔法/道具/逃跑 · 伤害以提示显示</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
-    let hp = 72, mp = 18, target = sk.$(".foe.selected");
+    let hp = 72, mp = 18;
+
+    function feed(msg) {
+      const el = document.createElement("div");
+      el.textContent = msg;
+      sk.$("#feed").prepend(el);
+      setTimeout(() => el.remove(), 2200);
+    }
+
+    function log(msg) {
+      sk.setText(sk.$("#battle-log"), msg);
+      feed(msg);
+    }
 
     function syncBars() {
       sk.setFill(sk.$("#hp-fill"), hp);
@@ -99,45 +212,62 @@
       return sk.$(".foe.selected:not(.dead)");
     }
 
+    function flashHurt() {
+      const v = sk.$("#vignette");
+      v.classList.add("on");
+      setTimeout(() => v.classList.remove("on"), 280);
+    }
+
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("help-open", open);
+    });
+
     sk.$all(".foe").forEach((foe) => {
       sk.on(foe, "click", () => {
         if (foe.classList.contains("dead")) return;
         sk.$all(".foe").forEach((f) => f.classList.remove("selected"));
         foe.classList.add("selected");
-        target = foe;
-        sk.toast("目标：" + foe.dataset.name);
+        log("目标 → " + foe.dataset.name);
       });
     });
 
     function dealToTarget(dmg, label) {
       const foe = selectedEnemy();
       if (!foe) {
-        sk.toast("无有效目标", "warning");
-        return;
+        log("无有效目标");
+        return false;
       }
       let ehp = parseInt(foe.dataset.hp, 10) - dmg;
       foe.dataset.hp = String(Math.max(0, ehp));
       foe.querySelector("[data-hp-label]").textContent = "生命 " + foe.dataset.hp;
-      sk.toast(label + " −" + dmg + "!", "success");
       sk.pulse(foe);
+      log(label + "对" + foe.dataset.name + " −" + dmg);
       if (parseInt(foe.dataset.hp, 10) <= 0) {
         foe.classList.add("dead");
-        sk.toast(foe.dataset.name + " 已被击败！", "success");
+        foe.classList.remove("selected");
+        const next = sk.$(".foe:not(.dead)");
+        if (next) next.classList.add("selected");
+        log(foe.dataset.name + " 倒下了");
+      } else {
+        const counter = 3 + Math.floor(Math.random() * 4);
+        hp = Math.max(0, hp - counter);
+        syncBars();
+        flashHurt();
+        log(foe.dataset.name + " 反击 −" + counter);
       }
+      return true;
     }
 
     sk.on(sk.$("#cmd-fight"), "click", () => {
-      if (!selectedEnemy()) return;
-      const dmg = 8 + Math.floor(Math.random() * 5);
-      dealToTarget(dmg, "打击");
+      dealToTarget(8 + Math.floor(Math.random() * 5), "打击");
     });
 
     sk.on(sk.$("#cmd-magic"), "click", () => {
-      if (mp < 6) {
-        sk.toast("魔法不足", "danger");
-        return;
-      }
-      if (!selectedEnemy()) return;
+      if (mp < 6) { log("魔法不足"); return; }
       mp -= 6;
       syncBars();
       dealToTarget(14, "火焰");
@@ -146,15 +276,15 @@
     sk.on(sk.$("#cmd-item"), "click", () => {
       hp = Math.min(99, hp + 20);
       syncBars();
-      sk.toast("药水 +20 生命", "success");
       sk.pulse(sk.$("#hp-fill"));
+      log("药水 +20 生命");
     });
 
     sk.on(sk.$("#cmd-run"), "click", () => {
       sk.modal({
         title: "逃离战斗？",
         body: "现在逃跑可能丢失 50 金币。",
-        onConfirm: () => sk.toast("成功逃脱！", "warning"),
+        onConfirm: () => log("成功逃脱！"),
       });
     });
 

@@ -6,180 +6,173 @@
   <title>06 卡通漫画 — 单一大拍键</title>
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
-    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/cartoon-comic.css" />
   <style>
     .game-world {
       background:
-        repeating-linear-gradient(45deg, transparent 0 24px, rgba(0,0,0,0.06) 24px 25px),
-        radial-gradient(circle at 50% 35%, #FFF1DC 0%, #FFD900 60%, #FFB300 100%);
+        repeating-linear-gradient(45deg, transparent 0 18px, rgba(0,0,0,0.05) 18px 19px),
+        radial-gradient(circle at 50% 32%, #FFF1DC 0%, #FFD900 55%, #FF9F1C 100%);
     }
     .game-world::before { opacity: 0; }
-    .top-bar {
-      position: absolute;
-      top: 58px; left: 14px; right: 14px;
-      display: flex; gap: 10px;
-      z-index: 5;
+    .speed-lines {
+      position: absolute; inset: 18% 0 42% 0; pointer-events: none; z-index: 1;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 28px,
+        rgba(0,0,0,0.06) 28px 30px
+      );
     }
-    .stat-tile {
-      flex: 1;
-      padding: 10px 12px;
+
+    .hud-chip {
+      position: absolute; top: 52px; z-index: 5;
+      padding: 8px 12px;
       background: var(--surface);
       border: 3px solid var(--border);
       box-shadow: 4px 4px 0 var(--shadow-color);
       font-family: var(--font-display);
       letter-spacing: 0.08em;
       text-align: center;
-      text-transform: var(--uppercase);
+      min-width: 72px;
     }
-    .stat-tile .lab { display: block; font-size: 11px; color: var(--text-muted); }
-    .stat-tile .num { display: block; font-size: 22px; line-height: 1.1; }
-    .stat-tile.combo .num { color: var(--accent); }
-    .stat-tile.score .num { color: var(--accent-2); }
+    .hud-chip.combo { left: 12px; }
+    .hud-chip.score { right: 52px; }
+    .hud-chip .lab { display: block; font-size: 10px; color: var(--text-muted); }
+    .hud-chip .num { display: block; font-size: 22px; line-height: 1.1; color: var(--accent); }
+    .hud-chip.score .num { color: var(--accent-2); }
 
     .lane {
       position: absolute;
-      top: 28%; left: 6%; right: 6%;
-      height: 30%;
-      border: 4px solid var(--border);
-      background: rgba(255, 241, 220, 0.45);
-      box-shadow: 6px 6px 0 var(--shadow-color), inset 0 0 0 4px var(--surface);
+      top: 26%; left: 0; right: 0;
+      height: 26%;
       overflow: hidden;
       z-index: 3;
+      border-top: 4px solid var(--border);
+      border-bottom: 4px solid var(--border);
+      background: rgba(255, 241, 220, 0.35);
     }
     .sweet {
-      position: absolute;
-      top: 0; bottom: 0;
-      left: 50%; width: 70px;
-      transform: translateX(-50%);
+      position: absolute; top: 0; bottom: 0;
+      left: 50%; width: 64px; transform: translateX(-50%);
       border-left: 4px solid var(--accent);
       border-right: 4px solid var(--accent);
-      background: rgba(230, 57, 70, 0.18);
+      background: rgba(230, 57, 70, 0.16);
       pointer-events: none;
     }
     .sweet::before, .sweet::after {
       content: ""; position: absolute; left: 50%; transform: translateX(-50%);
-      width: 18px; height: 18px;
-      background: var(--accent);
+      width: 16px; height: 16px; background: var(--accent);
       clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
     }
     .sweet::before { top: -2px; }
     .sweet::after { bottom: -2px; }
 
     .target {
-      position: absolute;
-      top: 50%; transform: translateY(-50%);
+      position: absolute; top: 50%; transform: translateY(-50%);
       width: 56px; height: 56px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 36px;
       background: var(--warning);
       border: 4px solid var(--border);
       box-shadow: 5px 5px 0 var(--shadow-color);
-      font-family: var(--font-display);
-      color: var(--text);
+      font-size: 28px;
       will-change: left;
     }
-    .target.hit {
-      animation: pop 240ms ease-out forwards;
-    }
-    .target.miss {
-      animation: shake 240ms ease-out forwards;
-      opacity: 0.55;
-    }
+    .target img { width: 32px; height: 32px; }
+    .target.hit { animation: pop 240ms ease-out forwards; }
+    .target.miss { animation: shake 240ms ease-out forwards; opacity: 0.55; }
     @keyframes pop {
-      0%   { transform: translateY(-50%) scale(1); background: var(--warning); }
-      40%  { transform: translateY(-50%) scale(1.45) rotate(8deg); background: var(--success); }
+      0% { transform: translateY(-50%) scale(1); }
+      40% { transform: translateY(-50%) scale(1.4) rotate(8deg); background: var(--success); }
       100% { transform: translateY(-50%) scale(0); opacity: 0; }
     }
     @keyframes shake {
-      0%, 100% { transform: translateY(-50%) translateX(0); }
-      25%      { transform: translateY(-50%) translateX(-7px); }
-      75%      { transform: translateY(-50%) translateX(7px); }
+      0%,100% { transform: translateY(-50%) translateX(0); }
+      25% { transform: translateY(-50%) translateX(-7px); }
+      75% { transform: translateY(-50%) translateX(7px); }
     }
 
     .fire-pad {
-      position: absolute;
-      left: 50%; bottom: 7%;
-      transform: translateX(-50%);
-      width: min(300px, 78%);
-      z-index: 5;
+      position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%);
+      width: min(200px, 58%); z-index: 5;
     }
     .punch {
-      width: 100%; padding: 26px 0;
+      width: 100%; aspect-ratio: 1;
+      border-radius: 50%;
       background: var(--accent);
       color: var(--surface);
       border: 5px solid var(--border);
       box-shadow: 6px 6px 0 var(--shadow-color);
-      font-family: var(--font-display);
-      font-size: 38px;
-      letter-spacing: 0.12em;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.14em;
       cursor: pointer;
       transition: transform 80ms ease-out, box-shadow 80ms ease-out, background 80ms ease-out;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      user-select: none;
+      touch-action: manipulation; user-select: none;
     }
+    .punch img { width: 48px; height: 48px; filter: brightness(0) invert(1); pointer-events: none; }
     .punch:active, .punch.pressed {
-      transform: translate(4px, 4px);
+      transform: translate(4px, 4px) scale(0.96);
       box-shadow: 2px 2px 0 var(--shadow-color);
       background: var(--danger);
     }
 
     .burst {
-      position: absolute;
-      pointer-events: none;
-      font-family: var(--font-display);
-      font-size: 26px;
-      color: var(--accent);
+      position: absolute; pointer-events: none; z-index: 6;
+      font-family: var(--font-display); font-size: 26px; color: var(--accent);
       text-shadow: 3px 3px 0 var(--border);
-      animation: fly 620ms ease-out forwards;
-      z-index: 6;
-      letter-spacing: 0.06em;
+      animation: fly 620ms ease-out forwards; letter-spacing: 0.06em;
     }
     @keyframes fly {
-      0%   { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
-      20%  { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
+      0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+      20% { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
       100% { transform: translate(-50%, -90px) scale(0.9); opacity: 0; }
     }
 
-    .hint {
-      position: absolute;
-      bottom: 6px; left: 50%; transform: translateX(-50%);
-      font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
-      pointer-events: none;
-      text-transform: var(--uppercase);
+    .help-toggle {
+      position: absolute; top: 52px; right: 12px; z-index: 16;
+      width: 36px; height: 36px; padding: 0; border-radius: 50%;
+      border: 3px solid var(--border); background: var(--surface);
+      box-shadow: 3px 3px 0 var(--shadow-color);
+      font-family: var(--font-display); font-size: 16px; cursor: pointer;
     }
+    .help-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow-color); }
+    .help {
+      position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
+      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.4;
+      background: var(--surface); border: 3px solid var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-color); pointer-events: none;
+    }
+    .help[hidden] { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="game-root letterbox">
+  <div class="game-root">
     <div class="game-world"></div>
+    <div class="speed-lines" aria-hidden="true"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
-      <div class="top-bar">
-        <div class="stat-tile combo">
-          <span class="lab">连击</span>
-          <span class="num" id="combo">0</span>
-        </div>
-        <div class="stat-tile score">
-          <span class="lab">分数</span>
-          <span class="num" id="score">000</span>
-        </div>
-        <div class="stat-tile">
-          <span class="lab">最佳</span>
-          <span class="num" id="best">0</span>
-        </div>
+      <div class="hud-chip combo">
+        <span class="lab">连击</span>
+        <span class="num" id="combo">0</span>
       </div>
+      <div class="hud-chip score">
+        <span class="lab">分数</span>
+        <span class="num" id="score">000</span>
+      </div>
+
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>目标驶入中线菱形区时点按大拍键 · 命中涨连击 · 偏了断连</div>
 
       <div class="lane" id="lane">
         <div class="sweet" aria-hidden="true"></div>
       </div>
 
       <div class="fire-pad">
-        <button type="button" class="punch hit" id="btn-punch" aria-label="出拳 · 单一大拍键">砰！</button>
+        <button type="button" class="punch hit" id="btn-punch" aria-label="出拳">
+          <img src="../../assets/_shared/rpg-icons/hand.png" alt="" />
+          <span>砰</span>
+        </button>
       </div>
-
-      <p class="hint">目标过中线时点按 · 命中加分 · 连击越高分越多</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
@@ -187,25 +180,15 @@
     const sk = SceneKit;
     const lane = sk.$("#lane");
     const punch = sk.$("#btn-punch");
-    const comboEl = sk.$("#combo");
-    const scoreEl = sk.$("#score");
-    const bestEl = sk.$("#best");
-
-    const SWEET_TOLERANCE = 36;     // px from center
-    const TARGET_TRAVEL = 2800;     // ms across lane
-    const SPAWN_GAP = [800, 1300];  // ms between targets
-
-    let combo = 0;
-    let score = 0;
-    let best = 0;
-    let active = null;
-    let nextSpawn = 0;
-    const icons = ["★", "✦", "❉", "✸", "✺"];
+    const SWEET_TOLERANCE = 36;
+    const TARGET_TRAVEL = 2800;
+    const SPAWN_GAP = [800, 1300];
+    let combo = 0, score = 0, best = 0, active = null, nextSpawn = 0;
+    const icons = ["fire.png", "battle.png", "exclamation.png", "eye.png", "coins.png"];
 
     function sync() {
-      sk.setText(comboEl, String(combo));
-      sk.setText(scoreEl, String(score).padStart(3, "0"));
-      sk.setText(bestEl, String(best));
+      sk.setText(sk.$("#combo"), String(combo));
+      sk.setText(sk.$("#score"), String(score).padStart(3, "0"));
     }
 
     function burst(x, y, text) {
@@ -218,7 +201,7 @@
       setTimeout(() => el.remove(), 640);
     }
 
-    function finishActive(outcome, label, bonus) {
+    function finishActive(outcome, label) {
       if (!active || active.hit) return;
       active.el.classList.add(outcome);
       active.hit = true;
@@ -229,10 +212,9 @@
     }
 
     function fire() {
-      if (!active || active.hit) {
-        sk.toast("现在没目标 — 等下一颗", "warning");
-        return;
-      }
+      punch.classList.add("pressed");
+      setTimeout(() => punch.classList.remove("pressed"), 90);
+      if (!active || active.hit) return;
       const laneRect = lane.getBoundingClientRect();
       const tRect = active.el.getBoundingClientRect();
       const tCenter = tRect.left + tRect.width / 2;
@@ -244,20 +226,23 @@
         combo += 1;
         best = Math.max(best, combo);
         finishActive("hit", "砰！+" + (10 * bonus));
-        sk.toast("命中 +" + (10 * bonus), "success");
       } else {
-        const side = tCenter < sweet ? "太早" : "太晚";
         combo = 0;
-        finishActive("miss", side);
-        sk.toast(side + " — 连击断了", "danger");
+        finishActive("miss", tCenter < sweet ? "太早" : "太晚");
+        const v = sk.$("#vignette");
+        v.classList.add("on");
+        setTimeout(() => v.classList.remove("on"), 200);
       }
       sync();
     }
 
     function spawnTarget(now) {
       const el = document.createElement("div");
-      el.className = "target hit";
-      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.className = "target";
+      const img = document.createElement("img");
+      img.src = "../../assets/_shared/rpg-icons/" + icons[Math.floor(Math.random() * icons.length)];
+      img.alt = "";
+      el.appendChild(img);
       lane.appendChild(el);
       const startX = -60;
       const endX = lane.clientWidth + 60;
@@ -272,7 +257,6 @@
           if (active && active.el === el && !active.hit) {
             combo = 0;
             finishActive("miss", "错过");
-            sk.toast("错过 — 连击断了", "warning");
             sync();
           }
           return;
@@ -291,13 +275,15 @@
       requestAnimationFrame(loop);
     }
 
-    punch.addEventListener("click", fire);
-    punch.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      fire();
-    }, { passive: false });
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+    });
 
-    // Desktop debug shortcut — never appears in on-screen help
+    punch.addEventListener("click", fire);
+    punch.addEventListener("touchstart", (e) => { e.preventDefault(); fire(); }, { passive: false });
     document.addEventListener("keydown", (e) => {
       if (e.code === "Space") { e.preventDefault(); fire(); }
     });

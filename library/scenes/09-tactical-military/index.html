@@ -3,131 +3,229 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>战术军事 — 界面</title>
+  <title>战术军事 — 瞄准辅助</title>
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
-    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/tactical-military.css" />
   <style>
+    .game-world {
+      background:
+        linear-gradient(180deg, #1a2218 0%, #0c100c 45%, #141810 100%);
+    }
+    .game-world.has-grid::before { opacity: 0.25; }
+
+    .target {
+      position: absolute; left: 58%; top: 36%;
+      width: 54px; height: 72px;
+      transform: translate(-50%, -50%);
+      border: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
+      background: color-mix(in srgb, var(--surface) 25%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: auto; cursor: pointer;
+    }
+    .target img { width: 28px; height: 28px; opacity: 0.7; }
+    .target.locked {
+      border-style: solid; border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .target.locked::before {
+      content: ""; position: absolute; inset: -6px;
+      border: 1px solid var(--accent); opacity: 0.5;
+      clip-path: polygon(0 0,12px 0,12px 1px,1px 1px,1px 12px,0 12px,0 0,100% 0,100% 12px,calc(100% - 1px) 12px,calc(100% - 1px) 1px,calc(100% - 12px) 1px,calc(100% - 12px) 0,100% 0,100% 100%,calc(100% - 12px) 100%,calc(100% - 12px) calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) calc(100% - 12px),100% calc(100% - 12px),100% 100%,0 100%,0 calc(100% - 12px),1px calc(100% - 12px),1px calc(100% - 1px),12px calc(100% - 1px),12px 100%,0 100%);
+    }
+    .target.down { opacity: 0.3; pointer-events: none; }
+
+    .reticle {
+      position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%);
+      width: 88px; height: 88px; pointer-events: none; z-index: 3;
+    }
+    .reticle svg { width: 100%; height: 100%; }
+    .reticle .ring { fill: none; stroke: var(--accent); stroke-width: 2; opacity: 0.35; }
+    .reticle .arc {
+      fill: none; stroke: var(--accent); stroke-width: 3;
+      stroke-linecap: butt; stroke-dasharray: 220; stroke-dashoffset: 220;
+      transition: stroke-dashoffset 80ms linear;
+    }
+    .reticle.hot .ring { opacity: 0.7; }
+
     .compass {
-      width:72px; height:72px; border:2px solid var(--border); border-radius:50%;
-      display:flex; align-items:center; justify-content:center; position:relative;
-      font-family:var(--font-mono); font-size:11px;
+      width: 64px; height: 64px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; position: relative;
+      font-family: var(--font-mono); background: color-mix(in srgb, var(--surface) 70%, transparent);
+      margin: 0 auto;
     }
-    .compass img { width:14px; height:14px; position:absolute; top:6px; }
-    .compass .deg { font-size:15px; font-weight:700; }
-    .stance-group { display:flex; gap:4px; flex-wrap:nowrap; }
-    .stance-group .btn { padding:5px 8px; font-size:10px; letter-spacing:0.04em; }
-    .stance-group .btn.active { border-color:var(--accent); background:var(--accent-soft); }
-    .panel-clipped { clip-path: none; }
-    .icon { width:16px; height:16px; vertical-align:middle; }
-    .hint {
-      position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
-      font-size:9px; color:var(--text-muted); letter-spacing:.08em;
-      pointer-events:none; width:92%; text-align:center;
+    .compass .deg { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+    .compass .n { position: absolute; top: 4px; font-size: 8px; color: var(--text-muted); letter-spacing: 0.12em; }
+
+    .short-msg {
+      margin-top: 6px; text-align: center;
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-muted);
     }
-    .bottom-left {
-      position:absolute; left:10px; bottom:46px;
-      width: 56%;
-      max-width: 200px;
+
+    .zone-l, .zone-r {
+      position: absolute; bottom: 36px; width: 42%; max-width: 160px;
     }
-    .bottom-right {
-      position:absolute; right:10px; bottom:46px;
-      width: 38%;
-      max-width: 140px;
+    .zone-l { left: 10px; }
+    .zone-r { right: 10px; }
+    .pad {
+      background: color-mix(in srgb, var(--surface) 78%, transparent);
+      border: 1px solid var(--border);
+      padding: 8px;
     }
-    .bl-card, .br-card {
-      background:var(--surface); border:2px solid var(--border);
-      box-shadow:3px 3px 0 var(--shadow-color);
-      padding:8px 10px; flex:1; min-width:0;
+    .pad .lab {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
+      color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;
     }
-    .bl-card .lab, .br-card .lab {
-      font-family:var(--font-mono); font-size:9px; color:var(--text-muted);
-      letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px;
+    .stance-row { display: flex; gap: 4px; }
+    .stance-row .t-btn {
+      flex: 1; min-height: 44px; padding: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; cursor: pointer;
     }
-    .stance-row { display:flex; gap:4px; }
-    .stance-row .btn { flex:1; padding:6px 4px; font-size:10px; }
-    .br-top, .br-mid { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
-    .br-top { font-size:10px; color:var(--text); }
-    .br-top .v { font-family:var(--font-mono); font-size:13px; font-weight:700; }
-    .br-mid { font-size:9px; color:var(--text-muted); }
-    .br-mid .v { font-family:var(--font-mono); }
-    .br-actions { display:flex; gap:6px; margin-top:4px; }
-    .br-actions .btn { flex:1; padding:6px 0; font-size:11px; }
-    .stamina-row { display:flex; align-items:center; gap:6px; }
-    .stamina-row .hud-bar-track { flex:1; }
+    .stance-row .t-btn img { width: 18px; height: 18px; opacity: 0.85; }
+    .stance-row .t-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .stance-row .t-btn:active { transform: scale(0.94); }
+
+    .stm { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+    .stm .hud-bar-track { flex: 1; height: 6px; }
+    .stm .badge { font-size: 10px; }
+
+    .fire-stack { display: flex; flex-direction: column; gap: 6px; }
+    .fire-stack .t-btn {
+      min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; cursor: pointer;
+    }
+    .fire-stack .t-btn.primary { border-color: var(--accent); color: var(--accent); min-height: 56px; }
+    .fire-stack .t-btn img { width: 18px; height: 18px; }
+    .fire-stack .t-btn:active { transform: scale(0.94); background: var(--accent-soft); }
+    .fire-stack .t-btn:disabled { opacity: 0.35; }
+
+    .ammo {
+      font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+      letter-spacing: 0.06em; margin-bottom: 6px; text-align: center;
+    }
+
+    .feed {
+      position: absolute; top: 100px; left: 12px; width: 48%;
+      z-index: 8; pointer-events: none;
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+    }
+    .feed div {
+      margin-bottom: 3px; padding: 3px 6px;
+      background: rgba(0,0,0,.55); border: 1px solid var(--border);
+      animation: fadeFeed 2s ease-out forwards;
+    }
+    @keyframes fadeFeed { 0%,70%{opacity:1} 100%{opacity:0} }
+
+    .help-toggle {
+      position: absolute; top: 52px; right: 12px; z-index: 16;
+      width: 32px; height: 32px; padding: 0; border-radius: 2px;
+      border: 1px solid var(--border); background: rgba(0,0,0,.5);
+      color: var(--text-muted); font-size: 12px; cursor: pointer;
+    }
+    .help-toggle:active { transform: scale(0.94); }
+    .help {
+      position: absolute; top: 90px; left: 12px; right: 12px; z-index: 15;
+      padding: 8px 10px; text-align: center; font-size: 10px; line-height: 1.45;
+      letter-spacing: 0.06em; color: var(--text-muted);
+      background: rgba(0,0,0,.88); border: 1px solid var(--border); pointer-events: none;
+      font-family: var(--font-mono);
+    }
+    .help[hidden] { display: none !important; }
+
+    .radar {
+      position: absolute; top: 52px; left: 12px; width: 48px; height: 48px;
+      border: 1px solid var(--border); border-radius: 50%;
+      background: color-mix(in srgb, var(--surface) 50%, transparent);
+      pointer-events: none;
+    }
+    .radar::after {
+      content: ""; position: absolute; left: 62%; top: 38%; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
   </style>
 </head>
 <body>
-  <div class="game-root letterbox">
+  <div class="game-root">
     <div class="game-world has-grid"></div>
     <div class="meta-vignette" id="vignette"></div>
-    <div class="reticle-center"></div>
     <div class="game-hud">
-      <div class="hud-anchor-tc">
-        <button type="button" class="compass" id="btn-compass" title="调整方位">
-          <img src="../../assets/_shared/kenney/icons/information.png" alt="" />
+      <div class="radar" aria-hidden="true"></div>
+      <div class="feed" id="feed" aria-live="polite"></div>
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>点目标锁定（环进度）· 左姿态/冲刺 · 右换弹/点射 · 未锁定时点射精度下降</div>
+
+      <div class="hud-anchor-tc" style="top:52px">
+        <button type="button" class="compass" id="btn-compass" aria-label="调整方位">
+          <span class="n">北</span>
           <span class="deg" id="compass-deg">274°</span>
-          <span style="position:absolute;bottom:8px;font-size:8px;color:var(--text-muted)">北</span>
         </button>
+        <div class="short-msg" id="short-msg">扇区静默</div>
       </div>
 
-      <div class="bottom-left">
-        <div class="bl-card">
+      <button type="button" class="target" id="tgt" aria-label="锁定目标">
+        <img src="../../assets/_shared/rpg-icons/eye.png" alt="" />
+      </button>
+      <div class="reticle" id="reticle" aria-hidden="true">
+        <svg viewBox="0 0 88 88">
+          <circle class="ring" cx="44" cy="44" r="35" />
+          <circle class="arc" id="lock-arc" cx="44" cy="44" r="35" transform="rotate(-90 44 44)" />
+        </svg>
+      </div>
+
+      <div class="zone-l">
+        <div class="pad">
           <div class="lab">姿态</div>
           <div class="stance-row" id="stance-group">
-            <button type="button" class="btn active" data-stance="STAND">立</button>
-            <button type="button" class="btn" data-stance="CROUCH">蹲</button>
-            <button type="button" class="btn" data-stance="PRONE">卧</button>
+            <button type="button" class="t-btn active" data-stance="STAND" aria-label="站立"><img src="../../assets/_shared/rpg-icons/brave.png" alt="" /><span>立</span></button>
+            <button type="button" class="t-btn" data-stance="CROUCH" aria-label="蹲伏"><img src="../../assets/_shared/rpg-icons/boots.png" alt="" /><span>蹲</span></button>
+            <button type="button" class="t-btn" data-stance="PRONE" aria-label="卧倒"><img src="../../assets/_shared/rpg-icons/down.png" alt="" /><span>卧</span></button>
           </div>
           <div class="lab" style="margin-top:8px">耐力</div>
-          <div class="stamina-row">
+          <div class="stm">
             <div class="hud-bar-track"><div id="stm-fill" class="hud-bar-fill success" style="width:100%"></div></div>
-            <span id="stm-val" class="badge" style="font-size:10px">100</span>
+            <span id="stm-val" class="badge">100</span>
           </div>
-          <button type="button" class="btn btn-warning" id="btn-sprint" style="margin-top:8px;width:100%;padding:7px 0;font-size:11px">
-            <img class="icon" src="../../assets/_shared/kenney/icons/play.png" alt="" /> 冲刺
+          <button type="button" class="t-btn" id="btn-sprint" aria-label="冲刺" style="width:100%;margin-top:8px;min-height:44px">
+            <img src="../../assets/_shared/kenney/icons/play.png" alt="" /><span>冲刺</span>
           </button>
         </div>
       </div>
 
-      <div class="bottom-right">
-        <div class="br-card">
-          <div class="lab">武器 · 方位</div>
-          <div class="br-top">
-            <img class="icon" src="../../assets/_shared/rpg-icons/gun.png" alt="" />
-            <span class="v" id="ammo-val">24 / 120</span>
-          </div>
-          <div class="br-mid">
-            <span>方位</span>
-            <span class="v" id="bearing-val">274° 西</span>
-          </div>
-          <div class="br-mid">
-            <span>姿态</span>
-            <span class="v" id="stance-val">站立</span>
-          </div>
-          <div class="br-actions">
-            <button type="button" class="btn" id="btn-reload" style="padding:7px 0;font-size:11px">换弹</button>
-            <button type="button" class="btn btn-primary" id="btn-fire" style="padding:7px 0;font-size:11px">
-              <img class="icon" src="../../assets/_shared/rpg-icons/bow.png" alt="" /> 点射
+      <div class="zone-r">
+        <div class="pad">
+          <div class="lab">武器</div>
+          <div class="ammo" id="ammo-val">24 / 120</div>
+          <div class="fire-stack">
+            <button type="button" class="t-btn" id="btn-reload" aria-label="换弹">换弹</button>
+            <button type="button" class="t-btn primary" id="btn-fire" aria-label="点射">
+              <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span>点射</span>
             </button>
           </div>
         </div>
       </div>
-
-      <p class="hint">罗盘 · 姿态 · 换弹 · 冲刺消耗耐力 · 点射</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
     let mag = 24, reserve = 120, stamina = 100, bearing = 274;
-    const bearings = ["北", "东北", "东", "东南", "南", "西南", "西", "西北"];
+    let locked = false, lockPct = 0, lockTimer = 0, tgtHp = 3;
     const stanceLabels = { STAND: "站立", CROUCH: "蹲伏", PRONE: "卧倒" };
+    const CIRC = 2 * Math.PI * 35;
 
-    function syncAmmo() {
-      sk.setText(sk.$("#ammo-val"), mag + " / " + reserve);
+    function feed(msg) {
+      const el = document.createElement("div");
+      el.textContent = msg;
+      sk.$("#feed").prepend(el);
+      setTimeout(() => el.remove(), 2000);
     }
+
+    function syncAmmo() { sk.setText(sk.$("#ammo-val"), mag + " / " + reserve); }
     function syncStamina() {
       sk.setFill(sk.$("#stm-fill"), stamina);
       sk.setText(sk.$("#stm-val"), String(stamina));
@@ -135,65 +233,108 @@
     }
     function syncBearing() {
       sk.setText(sk.$("#compass-deg"), bearing + "°");
-      const idx = Math.round(bearing / 45) % 8;
-      sk.setText(sk.$("#bearing-val"), bearing + "° " + bearings[idx]);
     }
+    function syncLock() {
+      const arc = sk.$("#lock-arc");
+      arc.style.strokeDasharray = String(CIRC);
+      arc.style.strokeDashoffset = String(CIRC * (1 - lockPct / 100));
+      sk.$("#reticle").classList.toggle("hot", locked || lockPct > 0);
+      sk.$("#tgt").classList.toggle("locked", locked);
+    }
+
+    function clearLock() {
+      locked = false;
+      lockPct = 0;
+      clearInterval(lockTimer);
+      lockTimer = 0;
+      syncLock();
+    }
+
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+    });
+
+    sk.on(sk.$("#tgt"), "click", () => {
+      if (sk.$("#tgt").classList.contains("down")) return;
+      if (locked) { feed("目标已锁定"); return; }
+      clearInterval(lockTimer);
+      lockPct = 0;
+      const stance = sk.$("[data-stance].active").dataset.stance;
+      const speed = stance === "PRONE" ? 14 : stance === "CROUCH" ? 10 : 7;
+      sk.setText(sk.$("#short-msg"), "锁定中…");
+      lockTimer = setInterval(() => {
+        lockPct = Math.min(100, lockPct + speed);
+        syncLock();
+        if (lockPct >= 100) {
+          locked = true;
+          clearInterval(lockTimer);
+          sk.setText(sk.$("#short-msg"), "目标锁定");
+          feed("锁定完成");
+        }
+      }, 120);
+    });
 
     sk.$all("[data-stance]").forEach((btn) => {
       sk.on(btn, "click", () => {
         sk.$all("[data-stance]").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        sk.setText(sk.$("#stance-val"), stanceLabels[btn.dataset.stance]);
-        sk.toast("姿态：" + stanceLabels[btn.dataset.stance]);
-        sk.pulse(btn);
+        feed("姿态：" + stanceLabels[btn.dataset.stance]);
+        if (lockPct > 0 && !locked) clearLock();
       });
     });
 
     sk.on(sk.$("#btn-reload"), "click", () => {
-      if (reserve <= 0) {
-        sk.toast("备用弹药耗尽", "danger");
-        return;
-      }
+      if (reserve <= 0) { feed("备用弹耗尽"); return; }
       const need = 30 - mag;
       const take = Math.min(need, reserve);
-      mag += take;
-      reserve -= take;
+      mag += take; reserve -= take;
       syncAmmo();
-      sk.toast("换弹 +" + take, "success");
+      feed("换弹 +" + take);
       sk.pulse(sk.$("#btn-reload"));
     });
 
     sk.on(sk.$("#btn-compass"), "click", () => {
       bearing = (bearing + 15) % 360;
       syncBearing();
-      sk.pulse(sk.$("#btn-compass"));
-      sk.toast("方位已更新");
+      sk.setText(sk.$("#short-msg"), "方位 " + bearing + "°");
     });
 
     sk.on(sk.$("#btn-sprint"), "click", () => {
-      if (stamina < 12) {
-        sk.toast("力竭 — 请喘息恢复", "danger");
-        return;
-      }
+      if (stamina < 12) { feed("力竭"); return; }
       stamina = Math.max(0, stamina - 12);
       syncStamina();
-      sk.toast("冲刺 −12 耐力", "warning");
+      clearLock();
+      sk.setText(sk.$("#short-msg"), "机动中");
+      feed("冲刺 −12");
     });
 
     sk.on(sk.$("#btn-fire"), "click", () => {
-      if (mag <= 0) {
-        sk.toast("弹匣已空 — 请换弹！", "danger");
-        return;
-      }
+      if (mag <= 0) { feed("弹匣空 — 换弹"); return; }
       const burst = Math.min(3, mag);
       mag -= burst;
       syncAmmo();
-      sk.toast("点射 −" + burst + " 发");
+      const hit = locked ? true : Math.random() < 0.35;
+      if (hit) {
+        tgtHp -= 1;
+        feed("命中 ×" + burst + (locked ? "" : "（盲射）"));
+        sk.pulse(sk.$("#tgt"));
+        if (tgtHp <= 0) {
+          sk.$("#tgt").classList.add("down");
+          clearLock();
+          sk.setText(sk.$("#short-msg"), "目标失效");
+          feed("目标清除");
+        }
+      } else {
+        feed("偏射 ×" + burst);
+        sk.$("#vignette").classList.add("on");
+        setTimeout(() => sk.$("#vignette").classList.remove("on"), 180);
+      }
     });
 
-    syncAmmo();
-    syncStamina();
-    syncBearing();
+    syncAmmo(); syncStamina(); syncBearing(); syncLock();
   </script>
 </body>
 </html>

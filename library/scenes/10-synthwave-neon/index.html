@@ -9,143 +9,194 @@
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/synthwave-neon.css" />
   <style>
-    .title-block {
-      position:absolute; top:18%; left:50%; transform:translateX(-50%);
-      text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px;
-      pointer-events:none;
+    .game-world {
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 60%),
+        linear-gradient(180deg, #120818 0%, #080510 50%, #1a0830 100%);
     }
-    .logo { font-family:var(--font-display); font-size:clamp(28px,7vw,56px); letter-spacing:.2em; text-shadow:0 0 20px var(--glow),0 0 40px var(--accent-2); margin:0; pointer-events:auto; }
-    .logo img { width:40px; height:40px; vertical-align:middle; margin-right:10px; filter:drop-shadow(0 0 8px var(--accent)); }
-    .menu { display:flex; flex-direction:column; gap:10px; min-width:240px; pointer-events:auto; }
-    .menu .btn { width:100%; letter-spacing:.15em; min-height:48px; }
-    .side-stack { width:min(280px,78%); max-height:70vh; overflow:auto; }
-    [data-sk-panel] { margin-bottom:12px; }
-    .score-list { list-style:none; margin:0; padding:0; }
-    .score-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border); font-family:var(--font-mono); font-size:12px; }
-    .score-list li.top { color:var(--accent); text-shadow:0 0 8px var(--glow); }
-    .vol-row { display:flex; align-items:center; gap:8px; margin:10px 0; }
-    .vol-row span { flex:1; font-size:12px; }
-    #loading-bar-wrap { width:min(320px,86vw); opacity:0; transition:opacity .2s; pointer-events:auto; }
-    #loading-bar-wrap.visible { opacity:1; }
-    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); pointer-events:none; width:90%; text-align:center; }
 
-    #title-layer[hidden], #play-layer[hidden], #over-layer[hidden] { display:none; }
-    #play-layer, #over-layer { position:absolute; inset:0; z-index:12; }
+    #title-layer[hidden], #play-layer[hidden], #over-layer[hidden] { display: none; }
+    #play-layer, #over-layer { position: absolute; inset: 0; z-index: 12; }
+
+    .crt-title {
+      position: absolute; top: 16%; left: 50%; transform: translateX(-50%);
+      text-align: center; width: 90%; pointer-events: none;
+    }
+    .logo {
+      font-family: var(--font-display); font-size: clamp(26px, 7vw, 48px);
+      letter-spacing: 0.28em; margin: 0;
+      text-shadow: 0 0 18px var(--glow), 0 0 36px var(--accent-2);
+      color: var(--accent);
+    }
+    .sub {
+      margin-top: 10px; font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.22em; color: var(--text-muted);
+    }
+    .coin-slot {
+      position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%);
+      width: min(240px, 72%); display: flex; flex-direction: column; gap: 10px;
+    }
+    .coin-slot .insert {
+      min-height: 64px; width: 100%;
+      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.28em;
+      color: var(--bg); background: var(--accent);
+      border: 2px solid var(--accent-2);
+      box-shadow: 0 0 24px var(--glow);
+      cursor: pointer;
+    }
+    .coin-slot .insert:active { transform: scale(0.96); }
+    .coin-slot .side {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+    }
+    .coin-slot .side .ghost {
+      min-height: 44px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+      background: transparent; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer;
+    }
+    .coin-slot .side .ghost:active { transform: scale(0.94); color: var(--accent); border-color: var(--accent); }
+
+    .load-bar {
+      margin-top: 14px; opacity: 0; transition: opacity 200ms;
+      pointer-events: none;
+    }
+    .load-bar.visible { opacity: 1; }
+
+    .side-stack {
+      position: absolute; top: 52px; right: 10px; width: min(260px, 78%);
+      max-height: 55vh; overflow: auto; z-index: 14;
+    }
+    .score-list { list-style: none; margin: 0; padding: 0; }
+    .score-list li {
+      display: flex; justify-content: space-between; padding: 8px 0;
+      border-bottom: 1px dashed var(--border); font-family: var(--font-mono); font-size: 12px;
+    }
+    .score-list li.top { color: var(--accent); text-shadow: 0 0 8px var(--glow); }
+    .vol-row { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+    .vol-row span { flex: 1; font-size: 12px; }
 
     .run-hud {
-      position:absolute; top:52px; left:14px; right:14px;
-      display:flex; justify-content:space-between; gap:10px;
-      font-family:var(--font-mono); letter-spacing:.12em;
+      position: absolute; top: 52px; left: 12px; right: 52px;
+      display: flex; justify-content: space-between; gap: 8px;
+      font-family: var(--font-mono); letter-spacing: 0.14em; pointer-events: none;
     }
-    .run-hud .pill {
-      padding:8px 12px; border:1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 80%, transparent);
-      text-shadow:0 0 8px var(--glow);
-      min-width:72px; text-align:center;
+    .run-hud .chip {
+      padding: 6px 10px; border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 55%, transparent);
+      text-shadow: 0 0 8px var(--glow); text-align: center; min-width: 64px;
     }
-    .run-hud .pill .lab { display:block; font-size:10px; color:var(--text-muted); }
-    .run-hud .pill .num { display:block; font-size:18px; color:var(--accent); }
+    .run-hud .lab { display: block; font-size: 9px; color: var(--text-muted); }
+    .run-hud .num { display: block; font-size: 16px; color: var(--accent); }
 
-    .lane {
-      position:absolute; top:28%; left:8%; right:8%; height:28%;
-      border:1px solid var(--border);
-      box-shadow:0 0 24px var(--glow), inset 0 0 40px rgba(255,0,200,.08);
-      overflow:hidden;
+    .road {
+      position: absolute; top: 26%; left: 0; right: 0; bottom: 28%;
+      overflow: hidden;
+    }
+    .horizon {
+      position: absolute; left: 0; right: 0; top: 18%;
+      height: 1px; background: color-mix(in srgb, var(--accent-2) 55%, transparent);
+      box-shadow: 0 0 12px var(--glow);
     }
     .gate {
-      position:absolute; top:0; bottom:0; left:50%; width:64px;
-      transform:translateX(-50%);
-      border-left:2px solid var(--accent-2);
-      border-right:2px solid var(--accent-2);
-      background: color-mix(in srgb, var(--accent-2) 18%, transparent);
-      pointer-events:none;
+      position: absolute; top: 28%; bottom: 22%; left: 50%; width: 56px;
+      transform: translateX(-50%);
+      border-left: 2px solid var(--accent-2);
+      border-right: 2px solid var(--accent-2);
+      background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+      pointer-events: none;
+      box-shadow: 0 0 20px color-mix(in srgb, var(--glow) 40%, transparent);
     }
     .orb {
-      position:absolute; top:50%; width:44px; height:44px;
-      margin-top:-22px; border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 16px var(--glow);
-      left: -50px;
+      position: absolute; top: 48%; width: 40px; height: 40px; margin-top: -20px;
+      border-radius: 50%; left: -50px;
+      background: var(--accent);
+      box-shadow: 0 0 18px var(--glow), 0 0 36px var(--accent);
     }
-    .orb.hit { opacity:0; transform:scale(1.4); transition: opacity .15s, transform .15s; }
-    .orb.miss { opacity:.35; }
+    .orb.hit { opacity: 0; transform: scale(1.5); transition: opacity .12s, transform .12s; }
 
     .tap-btn {
-      position:absolute; left:50%; bottom:56px; transform:translateX(-50%);
-      width:min(220px,70%); min-height:64px;
-      font-family:var(--font-display); letter-spacing:.2em; font-size:18px;
+      position: absolute; left: 50%; bottom: 48px; transform: translateX(-50%);
+      width: min(180px, 52%); aspect-ratio: 1; border-radius: 50%;
+      font-family: var(--font-display); letter-spacing: 0.2em; font-size: 16px;
+      color: var(--bg); background: var(--accent-2);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 28px var(--glow);
+      cursor: pointer;
     }
+    .tap-btn:active { transform: translateX(-50%) scale(0.94); }
 
     .over-card {
-      position:absolute; left:50%; top:42%; transform:translate(-50%,-50%);
-      width:min(320px,88%); text-align:center;
+      position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%);
+      width: min(300px, 88%); text-align: center;
     }
-    .over-card .final { font-family:var(--font-mono); font-size:28px; color:var(--accent); text-shadow:0 0 16px var(--glow); margin:12px 0 20px; }
-    .over-actions { display:flex; flex-direction:column; gap:10px; }
-    .over-actions .btn { min-height:48px; }
+    .over-card .final {
+      font-family: var(--font-mono); font-size: 32px; color: var(--accent);
+      text-shadow: 0 0 16px var(--glow); margin: 12px 0 18px;
+    }
+    .over-actions { display: flex; flex-direction: column; gap: 10px; }
+    .over-actions .btn { min-height: 48px; letter-spacing: 0.16em; }
+
+    .help-toggle {
+      position: absolute; top: 52px; right: 12px; z-index: 16;
+      width: 36px; height: 36px; padding: 0; border-radius: 50%;
+      border: 1px solid var(--accent); background: rgba(8,4,16,.7);
+      color: var(--accent); cursor: pointer; font-size: 14px;
+    }
+    .help-toggle:active { transform: scale(0.94); }
+    .help {
+      position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
+      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
+      letter-spacing: 0.08em; color: var(--text-muted);
+      background: rgba(8,4,16,.9); border: 1px solid var(--border); pointer-events: none;
+    }
+    .help[hidden] { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="game-root letterbox">
+  <div class="game-root">
     <div class="game-world has-grid"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>投币开始一局 · 光球进门时点按圆键 · 结束可再来或回标题 · 高分/选项在侧钮</div>
+
       <div id="title-layer">
-        <div class="title-block">
-          <h1 class="logo">
-            <img src="../../assets/_shared/kenney/icons/star.png" alt="" />霓虹漂移
-          </h1>
-          <div id="loading-bar-wrap">
-            <div class="progress progress-linear" style="height:12px">
+        <div class="crt-title">
+          <h1 class="logo">霓虹漂移</h1>
+          <div class="sub">投币开始 · 9:20</div>
+          <div class="load-bar" id="loading-bar-wrap">
+            <div class="progress progress-linear" style="height:10px">
               <div id="title-load-bar" class="progress-fill" style="width:0%;background:var(--accent-2)"></div>
             </div>
-            <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">投币开始</span></div>
+            <div style="margin-top:6px"><span class="badge" id="load-label">投币中</span></div>
           </div>
         </div>
-
-        <div class="hud-anchor-bc menu">
-          <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">开始</button>
-          <button type="button" class="btn menu-item-large" id="btn-scores">高分榜</button>
-          <button type="button" class="btn menu-item-large" id="btn-options">选项</button>
-          <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">退出</button>
+        <div class="coin-slot">
+          <button type="button" class="insert" id="btn-start" aria-label="投币开始">投币</button>
+          <div class="side">
+            <button type="button" class="ghost" id="btn-scores" aria-label="高分榜">高分</button>
+            <button type="button" class="ghost" id="btn-options" aria-label="选项">选项</button>
+            <button type="button" class="ghost" id="btn-quit" aria-label="退出">退出</button>
+          </div>
         </div>
-
-        <div class="hud-anchor-tr side-stack">
+        <div class="side-stack">
           <div id="scores-panel" class="panel frame-brackets" data-sk-panel hidden>
             <div class="panel-title">高分榜</div>
             <div class="panel-body">
-              <ul class="score-list" id="score-list">
+              <ul class="score-list">
                 <li class="top"><span>1. 雾汽小子</span><span>984,200</span></li>
                 <li><span>2. 复古狐</span><span>812,050</span></li>
                 <li><span>3. 合成浪人</span><span>640,880</span></li>
                 <li><span>4. 你</span><span id="your-score">000,000</span></li>
               </ul>
-              <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">关闭</button>
+              <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
             </div>
           </div>
-
           <div id="options-panel" class="panel frame-brackets" data-sk-panel hidden>
             <div class="panel-title">选项</div>
             <div class="panel-body">
-              <div class="vol-row">
-                <span>主音量</span>
-                <button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button>
-                <span id="vol-master" class="badge">70</span>
-                <button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button>
-              </div>
-              <div class="vol-row">
-                <span>音乐音量</span>
-                <button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button>
-                <span id="vol-music" class="badge">80</span>
-                <button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button>
-              </div>
-              <div class="vol-row">
-                <span>音效音量</span>
-                <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button>
-                <span id="vol-sfx" class="badge">90</span>
-                <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button>
-              </div>
-              <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">关闭</button>
+              <div class="vol-row"><span>主音量</span><button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button><span id="vol-master" class="badge">70</span><button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button></div>
+              <div class="vol-row"><span>音乐</span><button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button><span id="vol-music" class="badge">80</span><button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button></div>
+              <div class="vol-row"><span>音效</span><button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button><span id="vol-sfx" class="badge">90</span><button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button></div>
+              <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
             </div>
           </div>
         </div>
@@ -153,15 +204,16 @@
 
       <div id="play-layer" hidden>
         <div class="run-hud">
-          <div class="pill"><span class="lab">得分</span><span class="num" id="run-score">0</span></div>
-          <div class="pill"><span class="lab">剩余</span><span class="num" id="run-time">20</span></div>
-          <div class="pill"><span class="lab">连击</span><span class="num" id="run-combo">0</span></div>
+          <div class="chip"><span class="lab">得分</span><span class="num" id="run-score">0</span></div>
+          <div class="chip"><span class="lab">剩余</span><span class="num" id="run-time">20</span></div>
+          <div class="chip"><span class="lab">连击</span><span class="num" id="run-combo">0</span></div>
         </div>
-        <div class="lane" id="lane">
+        <div class="road" id="lane">
+          <div class="horizon" aria-hidden="true"></div>
           <div class="gate"></div>
           <div class="orb" id="orb"></div>
         </div>
-        <button type="button" class="btn btn-primary tap-btn" id="btn-tap" aria-label="点按得分">点按</button>
+        <button type="button" class="tap-btn" id="btn-tap" aria-label="点按得分">拍</button>
       </div>
 
       <div id="over-layer" hidden>
@@ -176,33 +228,18 @@
           </div>
         </div>
       </div>
-
-      <p class="hint" id="hint">开始 → 一局点按得分 → 结束可重开</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
     const vol = { master: 70, music: 80, sfx: 90 };
-    const volLabels = { master: "主音量", music: "音乐音量", sfx: "音效音量" };
     const ROUND_SEC = 20;
-    let best = 0;
-    let score = 0;
-    let combo = 0;
-    let left = ROUND_SEC;
-    let playing = false;
-    let orbX = -50;
-    let orbSpeed = 3.2;
-    let raf = 0;
-    let tickTimer = 0;
+    let best = 0, score = 0, combo = 0, left = ROUND_SEC;
+    let playing = false, orbX = -50, orbSpeed = 3.2, raf = 0, tickTimer = 0;
 
-    function syncVol(key) {
-      sk.setText(sk.$("#vol-" + key), String(vol[key]));
-    }
-
-    function fmt(n) {
-      return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+    function syncVol(key) { sk.setText(sk.$("#vol-" + key), String(vol[key])); }
+    function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
 
     function showLayer(name) {
       sk.$("#title-layer").hidden = name !== "title";
@@ -212,7 +249,7 @@
 
     function resetOrb() {
       const orb = sk.$("#orb");
-      orb.classList.remove("hit", "miss");
+      orb.classList.remove("hit");
       orbX = -60;
       orbSpeed = 2.8 + Math.random() * 2.4;
       orb.style.left = orbX + "px";
@@ -228,8 +265,6 @@
       }
       sk.setText(sk.$("#final-score"), fmt(score));
       showLayer("over");
-      sk.setText(sk.$("#hint"), "再来一局或返回标题");
-      sk.toast("本局得分 " + fmt(score), "success");
     }
 
     function frame() {
@@ -242,22 +277,17 @@
       if (orbX > w + 40) {
         combo = 0;
         sk.setText(sk.$("#run-combo"), "0");
-        orb.classList.add("miss");
         resetOrb();
       }
       raf = requestAnimationFrame(frame);
     }
 
     function startRound() {
-      score = 0;
-      combo = 0;
-      left = ROUND_SEC;
-      playing = true;
+      score = 0; combo = 0; left = ROUND_SEC; playing = true;
       sk.setText(sk.$("#run-score"), "0");
       sk.setText(sk.$("#run-combo"), "0");
       sk.setText(sk.$("#run-time"), String(left));
       showLayer("play");
-      sk.setText(sk.$("#hint"), "光球进门时点按得分");
       sk.closePanel("#scores-panel");
       sk.closePanel("#options-panel");
       resetOrb();
@@ -272,13 +302,20 @@
       }, 1000);
     }
 
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+    });
+
     sk.on(sk.$("#btn-tap"), "click", () => {
       if (!playing) return;
       const lane = sk.$("#lane");
       const center = lane.clientWidth / 2;
-      const dist = Math.abs(orbX + 22 - center);
+      const dist = Math.abs(orbX + 20 - center);
       const orb = sk.$("#orb");
-      if (dist < 42) {
+      if (dist < 40) {
         combo += 1;
         const gain = 100 + combo * 25;
         score += gain;
@@ -286,11 +323,12 @@
         sk.setText(sk.$("#run-combo"), String(combo));
         orb.classList.add("hit");
         sk.pulse(sk.$("#btn-tap"));
-        setTimeout(resetOrb, 120);
+        setTimeout(resetOrb, 110);
       } else {
         combo = 0;
         sk.setText(sk.$("#run-combo"), "0");
-        sk.toast("偏了", "warning");
+        sk.$("#vignette").classList.add("on");
+        setTimeout(() => sk.$("#vignette").classList.remove("on"), 160);
       }
     });
 
@@ -301,38 +339,27 @@
       let pct = 0;
       const bar = sk.$("#title-load-bar");
       const timer = setInterval(() => {
-        pct += 6 + Math.floor(Math.random() * 6);
+        pct += 8 + Math.floor(Math.random() * 8);
         if (pct >= 100) {
-          pct = 100;
           clearInterval(timer);
-          sk.setFill(bar, pct);
+          sk.setFill(bar, 100);
           sk.setText(sk.$("#load-label"), "就绪");
           startRound();
-        } else {
-          sk.setFill(bar, pct);
-        }
-      }, 70);
+        } else sk.setFill(bar, pct);
+      }, 60);
     });
 
     sk.on(sk.$("#btn-again"), "click", () => startRound());
     sk.on(sk.$("#btn-title"), "click", () => {
       showLayer("title");
-      sk.setText(sk.$("#hint"), "开始 → 一局点按得分 → 结束可重开");
-      sk.setText(sk.$("#load-label"), "投币开始");
+      sk.setText(sk.$("#load-label"), "投币中");
       sk.$("#loading-bar-wrap").classList.remove("visible");
       sk.setFill(sk.$("#title-load-bar"), 0);
     });
 
-    sk.on(sk.$("#btn-scores"), "click", () => {
-      sk.closePanel("#options-panel");
-      sk.togglePanel("#scores-panel");
-    });
+    sk.on(sk.$("#btn-scores"), "click", () => { sk.closePanel("#options-panel"); sk.togglePanel("#scores-panel"); });
     sk.on(sk.$("#scores-close"), "click", () => sk.closePanel("#scores-panel"));
-
-    sk.on(sk.$("#btn-options"), "click", () => {
-      sk.closePanel("#scores-panel");
-      sk.togglePanel("#options-panel");
-    });
+    sk.on(sk.$("#btn-options"), "click", () => { sk.closePanel("#scores-panel"); sk.togglePanel("#options-panel"); });
     sk.on(sk.$("#options-close"), "click", () => sk.closePanel("#options-panel"));
 
     sk.$all("[data-vol]").forEach((btn) => {
@@ -341,16 +368,11 @@
         const key = btn.dataset.vol;
         vol[key] = Math.max(0, Math.min(100, vol[key] + parseInt(btn.dataset.delta, 10)));
         syncVol(key);
-        sk.toast(volLabels[key] + " " + vol[key]);
       });
     });
 
     sk.on(sk.$("#btn-quit"), "click", () => {
-      sk.modal({
-        title: "退出到桌面？",
-        body: "你的高分已本地保存。",
-        onConfirm: () => sk.toast("网格上再见！", "warning"),
-      });
+      sk.modal({ title: "退出？", body: "高分已本地保存。", onConfirm: () => sk.toast("网格上再见！", "warning") });
     });
 
     Object.keys(vol).forEach(syncVol);

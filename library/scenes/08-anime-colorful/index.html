@@ -11,108 +11,142 @@
   <style>
     .game-world {
       background:
-        radial-gradient(ellipse 60% 70% at 35% 50%, color-mix(in srgb, var(--accent) 8%, #0a0812), #050408 80%);
+        radial-gradient(ellipse 60% 70% at 35% 45%, color-mix(in srgb, var(--accent) 14%, #120818), #050408 78%);
     }
+    #menu-root[hidden], #battle-layer[hidden] { display: none; }
+
     .poster-float {
-      position:absolute; left:50%; top:8%; transform:translate(-50%,0) rotate(-3deg);
-      pointer-events:none;
-      width: 46%;
-      max-width: 160px;
+      position: absolute; left: 50%; top: 10%; transform: translate(-50%, 0) rotate(-3deg);
+      pointer-events: none; width: 42%; max-width: 150px;
     }
     .poster-inner {
-      width:100%; aspect-ratio:3/4;
-      border:3px solid var(--accent);
-      clip-path:polygon(0 14px,14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px));
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
-      padding:12px 8px;
-      background:var(--surface); box-shadow:0 0 30px var(--glow);
+      width: 100%; aspect-ratio: 3/4;
+      border: 3px solid var(--accent);
+      clip-path: polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 8px; background: var(--surface); box-shadow: 0 0 28px var(--glow);
     }
-    .poster-inner img { width:38px; height:38px; }
-    .poster-title { font-family:var(--font-display); font-size:14px; letter-spacing:.15em; }
-    .menu-stack {
-      position:absolute; left:0; right:0; top:auto; bottom:48px;
-      display:flex; flex-direction:column; gap:8px; padding:0 14px;
-    }
-    .menu-stack .menu-list { width:100%; gap:10px; min-width:0; }
-    .menu-stack .menu-item-large { padding:12px 18px; font-size:15px; }
-    .toggle-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border); }
-    .toggle-row button { min-width:64px; }
-    #load-overlay, #loading-overlay {
-      position:absolute; inset:0; background:rgba(0,0,0,.75); display:flex; align-items:center; justify-content:center; z-index:30;
-    }
-    #load-overlay[hidden], #loading-overlay[hidden] { display:none; }
-    [data-sk-panel] { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(360px,92vw); z-index:20; }
-    .hint { position:absolute; bottom:8px; left:18px; right:18px; font-size:11px; color:var(--text-muted); pointer-events:none; }
+    .poster-inner img { width: 36px; height: 36px; }
+    .poster-title { font-family: var(--font-display); font-size: 13px; letter-spacing: 0.16em; }
 
-    /* —— 战斗层 —— */
-    #battle-layer[hidden] { display:none; }
-    #battle-layer {
-      position:absolute; inset:0; z-index:15;
-      display:flex; flex-direction:column;
+    .menu-stack {
+      position: absolute; left: 10%; right: 8%; bottom: 56px;
+      display: flex; flex-direction: column; gap: 8px;
     }
-    .battle-stage {
-      flex:1; position:relative; min-height:0;
-      padding: 56px 14px 12px;
+    .menu-stack .slash {
+      display: flex; align-items: center; gap: 12px;
+      min-height: 52px; padding: 0 16px 0 20px;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border: 2px solid var(--border);
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+      font-family: var(--font-display); font-size: 16px; letter-spacing: 0.18em;
+      color: var(--text); cursor: pointer; text-align: left;
+      transition: transform 100ms ease-out, border-color 100ms ease-out, background 100ms ease-out;
+    }
+    .menu-stack .slash.primary {
+      border-color: var(--accent); color: var(--accent);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--glow) 50%, transparent);
+    }
+    .menu-stack .slash img { width: 22px; height: 22px; }
+    .menu-stack .slash:active { transform: translateX(4px) scale(0.98); background: var(--accent-soft); }
+
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); }
+    #load-overlay, #loading-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.78);
+      display: flex; align-items: center; justify-content: center; z-index: 30;
+    }
+    #load-overlay[hidden], #loading-overlay[hidden] { display: none; }
+    [data-sk-panel] {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: min(340px, 90%); z-index: 20;
+    }
+
+    #battle-layer { position: absolute; inset: 0; z-index: 12; display: flex; flex-direction: column; }
+    .battle-top {
+      flex: 1; position: relative; min-height: 0; padding: 56px 12px 8px;
     }
     .foe-card {
-      position:absolute; top:12%; left:50%; transform:translateX(-50%);
-      width:min(70%, 200px);
-      text-align:center;
-      padding:16px 12px;
-      background:var(--surface);
-      border:3px solid var(--accent);
-      clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));
-      box-shadow:0 0 24px var(--glow);
+      position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+      width: min(68%, 190px); text-align: center; padding: 14px 10px;
+      background: var(--surface); border: 3px solid var(--accent);
+      clip-path: polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));
+      box-shadow: 0 0 22px var(--glow);
     }
-    .foe-card img { width:48px; height:48px; }
-    .foe-card .name { font-family:var(--font-display); letter-spacing:.12em; margin-top:8px; }
-    .party-strip {
-      position:absolute; left:14px; right:14px; bottom:0;
-      display:flex; flex-direction:column; gap:6px;
-    }
+    .foe-card img { width: 44px; height: 44px; }
+    .foe-card .name { font-family: var(--font-display); letter-spacing: 0.14em; margin-top: 6px; }
+    .party-strip { position: absolute; left: 12px; right: 12px; bottom: 0; display: flex; flex-direction: column; gap: 6px; }
     .cmd-bar {
-      display:grid; grid-template-columns:1fr 1fr; gap:8px;
-      padding:12px 14px 20px;
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-      border-top:3px solid var(--accent);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      padding: 12px 12px 22px;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      border-top: 3px solid var(--accent);
     }
-    .cmd-bar .btn { min-height:48px; font-size:15px; letter-spacing:.08em; }
+    .cmd-bar .cmd {
+      min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: var(--font-display); letter-spacing: 0.12em; font-size: 14px;
+      background: var(--bg); border: 2px solid var(--border); color: var(--text); cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+    }
+    .cmd-bar .cmd img { width: 20px; height: 20px; }
+    .cmd-bar .cmd.primary { border-color: var(--accent); color: var(--accent); }
+    .cmd-bar .cmd.danger { border-color: var(--danger); color: var(--danger); }
+    .cmd-bar .cmd:active { transform: scale(0.96); background: var(--accent-soft); }
     .log-line {
-      position:absolute; top:52px; left:14px; right:14px;
-      text-align:center; font-size:12px; color:var(--text-muted);
-      pointer-events:none;
+      position: absolute; top: 52px; left: 12px; right: 52px;
+      text-align: center; font-size: 12px; color: var(--text-muted); pointer-events: none;
     }
-    #menu-root[hidden] { display:none; }
+
+    .help-toggle {
+      position: absolute; top: 52px; right: 12px; z-index: 16;
+      width: 36px; height: 36px; padding: 0; border-radius: 50%;
+      border: 2px solid var(--accent); background: rgba(8,6,14,.75);
+      color: var(--accent); cursor: pointer; font-size: 14px;
+    }
+    .help-toggle:active { transform: scale(0.94); }
+    .help {
+      position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
+      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
+      letter-spacing: 0.06em; color: var(--text-muted);
+      background: rgba(8,6,14,.9); border: 1px solid var(--border); pointer-events: none;
+    }
+    .help[hidden] { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="game-root letterbox">
+  <div class="game-root">
     <div class="game-world"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>标题斜切菜单进入战斗 · 底栏点按指令 · 设置/读档用屏幕按钮关闭</div>
+
       <div id="menu-root">
         <div class="poster-float">
-          <div class="poster-inner panel-clipped">
+          <div class="poster-inner">
             <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
             <div class="poster-title">幻影之刃</div>
             <span class="badge accent">第四章</span>
-            <img src="../../assets/_shared/kenney/icons/star.png" alt="" style="width:24px;height:24px" />
           </div>
         </div>
-
         <div class="menu-stack">
-          <div class="menu-list">
-            <button type="button" class="menu-item-large primary" id="btn-start">开始</button>
-            <button type="button" class="menu-item-large" id="btn-load">读取</button>
-            <button type="button" class="menu-item-large" id="btn-config">设置</button>
-            <button type="button" class="menu-item-large" id="btn-exit">退出</button>
-          </div>
+          <button type="button" class="slash primary" id="btn-start" aria-label="开始">
+            <img src="../../assets/_shared/rpg-icons/battle.png" alt="" /><span>开始</span>
+          </button>
+          <button type="button" class="slash" id="btn-load" aria-label="读取">
+            <img src="../../assets/_shared/rpg-icons/book.png" alt="" /><span>读取</span>
+          </button>
+          <button type="button" class="slash" id="btn-config" aria-label="设置">
+            <img src="../../assets/_shared/kenney/icons/gear.png" alt="" /><span>设置</span>
+          </button>
+          <button type="button" class="slash" id="btn-exit" aria-label="退出">
+            <img src="../../assets/_shared/rpg-icons/cancel.png" alt="" /><span>退出</span>
+          </button>
         </div>
       </div>
 
       <div id="battle-layer" hidden>
         <div class="log-line" id="battle-log">点按指令条行动</div>
-        <div class="battle-stage">
+        <div class="battle-top">
           <div class="foe-card" id="foe-card">
             <img src="../../assets/_shared/rpg-icons/bow.png" alt="" />
             <div class="name" id="foe-name">影狼</div>
@@ -136,29 +170,28 @@
           </div>
         </div>
         <div class="cmd-bar">
-          <button type="button" class="btn btn-primary" id="cmd-atk">攻击</button>
-          <button type="button" class="btn" id="cmd-skill">技能</button>
-          <button type="button" class="btn" id="cmd-item">道具</button>
-          <button type="button" class="btn btn-danger" id="cmd-run">逃跑</button>
+          <button type="button" class="cmd primary" id="cmd-atk" aria-label="攻击">
+            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>攻击</span>
+          </button>
+          <button type="button" class="cmd" id="cmd-skill" aria-label="技能">
+            <img src="../../assets/_shared/rpg-icons/fire.png" alt="" /><span>技能</span>
+          </button>
+          <button type="button" class="cmd" id="cmd-item" aria-label="道具">
+            <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>道具</span>
+          </button>
+          <button type="button" class="cmd danger" id="cmd-run" aria-label="逃跑">
+            <img src="../../assets/_shared/rpg-icons/boots.png" alt="" /><span>逃跑</span>
+          </button>
         </div>
       </div>
 
       <div id="config-panel" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
         <div class="panel-title">设置</div>
         <div class="panel-body">
-          <div class="toggle-row">
-            <span>语音台词</span>
-            <button type="button" class="btn btn-success" data-toggle="voice" data-on="true">开</button>
-          </div>
-          <div class="toggle-row">
-            <span>战斗动画</span>
-            <button type="button" class="btn" data-toggle="anim" data-on="false">关</button>
-          </div>
-          <div class="toggle-row">
-            <span>自动保存</span>
-            <button type="button" class="btn btn-success" data-toggle="save" data-on="true">开</button>
-          </div>
-          <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%">关闭</button>
+          <div class="toggle-row"><span>语音台词</span><button type="button" class="btn btn-success" data-toggle="voice" data-on="true">开</button></div>
+          <div class="toggle-row"><span>战斗动画</span><button type="button" class="btn" data-toggle="anim" data-on="false">关</button></div>
+          <div class="toggle-row"><span>自动保存</span><button type="button" class="btn btn-success" data-toggle="save" data-on="true">开</button></div>
+          <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
         </div>
       </div>
 
@@ -166,15 +199,15 @@
         <div class="panel frame-brackets" style="min-width:280px">
           <div class="panel-title">读取存档</div>
           <div class="panel-body">
-            <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px">槽位 1 · 米德加 14:32</button>
-            <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px">槽位 2 · 空</button>
-            <button type="button" class="btn btn-ghost" id="load-close" style="width:100%">取消</button>
+            <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px;min-height:44px">槽位 1 · 米德加 14:32</button>
+            <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px;min-height:44px">槽位 2 · 空</button>
+            <button type="button" class="btn btn-ghost" id="load-close" style="width:100%;min-height:44px">取消</button>
           </div>
         </div>
       </div>
 
       <div id="loading-overlay" hidden>
-        <div class="panel frame-brackets" style="min-width:300px;text-align:center">
+        <div class="panel frame-brackets" style="min-width:280px;text-align:center">
           <div class="panel-title">加载中</div>
           <div class="progress progress-linear" style="height:14px;margin:16px 0">
             <div id="load-bar" class="progress-fill" style="width:0%"></div>
@@ -182,20 +215,12 @@
           <span class="badge" id="load-status">正在准备资源…</span>
         </div>
       </div>
-
-      <p class="hint" id="hint">开始进入战斗 · 点按底栏指令 · 设置可开关</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
-    const state = {
-      heroHp: 72, heroHpMax: 72,
-      heroMp: 22, heroMpMax: 40,
-      foeHp: 40, foeHpMax: 40,
-      busy: false,
-      potions: 2,
-    };
+    const state = { heroHp: 72, heroHpMax: 72, heroMp: 22, heroMpMax: 40, foeHp: 40, foeHpMax: 40, busy: false, potions: 2 };
 
     function syncBars() {
       sk.setFill(sk.$("#hero-hp-fill"), (state.heroHp / state.heroHpMax) * 100);
@@ -205,59 +230,51 @@
       sk.setFill(sk.$("#foe-hp-fill"), (state.foeHp / state.foeHpMax) * 100);
       sk.setText(sk.$("#foe-hp-val"), String(state.foeHp));
     }
-
-    function setLog(msg) {
-      sk.setText(sk.$("#battle-log"), msg);
-    }
+    function setLog(msg) { sk.setText(sk.$("#battle-log"), msg); }
 
     function enterBattle() {
-      state.heroHp = 72;
-      state.heroMp = 22;
-      state.foeHp = 40;
-      state.potions = 2;
-      state.busy = false;
+      Object.assign(state, { heroHp: 72, heroMp: 22, foeHp: 40, potions: 2, busy: false });
       sk.$("#menu-root").hidden = true;
       sk.$("#battle-layer").hidden = false;
-      sk.setText(sk.$("#hint"), "点按：攻击 / 技能 / 道具 / 逃跑");
       syncBars();
       setLog("遭遇影狼！选择指令");
     }
-
-    function returnMenu(toastMsg) {
+    function returnMenu(msg) {
       sk.$("#battle-layer").hidden = true;
       sk.$("#menu-root").hidden = false;
-      sk.setText(sk.$("#hint"), "开始进入战斗 · 点按底栏指令 · 设置可开关");
-      if (toastMsg) sk.toast(toastMsg, "success");
+      if (msg) sk.toast(msg, "success");
     }
-
     function foeTurn() {
       if (state.foeHp <= 0) return;
       const dmg = 6 + Math.floor(Math.random() * 5);
       state.heroHp = Math.max(0, state.heroHp - dmg);
       syncBars();
       setLog("影狼反击 −" + dmg);
-      sk.pulse(sk.$("#hero-hp-fill"));
+      sk.$("#vignette").classList.add("on");
+      setTimeout(() => sk.$("#vignette").classList.remove("on"), 280);
       if (state.heroHp <= 0) {
         state.busy = true;
         setLog("幻影倒下了…");
         setTimeout(() => returnMenu("战斗失败，回到标题"), 700);
-      } else {
-        state.busy = false;
-      }
+      } else state.busy = false;
     }
-
     function afterPlayerAct(msg) {
-      setLog(msg);
-      syncBars();
+      setLog(msg); syncBars();
       if (state.foeHp <= 0) {
         state.busy = true;
         setLog("影狼倒下！胜利");
-        sk.toast("战斗胜利", "success");
         setTimeout(() => returnMenu("章节继续…"), 800);
         return;
       }
       setTimeout(foeTurn, 420);
     }
+
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+    });
 
     sk.on(sk.$("#cmd-atk"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
@@ -267,101 +284,63 @@
       sk.pulse(sk.$("#foe-card"));
       afterPlayerAct("攻击命中 −" + dmg);
     });
-
     sk.on(sk.$("#cmd-skill"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      if (state.heroMp < 8) {
-        sk.toast("技力不足", "warning");
-        return;
-      }
-      state.busy = true;
-      state.heroMp -= 8;
+      if (state.heroMp < 8) { sk.toast("技力不足", "warning"); return; }
+      state.busy = true; state.heroMp -= 8;
       const dmg = 16 + Math.floor(Math.random() * 5);
       state.foeHp = Math.max(0, state.foeHp - dmg);
       sk.pulse(sk.$("#foe-card"));
       afterPlayerAct("幻影斩 −" + dmg);
     });
-
     sk.on(sk.$("#cmd-item"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      if (state.potions <= 0) {
-        sk.toast("没有恢复药", "warning");
-        return;
-      }
-      state.busy = true;
-      state.potions -= 1;
-      const heal = 18;
-      state.heroHp = Math.min(state.heroHpMax, state.heroHp + heal);
-      afterPlayerAct("使用恢复药 +" + heal + "（剩 " + state.potions + "）");
+      if (state.potions <= 0) { sk.toast("没有恢复药", "warning"); return; }
+      state.busy = true; state.potions -= 1;
+      state.heroHp = Math.min(state.heroHpMax, state.heroHp + 18);
+      afterPlayerAct("使用恢复药 +18（剩 " + state.potions + "）");
     });
-
     sk.on(sk.$("#cmd-run"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      if (Math.random() < 0.55) {
-        returnMenu("成功逃跑");
-      } else {
-        state.busy = true;
-        setLog("逃跑失败！");
-        setTimeout(foeTurn, 380);
-      }
+      if (Math.random() < 0.55) returnMenu("成功逃跑");
+      else { state.busy = true; setLog("逃跑失败！"); setTimeout(foeTurn, 380); }
     });
 
     sk.on(sk.$("#btn-config"), "click", () => sk.openPanel("#config-panel"));
     sk.on(sk.$("#config-close"), "click", () => sk.closePanel("#config-panel"));
-
     sk.$all("[data-toggle]").forEach((btn) => {
       sk.on(btn, "click", () => {
         const on = btn.dataset.on !== "true";
         btn.dataset.on = String(on);
         btn.textContent = on ? "开" : "关";
         btn.className = "btn" + (on ? " btn-success" : "");
-        sk.toast(btn.closest(".toggle-row").querySelector("span").textContent + "：" + (on ? "开" : "关"));
       });
     });
-
-    sk.on(sk.$("#btn-load"), "click", () => {
-      sk.$("#load-overlay").hidden = false;
-    });
-    sk.on(sk.$("#load-close"), "click", () => {
-      sk.$("#load-overlay").hidden = true;
-    });
+    sk.on(sk.$("#btn-load"), "click", () => { sk.$("#load-overlay").hidden = false; });
+    sk.on(sk.$("#load-close"), "click", () => { sk.$("#load-overlay").hidden = true; });
     sk.$all("[data-slot]").forEach((btn) => {
       sk.on(btn, "click", () => {
         sk.$("#load-overlay").hidden = true;
         if (btn.dataset.slot === "2") sk.toast("空槽位", "warning");
-        else {
-          sk.toast("已读取槽位 1", "success");
-          enterBattle();
-        }
+        else enterBattle();
       });
     });
-
     sk.on(sk.$("#btn-start"), "click", () => {
       const overlay = sk.$("#loading-overlay");
       overlay.hidden = false;
       let pct = 0;
-      sk.setText(sk.$("#load-status"), "正在准备资源…");
       const tick = setInterval(() => {
-        pct += 8 + Math.floor(Math.random() * 6);
+        pct += 10 + Math.floor(Math.random() * 8);
         if (pct >= 100) {
-          pct = 100;
           clearInterval(tick);
-          sk.setFill(sk.$("#load-bar"), pct);
+          sk.setFill(sk.$("#load-bar"), 100);
           overlay.hidden = true;
           enterBattle();
-        } else {
-          sk.setFill(sk.$("#load-bar"), pct);
-          if (pct > 50) sk.setText(sk.$("#load-status"), "正在同步队伍…");
-        }
-      }, 120);
+        } else sk.setFill(sk.$("#load-bar"), pct);
+      }, 100);
     });
-
     sk.on(sk.$("#btn-exit"), "click", () => {
-      sk.modal({
-        title: "退出游戏？",
-        body: "当前章节的未保存进度将会丢失。",
-        onConfirm: () => sk.toast("感谢游玩！", "warning"),
-      });
+      sk.modal({ title: "退出游戏？", body: "未保存进度将会丢失。", onConfirm: () => sk.toast("感谢游玩！", "warning") });
     });
   </script>
 </body>

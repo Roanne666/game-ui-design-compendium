@@ -9,77 +9,117 @@
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/survival-horror.css" />
   <style>
-    .game-world { background: radial-gradient(ellipse at 55% 50%, #121010 0%, #050404 75%); }
-    .world-hint {
-      position:absolute; top:18%; left:50%; transform:translateX(-50%);
-      width:min(78%, 260px); text-align:center;
-      font-size:12px; color:var(--text-muted); letter-spacing:.08em;
-      pointer-events:none;
+    .game-world {
+      background:
+        radial-gradient(ellipse at 50% 40%, #1a1212 0%, #080606 70%),
+        #050404;
+    }
+    .game-world::before { opacity: 0.55; }
+    .fog {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background: radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(0,0,0,.55) 100%);
     }
     .door-hotspot {
-      position:absolute; top:42%; left:50%; transform:translate(-50%,-50%);
-      width:72px; height:96px;
-      border:1px solid color-mix(in srgb, var(--border) 55%, transparent);
-      background: color-mix(in srgb, var(--surface) 35%, transparent);
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-      min-width:48px; min-height:48px;
+      position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%);
+      width: 64px; height: 110px;
+      border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(20,12,12,.55) 100%);
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 10px;
+      min-width: 48px; min-height: 48px;
+      opacity: 0.85;
     }
-    .door-hotspot img { width:28px; height:28px; opacity:.75; }
-    .door-hotspot span { font-size:10px; color:var(--text-muted); letter-spacing:.1em; }
+    .door-hotspot img { width: 22px; height: 22px; opacity: 0.55; }
+    .door-hotspot:active { opacity: 1; transform: translate(-50%, -50%) scale(0.97); }
+    .door-hotspot.near {
+      box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+      opacity: 1;
+    }
+
+    .ctx-prompt {
+      position: absolute; left: 50%; top: 58%; transform: translateX(-50%);
+      opacity: 0; transition: opacity 160ms ease-out;
+      font-size: 11px; letter-spacing: 0.16em; color: var(--text-muted);
+      pointer-events: none; z-index: 4;
+    }
+    .ctx-prompt.show { opacity: 1; }
+
     .bag-entry {
-      position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
-      width:64px; height:64px; min-width:48px; min-height:48px;
-      border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      background:var(--surface);
-      border:1px solid var(--border);
-      box-shadow:0 0 18px rgba(0,0,0,.55);
+      position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%);
+      width: 58px; height: 58px; min-width: 48px; min-height: 48px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
     }
-    .bag-entry img { width:28px; height:28px; opacity:.85; }
+    .bag-entry img { width: 26px; height: 26px; opacity: 0.8; }
     .bag-entry .dot {
-      position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%;
-      background:var(--danger);
+      position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--danger); box-shadow: 0 0 6px var(--danger);
     }
-    #inv-modal[hidden] { display:none; }
+    .bag-entry:active { transform: translateX(-50%) scale(0.94); }
+
+    #inv-modal[hidden] { display: none; }
     #inv-modal {
-      position:absolute; inset:0; z-index:25;
-      background:rgba(0,0,0,.72);
-      display:flex; align-items:flex-end; justify-content:center;
+      position: absolute; inset: 0; z-index: 25;
+      background: rgba(0,0,0,.78);
+      display: flex; align-items: flex-end; justify-content: center;
       padding: 12px 12px 28px;
     }
-    .inv-sheet {
-      width:min(92%, 360px);
-      max-height:78%;
-      overflow:auto;
+    .inv-sheet { width: min(92%, 360px); max-height: 78%; overflow: auto; }
+    .spine-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .spine-row .spine-bar-vertical { transform: scale(0.9); transform-origin: center left; }
+    .spine-row img { width: 22px; height: 22px; opacity: 0.7; }
+    .inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .slot img { width: 24px; height: 24px; }
+    .slot { cursor: pointer; min-height: 54px; }
+    .detail { margin-top: 10px; }
+    .detail .btn { padding: 8px 10px; font-size: 11px; min-height: 44px; }
+
+    .feed {
+      position: absolute; top: 52px; left: 12px; width: 55%;
+      z-index: 8; pointer-events: none; font-size: 11px; letter-spacing: 0.08em;
     }
-    .spine-row {
-      display:flex; align-items:center; gap:12px; margin-bottom:12px;
+    .feed div {
+      margin-bottom: 4px; padding: 4px 8px;
+      background: rgba(8,6,6,.8); border: 1px solid var(--border);
+      color: var(--text-muted); animation: fadeFeed 2.4s ease-out forwards;
     }
-    .spine-row .spine-bar-vertical { transform:scale(0.9); transform-origin:center left; }
-    .spine-row img { width:22px; height:22px; opacity:.7; }
-    .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
-    .slot img { width:24px; height:24px; }
-    .slot { cursor:pointer; min-height:54px; }
-    .detail { margin-top:10px; }
-    .detail .btn { padding:8px 10px; font-size:11px; min-height:44px; }
-    .hint {
-      position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
-      font-size:10px; color:var(--text-muted); letter-spacing:.06em;
-      pointer-events:none; width:90%; text-align:center;
+    @keyframes fadeFeed { 0%,70%{opacity:1} 100%{opacity:0} }
+
+    .help-toggle {
+      position: absolute; top: 52px; right: 12px; z-index: 16;
+      width: 32px; height: 32px; padding: 0; border-radius: 2px;
+      border: 1px solid var(--border); background: rgba(8,6,6,.65);
+      color: var(--text-muted); font-size: 13px; cursor: pointer;
     }
+    .help-toggle:active { transform: scale(0.94); }
+    .help {
+      position: absolute; top: 92px; left: 12px; right: 12px; z-index: 15;
+      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
+      letter-spacing: 0.06em; color: var(--text-muted);
+      background: rgba(8,6,6,.9); border: 1px solid var(--border);
+      pointer-events: none;
+    }
+    .help[hidden] { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="game-root letterbox">
+  <div class="game-root">
     <div class="game-world"></div>
+    <div class="fog" aria-hidden="true"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
-      <p class="world-hint">走廊尽头有一扇锁着的门。<br />几乎没有常驻界面——只留背包入口。</p>
+      <div class="feed" id="feed" aria-live="polite"></div>
+      <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
+      <div class="help" id="help" hidden>几乎无常驻界面 · 点门锁检查 · 底中打开脊骨背包 · 钥匙在包内 · 受伤时角标闪红</div>
 
-      <button type="button" class="door-hotspot" id="btn-world-door" aria-label="检查门锁">
+      <button type="button" class="door-hotspot near" id="btn-world-door" aria-label="检查门锁">
         <img src="../../assets/_shared/rpg-icons/door.png" alt="" />
-        <span>门锁</span>
       </button>
+      <div class="ctx-prompt show" id="ctx">检查门锁</div>
 
       <button type="button" class="bag-entry" id="btn-bag" aria-label="打开脊骨背包">
         <img src="../../assets/_shared/rpg-icons/box.png" alt="" />
@@ -118,19 +158,15 @@
             <div class="detail">
               <div class="stat-row"><span class="stat-key">已选</span><span class="stat-val" id="sel-name">—</span></div>
               <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                <button type="button" class="btn btn-primary" id="btn-use">使用物品</button>
-                <button type="button" class="btn" id="btn-door">
-                  <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> 尝试开门
-                </button>
+                <button type="button" class="btn btn-primary" id="btn-use">使用</button>
+                <button type="button" class="btn" id="btn-door">开门</button>
                 <button type="button" class="btn btn-danger" id="btn-hurt">受伤</button>
-                <button type="button" class="btn btn-ghost" id="btn-close-bag" style="flex:1">关闭背包</button>
+                <button type="button" class="btn btn-ghost" id="btn-close-bag" style="flex:1">合上</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <p class="hint">世界探索 · 点按底中背包 · 脊骨仅在背包内显示</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
@@ -140,8 +176,15 @@
     let selectedSlot = null;
     const SEGMENTS = 10;
 
+    function feed(msg) {
+      const el = document.createElement("div");
+      el.textContent = msg;
+      sk.$("#feed").prepend(el);
+      setTimeout(() => el.remove(), 2400);
+    }
+
     function flashVignette() {
-      const v = document.getElementById("vignette");
+      const v = sk.$("#vignette");
       v.classList.add("on");
       setTimeout(() => v.classList.remove("on"), 400);
     }
@@ -167,6 +210,7 @@
 
     function openBag() {
       sk.$("#inv-modal").hidden = false;
+      sk.$("#ctx").classList.remove("show");
       renderSpine();
     }
 
@@ -174,22 +218,30 @@
       sk.$("#inv-modal").hidden = true;
       selectedSlot = null;
       sk.setText(sk.$("#sel-name"), "—");
+      sk.$("#ctx").classList.add("show");
     }
 
     function tryDoor() {
       const hasKey = sk.$('.slot[data-item="key"].has');
       if (hasKey) {
-        sk.toast("门已解锁 — 逃生路线已开启！", "success");
+        feed("锁芯转动了");
         sk.modal({
           title: "维修通道出口",
           body: "钥匙湿漉漉地转动了。冷空气涌了进来。",
-          onConfirm: () => sk.toast("正在保存检查点…"),
+          onConfirm: () => feed("检查点已写入"),
         });
       } else {
-        sk.toast("已上锁 — 需要黄铜钥匙", "danger");
+        feed("上锁 — 需要黄铜钥匙");
         flashVignette();
       }
     }
+
+    sk.on(sk.$("#btn-help"), "click", () => {
+      const help = sk.$("#help");
+      const open = help.hidden;
+      help.hidden = !open;
+      sk.$("#btn-help").setAttribute("aria-expanded", String(open));
+    });
 
     sk.on(sk.$("#btn-bag"), "click", openBag);
     sk.on(sk.$("#btn-close-bag"), "click", closeBag);
@@ -225,32 +277,27 @@
     }
 
     sk.on(sk.$("#btn-use"), "click", () => {
-      if (!selectedSlot || !selectedSlot.dataset.item) {
-        sk.toast("请先选择物品", "warning");
-        return;
-      }
+      if (!selectedSlot || !selectedSlot.dataset.item) { feed("先选一格"); return; }
       if (selectedSlot.dataset.item === "med") {
         hp = Math.min(100, hp + 18);
         renderSpine();
         consumeOne(selectedSlot);
-        sk.toast("医疗包 +18 生命", "success");
+        feed("包扎 +18");
         sk.pulse(sk.$("#spine-bar"));
       } else if (selectedSlot.dataset.item === "key") {
-        sk.toast("钥匙不可消耗 — 在世界中点按门锁", "warning");
+        feed("钥匙留着开门用");
       } else {
-        sk.toast("此处无法使用 " + selectedSlot.dataset.label, "warning");
+        feed("现在用不了");
       }
     });
 
-    sk.on(sk.$("#btn-door"), "click", () => {
-      tryDoor();
-    });
+    sk.on(sk.$("#btn-door"), "click", tryDoor);
 
     sk.on(sk.$("#btn-hurt"), "click", () => {
       hp = Math.max(0, hp - 15);
       renderSpine();
       flashVignette();
-      sk.toast(hp <= 0 ? "生命体征衰竭" : "受伤 −15%", "danger");
+      feed(hp <= 0 ? "生命体征衰竭" : "剧痛 −15%");
     });
 
     renderSpine();
