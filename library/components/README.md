@@ -50,7 +50,7 @@ components/
 }
 ```
 
-例：02 金边在 `hud.css` 的 `:root` 覆写 `--phone-border-color` / `--phone-shadow-inset`。
+例：02 金边在 `scene.css` 的 `:root` 覆写 `--phone-border-color` / `--phone-shadow-inset`。
 
 ## 组件速查(35+)
 

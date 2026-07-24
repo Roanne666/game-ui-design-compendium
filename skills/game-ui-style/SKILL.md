@@ -33,7 +33,7 @@ description: >-
 加载序：
 
 ```
-components.css → phone-frame.css → game-feel.css → ./tokens.css → 可选场景私有 css → scene-kit.js
+components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js
 ```
 
 ---
@@ -49,7 +49,7 @@ components.css → phone-frame.css → game-feel.css → ./tokens.css → 可选
 5. **加载序**（与 pack 路径相同，仅 token 来源不同）：
 
 ```
-components.css → phone-frame.css → game-feel.css → ./tokens.css → scene-kit.js
+components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js
 ```
 
 6. 文案中文；触控语义；禁止统一锁定开火模板、禁止网页壳冒充 HUD

@@ -1,5 +1,5 @@
 /* 9:20 portrait stage + per-dialect mobile layouts
-   Load AFTER hud.css. Phone chrome is phone-frame.css. */
+   Load AFTER scene.css. Phone chrome is phone-frame.css. */
 
 html, body {
   display: flex !important;

@@ -1,0 +1,242 @@
+.game-world {
+  image-rendering: pixelated;
+  background: #1D2B53 center top / cover no-repeat;
+  background-image: url("./assets/battle-bg.png");
+}
+.game-world::before { opacity: 0.1; }
+.game-world::after {
+  box-shadow: inset 0 0 80px 24px rgba(0, 0, 0, 0.45);
+}
+
+.stage {
+  position: absolute;
+  top: 48px; left: 0; right: 0; bottom: 196px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.float-layer {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 6;
+}
+.float-dmg {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000;
+  animation: floatUp 700ms steps(6) forwards;
+  white-space: nowrap;
+}
+.float-dmg.heal { color: var(--success); }
+.float-dmg.miss { color: var(--text-muted); }
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -36px); }
+}
+
+.party {
+  position: absolute; left: 6%; bottom: 6%;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  transition: filter 80ms step-end;
+  z-index: 3;
+}
+.party.flash { filter: brightness(2.2); }
+.party .sprite {
+  width: 108px; height: 128px;
+  object-fit: contain;
+  object-position: center bottom;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 12px rgba(0,0,0,.75));
+  background: transparent !important;
+}
+.party .shadow {
+  width: 56px; height: 10px; margin-top: -6px;
+  background: rgba(0,0,0,.45);
+  border-radius: 50%;
+}
+.party .tag {
+  margin-top: 6px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em;
+  color: var(--text); background: #000; border: 2px solid var(--border);
+  padding: 2px 6px;
+}
+
+/* 敌人压在草地带，不拉满舞台高度（避免史莱姆飞上天） */
+.enemies {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.foe {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 72px;
+  padding: 4px 6px 2px;
+  background: transparent !important; border: none; cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 80ms step-end;
+}
+/* 站位：上→下 右、左、右（敌方纵列错位），全体贴草地 */
+.foe[data-id="slime"] { right: 6%;  bottom: 26%; z-index: 3; } /* 上 · 右 */
+.foe[data-id="bat"]   { right: 28%; bottom: 14%; z-index: 4; } /* 中 · 左 */
+.foe[data-id="orc"]   { right: 8%;  bottom: 3%;  z-index: 5; } /* 下 · 右 */
+.foe.selected { z-index: 6; }
+.foe .sprite {
+  width: 78px; height: 92px;
+  object-fit: contain;
+  object-position: center bottom;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.7));
+  background: transparent !important;
+  transition: filter 80ms step-end, transform 80ms step-end;
+}
+.foe[data-id="bat"] .sprite {
+  width: 96px; height: 56px;
+  object-position: center center;
+}
+.foe[data-id="slime"] .sprite {
+  width: 72px; height: 64px;
+}
+.foe .shadow {
+  width: 40px; height: 8px; margin-top: -4px;
+  background: rgba(0,0,0,.4); border-radius: 50%;
+}
+.foe .name {
+  margin-top: 4px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em;
+  color: var(--text); background: #000; border: 1px solid var(--border);
+  padding: 1px 4px;
+}
+.foe .hp-mini {
+  font-family: var(--font-mono); font-size: 8px; color: var(--text-muted);
+  margin-top: 2px;
+}
+.foe.selected .sprite {
+  filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 8px 10px rgba(0,0,0,.7));
+}
+.foe.selected::before {
+  content: "▶";
+  position: absolute; left: -14px; top: 28%;
+  color: var(--accent); font-size: 12px;
+  text-shadow: 1px 1px 0 #000;
+}
+.foe.hit .sprite { transform: translateX(6px); filter: brightness(2.1); }
+.foe.dead {
+  opacity: 0.28; pointer-events: none;
+}
+.foe.dead::before { content: none; }
+.foe:active:not(.dead) { transform: scale(0.96); }
+
+/* —— SNES 指令窗 —— */
+.battle-window {
+  position: absolute; left: 6px; right: 6px; bottom: 8px;
+  display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 0;
+  background: #000;
+  border: 4px solid var(--border);
+  box-shadow:
+    inset 0 0 0 2px #5F574F,
+    0 4px 0 #000;
+  z-index: 5;
+  min-height: 176px;
+}
+.win-left, .win-right {
+  padding: 8px;
+  min-width: 0;
+}
+.win-right {
+  border-left: 4px solid var(--border);
+  box-shadow: inset 2px 0 0 #5F574F;
+}
+.log-box {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1.55;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  height: 52px;
+  overflow: hidden;
+  border: 2px solid #5F574F;
+  background: #1D2B53;
+  padding: 4px 6px;
+  margin-bottom: 8px;
+}
+.log-box .line { display: block; }
+.log-box .line.dim { color: var(--text-muted); }
+
+.vitals .hud-bar { margin-bottom: 4px; }
+.vitals .hud-bar-label { font-size: 8px; min-width: 28px; }
+.vitals .hud-bar-value { font-size: 9px; }
+.vitals .hud-bar-track { height: 8px; border: 2px solid var(--border); }
+
+.cmds {
+  display: flex; flex-direction: column; gap: 2px;
+  height: 100%;
+}
+.cmds .cmd {
+  display: flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 0 8px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  background: transparent; border: 2px solid transparent;
+  color: var(--text); cursor: pointer; text-align: left;
+  border-radius: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.cmds .cmd .cursor {
+  width: 12px; color: transparent; flex-shrink: 0;
+}
+.cmds .cmd.focus {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cmds .cmd.focus .cursor { color: var(--accent); }
+.cmds .cmd:active { transform: scale(0.98); }
+.cmds .cmd:disabled { opacity: 0.35; pointer-events: none; }
+.cmds .cmd.danger.focus { color: var(--danger); border-color: var(--danger); }
+.cmds .cmd.danger.focus .cursor { color: var(--danger); }
+
+.end-banner {
+  position: absolute; left: 50%; top: 28%; transform: translate(-50%, -50%);
+  z-index: 20; width: min(280px, 86%);
+  background: #000; border: 4px solid var(--accent);
+  box-shadow: inset 0 0 0 2px #5F574F, 0 4px 0 #000;
+  padding: 14px 12px; text-align: center;
+}
+.end-banner[hidden] { display: none !important; }
+.end-banner .title {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em;
+  color: var(--accent); margin-bottom: 8px;
+}
+.end-banner .title.lose { color: var(--danger); border-color: var(--danger); }
+.end-banner .sub {
+  font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);
+  margin-bottom: 12px; line-height: 1.4;
+}
+.end-banner .btn {
+  width: 100%; min-height: 48px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+}
+
+.help-toggle {
+  position: absolute; top: 52px; right: 10px; z-index: 16;
+  width: 36px; height: 36px; min-width: 36px; padding: 0;
+  border-radius: 0; border: 2px solid var(--border);
+  background: #000; color: var(--text);
+  font-family: var(--font-mono); font-size: 14px; cursor: pointer;
+}
+.help-toggle:active { transform: scale(0.94); }
+.help {
+  position: absolute; top: 94px; left: 10px; right: 10px; z-index: 15;
+  padding: 8px 10px; text-align: center;
+  font-family: var(--font-mono); font-size: 9px; line-height: 1.5;
+  letter-spacing: 0.04em; color: var(--text-muted);
+  background: rgba(0,0,0,.9); border: 2px solid var(--border);
+  pointer-events: none;
+}
+.help[hidden] { display: none !important; }
+
+body.battle-over .cmds .cmd { pointer-events: none; opacity: 0.4; }
+body.battle-over .foe { pointer-events: none; }

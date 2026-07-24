@@ -19,5 +19,6 @@
 |------|------|
 | `index.html` | 可打开的最小竖屏 HUD |
 | `tokens.css` | 中性变量；可复制到用户项目后按需改色 |
+| `scene.css` | 本页楼型样式 |
 
 权威规则：`docs/rules/mobile-portrait-first.md`、`docs/rules/game-feel-vs-web.md`。

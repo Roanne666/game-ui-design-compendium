@@ -1,6 +1,6 @@
-/* Style 01 — Cyberpunk gameplay HUD + dialect switcher
+/* Style 01 — Cyberpunk gameplay scene layout + dialect switcher
    Dialects: neo | matrix | amber | noir
-   Self-contained. Do NOT import components.css. */
+   Scene-local CSS after shared stack + tokens.css. */
 
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap");
 

@@ -35,8 +35,13 @@ Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 
 ├── library/                      ← UI 组件库 + 范例
 │   ├── index.html                 ← 入口（packs + generic）
 │   ├── components/                ← 共享建材
-│   ├── packs/                     ← 每风格独立包（有对应时套用）
-│   ├── examples/generic/          ← 无对应时的最小通用 HUD 骨架
+│   ├── packs/<id>/                ← 每风格独立包
+│   │   ├── SPEC.md
+│   │   ├── tokens.css
+│   │   ├── scene.css              ← 场景楼型（从页内 style 外置）
+│   │   ├── index.html
+│   │   └── assets/                ← 可空
+│   ├── examples/generic/          ← 无对应时的最小通用 HUD
 │   ├── assets/                    ← 第三方共享素材与许可
 │   └── previews/                  ← shoot.js 输出（gitignored）
 ├── docs/rules/                    ← 硬规则权威稿
