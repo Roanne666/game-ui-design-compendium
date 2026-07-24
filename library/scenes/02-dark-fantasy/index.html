@@ -31,17 +31,14 @@
         <div class="rest-hint">篝火近前 · 点按休息</div>
       </div>
 
-      <div class="vitals" id="vitals">
-        <div class="vital hp" id="hp-row">
-          <span class="lab">生命</span>
+      <div class="vitals" id="vitals" aria-label="状态">
+        <div class="vital hp" id="hp-row" aria-label="生命">
           <div class="trk"><div class="fill" id="hp-fill"></div></div>
         </div>
-        <div class="vital fp">
-          <span class="lab">集中</span>
+        <div class="vital fp" aria-label="集中">
           <div class="trk"><div class="fill" id="fp-fill"></div></div>
         </div>
-        <div class="vital st">
-          <span class="lab">耐力</span>
+        <div class="vital st" aria-label="耐力">
           <div class="trk"><div class="fill" id="st-fill"></div></div>
         </div>
       </div>
@@ -54,10 +51,10 @@
       <div class="prompt" id="prompt"></div>
       <div id="feed"></div>
 
-      <div class="slate" id="slate">
-        <h2>篝火</h2>
-        <button type="button" id="slate-rest">休息</button>
-        <button type="button" id="slate-leave">离开</button>
+      <div class="slate" id="slate" role="dialog" aria-label="篝火">
+        <div class="slate-title">篝火</div>
+        <button type="button" class="slate-line" id="slate-rest">休息</button>
+        <button type="button" class="slate-line" id="slate-leave">离开</button>
       </div>
 
       <div class="touch-pad">
