@@ -115,6 +115,6 @@
 - 竖屏与玩法矩阵：[`mobile-portrait-first.md`](./mobile-portrait-first.md)  
 - 风格互斥（调研）：[`research/synthesis/style-boundaries.md`](../../research/synthesis/style-boundaries.md)  
 - 实现：`library/components/game-feel.css`、`phone-frame.css`  
-- 正例场景：`library/scenes/05-hand-drawn/index.html`（羊皮纸献礼台）
+- 正例场景：`library/packs/05-hand-drawn/index.html`（羊皮纸献礼台）
 
 Refs: Fagerholt & Lorentzon 2009；Nasty Rodent 四层 UI；本仓库 05 迭代（去卡片栏 → 去光泽圆钮 → 去 button 白底）。

@@ -13,22 +13,25 @@
 
 场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 [`docs/rules/game-feel-vs-web.md`](docs/rules/game-feel-vs-web.md)（含控件同语汇、反 Material 底栏）。
 
-- 共享：`library/components/components.css` + `library/components/phone-frame.css` + `library/components/game-feel.css` + `library/components/scene-kit.js` + `library/components/styles/<name>.css`
-- 独占：`library/scenes/<style>/index.html`——**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
+- 共享：`library/components/components.css` + `library/components/phone-frame.css` + `library/components/game-feel.css` + `library/components/scene-kit.js`
+- 风格包：`library/packs/<id>/`——Spec、Token、专属素材与**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
 - 美术：`library/assets/`（CC0 / CC-BY 等开放许可，见 `library/assets/CREDITS.md`）
 - **禁止**用「同一套页面换 CSS」或统一动作条作为风格验收标准；**禁止**商业游戏官方/Rip 素材
 - **禁止**以键鼠快捷键为玩家主操作路径（调试捷径可保留）
 
 ```
 游戏UI设计大全/
-├── styles/                        ← 10 套风格 spec（含适用游戏类型）
 ├── library/                      ← UI 组件库 + 范例
-│   ├── components/                ← 共享组件 + Token
-│   ├── scenes/                    ← 每风格独占主场景（竖屏）
-│   ├── assets/                    ← 第三方 + 项目生成
+│   ├── index.html                 ← 10 套风格入口表
+│   ├── components/                ← 共享建材
+│   ├── packs/                     ← 每风格独立包
+│   │   └── <nn-style>/
+│   │       ├── SPEC.md            ← 参数化风格规范
+│   │       ├── tokens.css         ← 风格 Token
+│   │       ├── index.html         ← 竖屏触控主场景
+│   │       └── assets/            ← 该风格专属素材
+│   ├── assets/                    ← 第三方共享素材与许可
 │   └── previews/                  ← shoot.js 输出（gitignored）
-│       ├── index.html
-│       └── <nn-style>/<main>.html
 ├── research/                      ← 研究与互斥边界 / 竖屏准则
 └── tools/                         ← 截图等工具
 ```
@@ -37,15 +40,15 @@
 
 ### 1. 读 Spec
 
-打开 `styles/01-cyberpunk-hud.md`，先看「适用游戏类型」再看色彩/几何/动效。
+打开 `library/packs/01-cyberpunk-hud/SPEC.md`，先看「适用游戏类型」再看色彩/几何/动效。
 
 ### 2. 用手机或 DevTools 竖屏玩场景
 
-打开 `library/scenes/index.html` → 某风格 `index.html`。优先用 **手机框 9:20 + 触控**；验收看该类型玩法是否成立，不要按「每套都是锁定开火」习惯验收。
+打开 `library/index.html` → 某风格包的 `index.html`。优先用 **手机框 9:20 + 触控**；验收看该类型玩法是否成立，不要按「每套都是锁定开火」习惯验收。
 
 ### 3. 用组件库做建材
 
-复制 `library/components/components.css` + 目标 `library/components/styles/<name>.css`，按**该类型游戏**的信息架构写页面，复用类名即可；控件热区按触控尺寸设计。
+复制共享建材，并引用目标 `library/packs/<id>/tokens.css`，按**该类型游戏**的信息架构写页面，复用类名即可；控件热区按触控尺寸设计。
 
 ## 10 套风格 × 锚定游戏类型
 
@@ -110,10 +113,10 @@
 
 ## 添加新风格
 
-1. 写 `styles/<number>-<name>.md`（含适用游戏类型）
-2. 写 `library/components/styles/<name>.css` 覆写 `:root`
-3. 在 `library/scenes/<number>-<name>/` 写**该类型**主场景 HTML（不要复用其他风格的 DOM 骨架）
-4. 把入口加到 `library/scenes/index.html`
+1. 新建 `library/packs/<number>-<name>/SPEC.md`（含适用游戏类型）
+2. 在同一 pack 写 `tokens.css` 覆写 `:root`
+3. 在同一 pack 写**该类型**主场景 `index.html`（不要复用其他风格的 DOM 骨架）
+4. 把入口加到 `library/index.html`
 
 ## 许可
 

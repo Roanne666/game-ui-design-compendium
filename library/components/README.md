@@ -1,6 +1,6 @@
 # Components — 共享建材层
 
-**角色：建材层。** 场景布局在 `library/scenes/<style>/`，按游戏类型独占编写。
+**角色：共享建材层。** 每套风格的 Spec、Token、场景与专属素材集中在 `library/packs/<id>/`，按游戏类型独占编写。
 
 **交付形态：移动端竖屏 + 触控**（见仓库根 `docs/rules/mobile-portrait-first.md`）。共享组件的热区与状态应以触控为准，不依赖 hover。
 
@@ -12,9 +12,10 @@ components/
 ├── phone-frame.css          # 9:20 手机壳 + bezel + 9:20 锁帧（可主题化）
 ├── game-feel.css            # HUD 层 / vignette / 锚点 / reticle
 ├── scene-kit.js             # 交互 helper（toast / modal / pulse / 锚点）
-├── styles/<name>.css ×10    # 10 套 token 覆写 :root
 └── README.md
 ```
+
+风格 Token 位于各 `library/packs/<id>/tokens.css`，不再由共享目录集中维护。
 
 ## 加载顺序
 
@@ -22,15 +23,17 @@ components/
 <link rel="stylesheet" href="../../components/components.css" />
 <link rel="stylesheet" href="../../components/phone-frame.css" />
 <link rel="stylesheet" href="../../components/game-feel.css" />
-<link rel="stylesheet" href="../../components/styles/<name>.css" />
+<link rel="stylesheet" href="./tokens.css" />
 <script src="../../components/scene-kit.js"></script>
 ```
 
+以上示例以 `library/packs/<id>/index.html` 为当前位置。
+
 ## 自建页面
 
-1. 打开 `library/scenes/index.html` 选风格 → 用手机或 DevTools **竖屏**进入主场景
+1. 打开 `library/index.html` 选风格 → 用手机或 DevTools **竖屏**进入主场景
 2. 自建页面：引用上面四个 CSS + scene-kit.js，按 Spec「适用游戏类型」设计信息架构；控件 ≥44px 热区
-3. 新风格：加 Token + 新场景目录 + 登记 index；**不要**复制其他风格的整页 DOM 再换 link
+3. 新风格：新增完整 pack（`SPEC.md`、`tokens.css`、`index.html`）并登记入口；**不要**复制其他风格的整页 DOM 再换 link
 
 ## phone-frame.css 可覆写变量
 
