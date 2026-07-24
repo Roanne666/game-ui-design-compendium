@@ -88,14 +88,27 @@
       font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
       color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;
     }
+    .pad .t-btn {
+      appearance: none; -webkit-appearance: none;
+      box-sizing: border-box;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 0 8px; margin: 0; outline: none; overflow: hidden;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pad .t-btn img {
+      width: 22px; height: 22px; max-width: 22px; max-height: 22px;
+      object-fit: contain; flex-shrink: 0; pointer-events: none;
+    }
     .stance-row { display: flex; gap: 4px; }
     .stance-row .t-btn {
       flex: 1; min-height: 44px; padding: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-      background: transparent; border: 1px solid var(--border); color: var(--text);
-      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; cursor: pointer;
+      flex-direction: column; gap: 2px;
+      font-size: 9px; letter-spacing: 0.06em;
     }
-    .stance-row .t-btn img { width: 22px; height: 22px; object-fit: contain; opacity: 0.9; }
+    .stance-row .t-btn img { width: 20px; height: 20px; max-width: 20px; max-height: 20px; opacity: 0.9; }
     .stance-row .t-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
     .stance-row .t-btn:active { transform: scale(0.94); }
 
@@ -103,14 +116,17 @@
     .stm .hud-bar-track { flex: 1; height: 6px; }
     .stm .badge { font-size: 10px; }
 
+    #btn-sprint {
+      width: 100%; margin-top: 8px; min-height: 44px;
+    }
+    #btn-sprint:active { transform: scale(0.94); background: var(--accent-soft); }
+
     .fire-stack { display: flex; flex-direction: column; gap: 6px; }
     .fire-stack .t-btn {
-      min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: transparent; border: 1px solid var(--border); color: var(--text);
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; cursor: pointer;
+      min-height: 48px;
     }
     .fire-stack .t-btn.primary { border-color: var(--accent); color: var(--accent); min-height: 56px; }
-    .fire-stack .t-btn img { width: 26px; height: 18px; object-fit: contain; }
+    .fire-stack .t-btn img { width: 26px; height: 18px; max-width: 26px; max-height: 18px; }
     .fire-stack .t-btn:active { transform: scale(0.94); background: var(--accent-soft); }
     .fire-stack .t-btn:disabled { opacity: 0.35; }
 
@@ -201,7 +217,7 @@
             <div class="hud-bar-track"><div id="stm-fill" class="hud-bar-fill success" style="width:100%"></div></div>
             <span id="stm-val" class="badge">100</span>
           </div>
-          <button type="button" class="t-btn" id="btn-sprint" aria-label="冲刺" style="width:100%;margin-top:8px;min-height:44px">
+          <button type="button" class="t-btn" id="btn-sprint" aria-label="冲刺">
             <img src="../../assets/project/09-tactical-military/icons/icon-sprint.png" alt="" draggable="false" /><span>冲刺</span>
           </button>
         </div>
