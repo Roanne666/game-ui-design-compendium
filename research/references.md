@@ -116,6 +116,6 @@
 ## 研究综合 / 项目准则
 
 - [风格互斥边界](./synthesis/style-boundaries.md)
-- [游戏感 vs 网页壳 — 通用 UI 思路](./synthesis/game-feel-vs-web.md) — 反网页壳、控件同语汇、05 正反例
+- [游戏感 vs 网页壳 — 通用 UI 思路](../docs/rules/game-feel-vs-web.md) — 实践规则：反网页壳、控件同语汇
 - [赛博朋克 UI 全景](./synthesis/cyberpunk-ui-landscape.md)
 - [移动端竖屏优先（硬规则）](../docs/rules/mobile-portrait-first.md) — 9:20 + 触控 + 类型玩法矩阵

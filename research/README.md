@@ -11,10 +11,9 @@
 ## 当前 synthesis
 
 - `style-boundaries.md` — 10 套风格的互斥边界（核心特征对比表）
-- `game-feel-vs-web.md` — 游戏感 vs 网页壳（通用 UI 思路：同语汇控件、反 Material 底栏）
 - `cyberpunk-ui-landscape.md` — 赛博朋克 UI 视觉调研
 
 ## 注意
 
 - 不要把已落地为项目规则的文档留在这里。
-- `mobile-portrait-first.md`（含 9:20 + 类型矩阵）已移至 `docs/rules/`，那里是它的归宿。
+- `mobile-portrait-first.md`（含 9:20 + 类型矩阵）与 `game-feel-vs-web.md`（游戏感 / 同语汇）已移至 [`docs/rules/`](../docs/rules/)，那里是它们的归宿。

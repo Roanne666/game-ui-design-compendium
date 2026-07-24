@@ -8,6 +8,7 @@
 ## 当前 rules
 
 - `mobile-portrait-first.md` — 9:20 + 触控 + 类型 → 布局 / 玩法矩阵（权威）
+- `game-feel-vs-web.md` — 游戏感 vs 网页壳（控件同语汇、反 Material 底栏）
 
 ## 区分
 

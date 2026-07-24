@@ -1,8 +1,8 @@
 # 游戏感 vs 网页壳 — 通用 UI 思路
 
-> 场景必须是「盖在游戏世界上的 HUD」，不是落地页 / SaaS 面板。  
-> 硬规则（9:20、玩法矩阵、触控）见 [`docs/rules/mobile-portrait-first.md`](../../docs/rules/mobile-portrait-first.md)。  
-> 本文是可跨风格复用的**观感与控件语汇**原则；05 手绘恩赐台是近期正反例来源。
+> **实践得出的规则**：场景必须是「盖在游戏世界上的 HUD」，不是落地页 / SaaS 面板。  
+> 与 [`mobile-portrait-first.md`](./mobile-portrait-first.md)（9:20、玩法矩阵、触控）并列遵守。  
+> 05 手绘恩赐台是近期正反例来源；原则可跨风格复用。
 
 ---
 
@@ -93,7 +93,7 @@
 
 ## 6. 验收（盲测以外的观感测）
 
-1. 截掉帮助文案后，能否完成该类型矩阵循环？（规则已有）  
+1. 截掉帮助文案后，能否完成该类型矩阵循环？（见 `mobile-portrait-first.md`）  
 2. 把主操作截出来单独看：像**世界里的物件**，还是像**后台管理系统按钮**？  
 3. 选项区与底栏是否同一材质家族？有无「插画 + 现代 CTA」混排？  
 4. 放大到 200%：控件边缘有无系统白底、未透明的矩形角？  
@@ -106,14 +106,14 @@
 - 05：圆角卡片列表 + `.btn` 双栏 → 网页表单感  
 - 05：火漆光泽圆钮混羊皮纸 → 语汇破裂  
 - 05：`button` 默认底色 + 轻撕边 → 白角方块  
-- 全库：为「统一」给 03/04/05/07/08/10 硬套锁定开火双圆键 → 玩法污染（见规则矩阵）
+- 全库：为「统一」给 03/04/05/07/08/10 硬套锁定开火双圆键 → 玩法污染（见玩法矩阵）
 
 ---
 
 ## 8. 相关
 
-- 硬规则与玩法矩阵：[`docs/rules/mobile-portrait-first.md`](../../docs/rules/mobile-portrait-first.md)  
-- 风格互斥：[`style-boundaries.md`](./style-boundaries.md)  
+- 竖屏与玩法矩阵：[`mobile-portrait-first.md`](./mobile-portrait-first.md)  
+- 风格互斥（调研）：[`research/synthesis/style-boundaries.md`](../../research/synthesis/style-boundaries.md)  
 - 实现：`library/components/game-feel.css`、`phone-frame.css`  
 - 正例场景：`library/scenes/05-hand-drawn/index.html`（羊皮纸献礼台）
 
