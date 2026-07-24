@@ -118,7 +118,7 @@ html, body {
   inset: -5%;
   transition: transform 80ms linear;
   background: #050508 center/cover no-repeat;
-  background-image: url("./art/street-bg.png");
+  background-image: url("../../assets/project/01-cyberpunk-hud/street-bg.png");
 }
 #rain {
   position: absolute;
