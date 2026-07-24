@@ -1,5 +1,6 @@
 // Screenshot genre-bound interactive scenes (puppeteer-core + local Chrome)
 // Usage: node tools/shoot.js
+// Outputs PNG to library/previews/<style>.png (gitignored).
 
 const puppeteer = require('puppeteer-core');
 const path = require('path');
@@ -43,10 +44,13 @@ async function shootOne(browser, url, out, h = 800) {
     args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
   });
   try {
+    const sceneRoot = path.join(root, 'library', 'scenes');
+    const previewRoot = path.join(root, 'library', 'previews');
+    fs.mkdirSync(previewRoot, { recursive: true });
     for (const dir of scenes) {
-      const sceneDir = path.join(root, 'demo', 'scenes', dir);
+      const sceneDir = path.join(sceneRoot, dir);
       const url = 'file:///' + path.join(sceneDir, 'index.html').replace(/\\/g, '/');
-      const out = path.join(sceneDir, 'preview.png');
+      const out = path.join(previewRoot, dir + '.png');
       await shootOne(browser, url, out);
       console.log('shot', dir);
     }

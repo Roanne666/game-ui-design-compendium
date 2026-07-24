@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>手绘风 — 恩赐选择</title>
+  <link rel="stylesheet" href="../../components/components.css" />
+  <link rel="stylesheet" href="../../components/phone-frame.css" />
+    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/styles/hand-drawn.css" />
+  <style>
+    .title-overlay {
+      position:absolute; top:14%; left:50%; transform:translateX(-50%);
+      text-align:center; pointer-events:none;
+    }
+    .title-overlay .title { font-family:var(--font-display); font-size:28px; margin:0 0 8px; text-shadow:2px 2px 0 var(--shadow-color); }
+    .title-overlay .subtitle { color:var(--text-muted); margin:0; font-size:14px; }
+    .boon-row {
+      position:absolute; bottom:28%; left:50%; transform:translateX(-50%);
+      display:flex; gap:16px; flex-wrap:wrap; justify-content:center; max-width:92vw;
+    }
+    .boon-card {
+      border:2px solid var(--border); background:var(--surface); border-radius:var(--radius-lg);
+      padding:16px; cursor:pointer; text-align:center; transition:transform .12s, border-color .12s;
+      width:min(220px,28vw); min-width:160px;
+    }
+    .boon-card:hover { transform:rotate(-1deg) scale(1.02); border-color:var(--accent); }
+    .boon-card.selected { border-color:var(--accent); background:var(--accent-soft); box-shadow:4px 4px 0 var(--shadow-color); }
+    .boon-card img { width:56px; height:56px; margin-bottom:10px; }
+    .boon-card h3 { margin:0 0 6px; font-size:15px; font-family:var(--font-display); }
+    .boon-card p { margin:0; font-size:12px; color:var(--text-muted); line-height:1.4; }
+    .action-bar {
+      position:absolute; bottom:12%; left:50%; transform:translateX(-50%);
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center;
+    }
+    [data-sk-panel] { position:absolute; left:50%; top:38%; transform:translate(-50%,0); width:min(400px,90vw); z-index:20; }
+    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); pointer-events:none; }
+  </style>
+</head>
+<body>
+  <div class="game-root letterbox">
+    <div class="game-world"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="game-hud">
+      <div class="title-overlay">
+        <h1 class="title">选择你的恩赐</h1>
+        <p class="subtitle">诸神提供三条道路 — 择一，再领取下一份祝福。</p>
+      </div>
+
+      <div class="boon-row" id="boon-nodes">
+        <button type="button" class="boon-card" data-boon="strike" data-next="你的利刃渴求鲜血 — 冲刺斩击攻速 +15%。">
+          <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
+          <h3>赫尔墨斯之击</h3>
+          <p>冲刺攻击造成额外伤害并留下墨迹轨迹。</p>
+        </button>
+        <button type="button" class="boon-card selected" data-boon="ward" data-next="神盾绽放 — 完美格挡每次恢复 8 生命。">
+          <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
+          <h3>神盾守护</h3>
+          <p>完美格挡治疗并击退附近敌人。</p>
+        </button>
+        <button type="button" class="boon-card" data-boon="flux" data-next="混沌涌动 — 特技冷却 −20%，每次施放随机元素。">
+          <img src="../../assets/_shared/rpg-icons/fire.png" alt="" />
+          <h3>混沌余烬</h3>
+          <p>特技轮换元素，击杀返还魔力。</p>
+        </button>
+      </div>
+
+      <div class="action-bar">
+        <button type="button" class="btn btn-primary" id="btn-confirm">
+          <img src="../../assets/_shared/kenney/icons/checkmark.png" alt="" style="width:18px;height:18px" /> 确认恩赐
+        </button>
+        <button type="button" class="btn" id="btn-reroll">
+          <img src="../../assets/_shared/kenney/icons/gear.png" alt="" style="width:18px;height:18px" /> 重新抽取
+        </button>
+        <span class="badge" id="pick-label">已选：神盾守护</span>
+      </div>
+
+      <div id="boon-result" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
+        <div class="panel-title">下一恩赐 · 尾声</div>
+        <div class="panel-body" id="boon-text">—</div>
+        <button type="button" class="btn btn-success" id="btn-continue" style="margin-top:12px">继续征程</button>
+      </div>
+
+      <p class="hint">选择卡片 · 确认 · 阅读下一恩赐 · 重新抽取或继续</p>
+    </div>
+  </div>
+  <script src="../../components/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let selected = sk.$(".boon-card.selected");
+    const rerollPool = [
+      { icon: "potion.png", name: "花蜜啜饮", desc: "药水持续恢复生命。", next: "活力滴注 — 使用药水后 8 秒内每秒恢复 2 生命。" },
+      { icon: "bow.png", name: "阿尔忒弥斯之触", desc: "远程暴击穿透一名敌人。", next: "穿透射击 — 暴击以 50% 伤害连锁第二名目标。" },
+      { icon: "key.png", name: "万能钥匙", desc: "解锁隐藏密室。", next: "本区域地图显示秘密通道。" },
+    ];
+
+    sk.$all(".boon-card").forEach((card) => {
+      sk.on(card, "click", () => {
+        sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
+        card.classList.add("selected");
+        selected = card;
+        sk.setText(sk.$("#pick-label"), "已选：" + card.querySelector("h3").textContent);
+        sk.pulse(card);
+      });
+    });
+
+    sk.on(sk.$("#btn-confirm"), "click", () => {
+      if (!selected) {
+        sk.toast("请先选择恩赐", "warning");
+        return;
+      }
+      sk.setText(sk.$("#boon-text"), selected.dataset.next);
+      sk.openPanel("#boon-result");
+      sk.toast("恩赐已领取：" + selected.dataset.boon, "success");
+      sk.pulse(selected);
+    });
+
+    sk.on(sk.$("#btn-reroll"), "click", () => {
+      const cards = sk.$all(".boon-card");
+      cards.forEach((card, i) => {
+        const pick = rerollPool[i % rerollPool.length];
+        card.querySelector("img").src = "../../assets/_shared/rpg-icons/" + pick.icon;
+        card.querySelector("h3").textContent = pick.name;
+        card.querySelector("p").textContent = pick.desc;
+        card.dataset.boon = pick.name.toLowerCase().replace(/\s+/g, "-");
+        card.dataset.next = pick.next;
+      });
+      sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
+      cards[1].classList.add("selected");
+      selected = cards[1];
+      sk.setText(sk.$("#pick-label"), "已选：" + selected.querySelector("h3").textContent);
+      sk.closePanel("#boon-result");
+      sk.toast("已刷新恩赐选项", "warning");
+    });
+
+    sk.on(sk.$("#btn-continue"), "click", () => {
+      sk.closePanel("#boon-result");
+      sk.toast("进入下一密室…", "success");
+    });
+  </script>
+</body>
+</html>

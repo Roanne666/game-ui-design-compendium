@@ -13,18 +13,20 @@
 
 场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 `research/synthesis/game-feel-vs-web.md`。
 
-- 共享：`demo/lib/components.css` + `demo/lib/styles/<name>.css` + `demo/lib/scene-kit.js` + `demo/lib/game-feel.css`
-- 独占：`demo/scenes/<style>/index.html`——**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
-- 美术：`demo/assets/`（CC0 / CC-BY 等开放许可，见 `demo/assets/CREDITS.md`）
+- 共享：`library/components/components.css` + `library/components/phone-frame.css` + `library/components/game-feel.css` + `library/components/scene-kit.js` + `library/components/styles/<name>.css`
+- 独占：`library/scenes/<style>/index.html`——**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
+- 美术：`library/assets/`（CC0 / CC-BY 等开放许可，见 `library/assets/CREDITS.md`）
 - **禁止**用「同一套页面换 CSS」或统一动作条作为风格验收标准；**禁止**商业游戏官方/Rip 素材
 - **禁止**以键鼠快捷键为玩家主操作路径（调试捷径可保留）
 
 ```
 游戏UI设计大全/
 ├── styles/                        ← 10 套风格 spec（含适用游戏类型）
-├── demo/
-│   ├── lib/                       ← 共享组件 + Token
-│   └── scenes/                    ← 每风格独占主场景（竖屏）
+├── library/                      ← UI 组件库 + 范例
+│   ├── components/                ← 共享组件 + Token
+│   ├── scenes/                    ← 每风格独占主场景（竖屏）
+│   ├── assets/                    ← 第三方 + 项目生成
+│   └── previews/                  ← shoot.js 输出（gitignored）
 │       ├── index.html
 │       └── <nn-style>/<main>.html
 ├── research/                      ← 研究与互斥边界 / 竖屏准则
@@ -39,11 +41,11 @@
 
 ### 2. 用手机或 DevTools 竖屏玩场景
 
-打开 `demo/scenes/index.html` → 某风格 `index.html`。优先用 **手机框 9:20 + 触控**；验收看该类型玩法是否成立，不要按「每套都是锁定开火」习惯验收。
+打开 `library/scenes/index.html` → 某风格 `index.html`。优先用 **手机框 9:20 + 触控**；验收看该类型玩法是否成立，不要按「每套都是锁定开火」习惯验收。
 
 ### 3. 用组件库做建材
 
-复制 `demo/lib/components.css` + 目标 `lib/styles/<name>.css`，按**该类型游戏**的信息架构写页面，复用类名即可；控件热区按触控尺寸设计。
+复制 `library/components/components.css` + 目标 `library/components/styles/<name>.css`，按**该类型游戏**的信息架构写页面，复用类名即可；控件热区按触控尺寸设计。
 
 ## 10 套风格 × 锚定游戏类型
 
@@ -109,12 +111,12 @@
 ## 添加新风格
 
 1. 写 `styles/<number>-<name>.md`（含适用游戏类型）
-2. 写 `demo/lib/styles/<name>.css` 覆写 `:root`
-3. 在 `demo/scenes/<number>-<name>/` 写**该类型**主场景 HTML（不要复用其他风格的 DOM 骨架）
-4. 把入口加到 `demo/scenes/index.html`
+2. 写 `library/components/styles/<name>.css` 覆写 `:root`
+3. 在 `library/scenes/<number>-<name>/` 写**该类型**主场景 HTML（不要复用其他风格的 DOM 骨架）
+4. 把入口加到 `library/scenes/index.html`
 
 ## 许可
 
 - 设计规范与示例代码：项目自有
-- 第三方美术：见 `demo/assets/CREDITS.md`（CC0 / CC-BY 等）
+- 第三方美术：见 `library/assets/CREDITS.md`（CC0 / CC-BY 等）
 - **不含**商业游戏官方素材或 Rip

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>06 卡通漫画 — 单一大拍键</title>
+  <link rel="stylesheet" href="../../components/components.css" />
+  <link rel="stylesheet" href="../../components/phone-frame.css" />
+    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/styles/cartoon-comic.css" />
+  <style>
+    .game-world {
+      background:
+        repeating-linear-gradient(45deg, transparent 0 24px, rgba(0,0,0,0.06) 24px 25px),
+        radial-gradient(circle at 50% 35%, #FFF1DC 0%, #FFD900 60%, #FFB300 100%);
+    }
+    .game-world::before { opacity: 0; }
+    .top-bar {
+      position: absolute;
+      top: 58px; left: 14px; right: 14px;
+      display: flex; gap: 10px;
+      z-index: 5;
+    }
+    .stat-tile {
+      flex: 1;
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 3px solid var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-color);
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: var(--uppercase);
+    }
+    .stat-tile .lab { display: block; font-size: 11px; color: var(--text-muted); }
+    .stat-tile .num { display: block; font-size: 22px; line-height: 1.1; }
+    .stat-tile.combo .num { color: var(--accent); }
+    .stat-tile.score .num { color: var(--accent-2); }
+
+    .lane {
+      position: absolute;
+      top: 28%; left: 6%; right: 6%;
+      height: 30%;
+      border: 4px solid var(--border);
+      background: rgba(255, 241, 220, 0.45);
+      box-shadow: 6px 6px 0 var(--shadow-color), inset 0 0 0 4px var(--surface);
+      overflow: hidden;
+      z-index: 3;
+    }
+    .sweet {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%; width: 70px;
+      transform: translateX(-50%);
+      border-left: 4px solid var(--accent);
+      border-right: 4px solid var(--accent);
+      background: rgba(230, 57, 70, 0.18);
+      pointer-events: none;
+    }
+    .sweet::before, .sweet::after {
+      content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+      width: 18px; height: 18px;
+      background: var(--accent);
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    }
+    .sweet::before { top: -2px; }
+    .sweet::after { bottom: -2px; }
+
+    .target {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      background: var(--warning);
+      border: 4px solid var(--border);
+      box-shadow: 5px 5px 0 var(--shadow-color);
+      font-family: var(--font-display);
+      color: var(--text);
+      will-change: left;
+    }
+    .target.hit {
+      animation: pop 240ms ease-out forwards;
+    }
+    .target.miss {
+      animation: shake 240ms ease-out forwards;
+      opacity: 0.55;
+    }
+    @keyframes pop {
+      0%   { transform: translateY(-50%) scale(1); background: var(--warning); }
+      40%  { transform: translateY(-50%) scale(1.45) rotate(8deg); background: var(--success); }
+      100% { transform: translateY(-50%) scale(0); opacity: 0; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      25%      { transform: translateY(-50%) translateX(-7px); }
+      75%      { transform: translateY(-50%) translateX(7px); }
+    }
+
+    .fire-pad {
+      position: absolute;
+      left: 50%; bottom: 7%;
+      transform: translateX(-50%);
+      width: min(300px, 78%);
+      z-index: 5;
+    }
+    .punch {
+      width: 100%; padding: 26px 0;
+      background: var(--accent);
+      color: var(--surface);
+      border: 5px solid var(--border);
+      box-shadow: 6px 6px 0 var(--shadow-color);
+      font-family: var(--font-display);
+      font-size: 38px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: transform 80ms ease-out, box-shadow 80ms ease-out, background 80ms ease-out;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+    .punch:active, .punch.pressed {
+      transform: translate(4px, 4px);
+      box-shadow: 2px 2px 0 var(--shadow-color);
+      background: var(--danger);
+    }
+
+    .burst {
+      position: absolute;
+      pointer-events: none;
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--accent);
+      text-shadow: 3px 3px 0 var(--border);
+      animation: fly 620ms ease-out forwards;
+      z-index: 6;
+      letter-spacing: 0.06em;
+    }
+    @keyframes fly {
+      0%   { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+      20%  { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
+      100% { transform: translate(-50%, -90px) scale(0.9); opacity: 0; }
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 6px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
+      pointer-events: none;
+      text-transform: var(--uppercase);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-root letterbox">
+    <div class="game-world"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="game-hud">
+      <div class="top-bar">
+        <div class="stat-tile combo">
+          <span class="lab">连击</span>
+          <span class="num" id="combo">0</span>
+        </div>
+        <div class="stat-tile score">
+          <span class="lab">分数</span>
+          <span class="num" id="score">000</span>
+        </div>
+        <div class="stat-tile">
+          <span class="lab">最佳</span>
+          <span class="num" id="best">0</span>
+        </div>
+      </div>
+
+      <div class="lane" id="lane">
+        <div class="sweet" aria-hidden="true"></div>
+      </div>
+
+      <div class="fire-pad">
+        <button type="button" class="punch hit" id="btn-punch" aria-label="出拳 · 单一大拍键">砰！</button>
+      </div>
+
+      <p class="hint">目标过中线时点按 · 命中加分 · 连击越高分越多</p>
+    </div>
+  </div>
+  <script src="../../components/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    const lane = sk.$("#lane");
+    const punch = sk.$("#btn-punch");
+    const comboEl = sk.$("#combo");
+    const scoreEl = sk.$("#score");
+    const bestEl = sk.$("#best");
+
+    const SWEET_TOLERANCE = 36;     // px from center
+    const TARGET_TRAVEL = 2800;     // ms across lane
+    const SPAWN_GAP = [800, 1300];  // ms between targets
+
+    let combo = 0;
+    let score = 0;
+    let best = 0;
+    let active = null;
+    let nextSpawn = 0;
+    const icons = ["★", "✦", "❉", "✸", "✺"];
+
+    function sync() {
+      sk.setText(comboEl, String(combo));
+      sk.setText(scoreEl, String(score).padStart(3, "0"));
+      sk.setText(bestEl, String(best));
+    }
+
+    function burst(x, y, text) {
+      const el = document.createElement("div");
+      el.className = "burst";
+      el.textContent = text;
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 640);
+    }
+
+    function finishActive(outcome, label, bonus) {
+      if (!active || active.hit) return;
+      active.el.classList.add(outcome);
+      active.hit = true;
+      const rect = active.el.getBoundingClientRect();
+      burst(rect.left + rect.width / 2, rect.top, label);
+      setTimeout(() => active && active.el.remove(), 260);
+      active = null;
+    }
+
+    function fire() {
+      if (!active || active.hit) {
+        sk.toast("现在没目标 — 等下一颗", "warning");
+        return;
+      }
+      const laneRect = lane.getBoundingClientRect();
+      const tRect = active.el.getBoundingClientRect();
+      const tCenter = tRect.left + tRect.width / 2;
+      const sweet = laneRect.left + laneRect.width / 2;
+      const dist = Math.abs(tCenter - sweet);
+      if (dist <= SWEET_TOLERANCE) {
+        const bonus = 1 + Math.floor(combo / 5);
+        score += 10 * bonus;
+        combo += 1;
+        best = Math.max(best, combo);
+        finishActive("hit", "砰！+" + (10 * bonus));
+        sk.toast("命中 +" + (10 * bonus), "success");
+      } else {
+        const side = tCenter < sweet ? "太早" : "太晚";
+        combo = 0;
+        finishActive("miss", side);
+        sk.toast(side + " — 连击断了", "danger");
+      }
+      sync();
+    }
+
+    function spawnTarget(now) {
+      const el = document.createElement("div");
+      el.className = "target hit";
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      lane.appendChild(el);
+      const startX = -60;
+      const endX = lane.clientWidth + 60;
+      el.style.left = startX + "px";
+      active = { el, hit: false };
+      const t0 = now;
+      const animate = (ts) => {
+        if (!active || active.el !== el || active.hit) return;
+        const p = Math.min(1, (ts - t0) / TARGET_TRAVEL);
+        el.style.left = (startX + (endX - startX) * p) + "px";
+        if (p >= 1) {
+          if (active && active.el === el && !active.hit) {
+            combo = 0;
+            finishActive("miss", "错过");
+            sk.toast("错过 — 连击断了", "warning");
+            sync();
+          }
+          return;
+        }
+        requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    }
+
+    function loop(ts) {
+      if (ts >= nextSpawn && !active) {
+        spawnTarget(ts);
+        const [lo, hi] = SPAWN_GAP;
+        nextSpawn = ts + lo + Math.random() * (hi - lo);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    punch.addEventListener("click", fire);
+    punch.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      fire();
+    }, { passive: false });
+
+    // Desktop debug shortcut — never appears in on-screen help
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") { e.preventDefault(); fire(); }
+    });
+
+    nextSpawn = 400 + Math.random() * 400;
+    sync();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

@@ -10,5 +10,7 @@ Thumbs.db
 *.tsbuildinfo
 .vscode/
 .idea/
-demo/assets/tmp/
+library/assets/tmp/
+library/previews/
 png/
+docs/superpowers/

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>生存恐怖 — 脊骨背包</title>
+  <link rel="stylesheet" href="../../components/components.css" />
+  <link rel="stylesheet" href="../../components/phone-frame.css" />
+    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/styles/survival-horror.css" />
+  <style>
+    .game-world { background: radial-gradient(ellipse at 55% 50%, #121010 0%, #050404 75%); }
+    .spine-col {
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      top: 58px !important;
+      transform: scale(0.85); transform-origin: top center;
+    }
+    .spine-col img { width:24px; height:24px; opacity:.7; }
+    .inv-panel {
+      position:absolute; left:50%; bottom:48px; transform:translateX(-50%);
+      width: min(92%, 360px);
+    }
+    .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .slot img { width:24px; height:24px; }
+    .slot { cursor:pointer; min-height:54px; }
+    .detail { margin-top:10px; }
+    .detail .btn { padding: 8px 10px; font-size: 11px; }
+    .hint { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--text-muted); letter-spacing:.06em; pointer-events:none; width:90%; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="game-root letterbox">
+    <div class="game-world"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="game-hud">
+      <div class="hud-anchor-bl spine-col">
+        <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
+        <div class="spine-bar-vertical" id="spine-bar"></div>
+        <span class="badge" id="hp-label">生命 72%</span>
+      </div>
+
+      <div class="hud-anchor-br inv-panel">
+        <div class="panel frame-brackets">
+          <div class="panel-title">脊骨背包 · 8 格</div>
+          <div class="panel-body">
+            <div class="inv-grid" id="inv">
+              <button type="button" class="slot has" data-item="med" data-qty="2" data-label="医疗包">
+                <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
+              </button>
+              <button type="button" class="slot has" data-item="key" data-qty="1" data-label="黄铜钥匙">
+                <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
+              </button>
+              <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="生存刀">
+                <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
+              </button>
+              <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm 子弹">
+                <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
+              </button>
+              <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="破损盾牌">
+                <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
+              </button>
+              <button type="button" class="slot"></button>
+              <button type="button" class="slot"></button>
+              <button type="button" class="slot"></button>
+            </div>
+            <div class="detail">
+              <div class="stat-row"><span class="stat-key">已选</span><span class="stat-val" id="sel-name">—</span></div>
+              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                <button type="button" class="btn btn-primary" id="btn-use">使用物品</button>
+                <button type="button" class="btn" id="btn-door">
+                  <img src="../../assets/_shared/rpg-icons/door.png" alt="" style="width:18px;height:18px" /> 尝试开门
+                </button>
+                <button type="button" class="btn btn-danger" id="btn-hurt">受伤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="hint">脊骨反映生命 · 选择格子 · 使用医疗包 · 钥匙开门 · 模拟受伤</p>
+    </div>
+  </div>
+  <script src="../../components/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let hp = 72;
+    let selectedSlot = null;
+    const SEGMENTS = 10;
+
+    function flashVignette() {
+      const v = document.getElementById("vignette");
+      v.classList.add("on");
+      setTimeout(() => v.classList.remove("on"), 400);
+    }
+
+    function renderSpine() {
+      const bar = sk.$("#spine-bar");
+      bar.innerHTML = "";
+      const lit = Math.round((hp / 100) * SEGMENTS);
+      for (let i = 0; i < SEGMENTS; i++) {
+        const seg = document.createElement("div");
+        seg.className = "spine-seg vertical";
+        const idx = SEGMENTS - 1 - i;
+        if (idx < lit) {
+          if (hp <= 25) seg.classList.add("danger");
+          else if (hp <= 50) seg.classList.add("warn");
+          else seg.classList.add("on");
+        }
+        bar.appendChild(seg);
+      }
+      sk.setText(sk.$("#hp-label"), "生命 " + hp + "%");
+    }
+
+    sk.bindSlots("#inv", (slot) => {
+      if (!slot.classList.contains("has")) {
+        sk.setText(sk.$("#sel-name"), "空槽位");
+        selectedSlot = null;
+        return;
+      }
+      selectedSlot = slot;
+      sk.setText(sk.$("#sel-name"), slot.dataset.label + (slot.dataset.qty ? " ×" + slot.dataset.qty : ""));
+    });
+
+    function consumeOne(slot) {
+      let q = parseInt(slot.dataset.qty || "1", 10);
+      q -= 1;
+      if (q <= 0) {
+        slot.classList.remove("has");
+        slot.innerHTML = "";
+        slot.removeAttribute("data-item");
+        selectedSlot = null;
+        sk.setText(sk.$("#sel-name"), "—");
+      } else {
+        slot.dataset.qty = String(q);
+        const qtyEl = slot.querySelector(".qty");
+        if (qtyEl) qtyEl.textContent = "×" + q;
+      }
+    }
+
+    sk.on(sk.$("#btn-use"), "click", () => {
+      if (!selectedSlot || !selectedSlot.dataset.item) {
+        sk.toast("请先选择物品", "warning");
+        return;
+      }
+      if (selectedSlot.dataset.item === "med") {
+        hp = Math.min(100, hp + 18);
+        renderSpine();
+        consumeOne(selectedSlot);
+        sk.toast("医疗包 +18 生命", "success");
+        sk.pulse(sk.$("#spine-bar"));
+      } else if (selectedSlot.dataset.item === "key") {
+        sk.toast("钥匙不可消耗 — 试试开门", "warning");
+      } else {
+        sk.toast("此处无法使用 " + selectedSlot.dataset.label, "warning");
+      }
+    });
+
+    sk.on(sk.$("#btn-door"), "click", () => {
+      const hasKey = sk.$('.slot[data-item="key"].has');
+      if (hasKey) {
+        sk.toast("门已解锁 — 逃生路线已开启！", "success");
+        sk.modal({
+          title: "维修通道出口",
+          body: "钥匙湿漉漉地转动了。冷空气涌了进来。",
+          onConfirm: () => sk.toast("正在保存检查点…"),
+        });
+      } else {
+        sk.toast("已上锁 — 需要黄铜钥匙", "danger");
+      }
+    });
+
+    sk.on(sk.$("#btn-hurt"), "click", () => {
+      hp = Math.max(0, hp - 15);
+      renderSpine();
+      flashVignette();
+      sk.toast(hp <= 0 ? "生命体征衰竭" : "受伤 −15%", "danger");
+    });
+
+    renderSpine();
+  </script>
+</body>
+</html>

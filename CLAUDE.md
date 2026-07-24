@@ -5,14 +5,14 @@
 蒸馏多套**可程序化生成**的游戏 UI 风格文档。每套风格绑定**适合该风格的游戏类型**：参数化规则 + 类型正确的参考场景。工程师拿规则可生成按钮/面板/血条等。**只定义风格,不涉及具体美术素材**(icon、character art、logo)。
 
 **本项目为移动端竖屏服务**（画幅 **9:20 定死**，主输入为触控）。桌面浏览器仅作预览壳。  
-**楼型与玩法循环按游戏类型区分**，禁止全库套同一套「锁定 + 开火」动作条。见 `research/synthesis/mobile-portrait-first.md`。
+**楼型与玩法循环按游戏类型区分**，禁止全库套同一套「锁定 + 开火」动作条。见 `docs/rules/mobile-portrait-first.md`。
 
 ## 核心原则
 
 **建材共享,楼型按游戏类型分；画幅统一竖屏 9:20，玩法不统一。**
 
-- `demo/lib/`：共享组件结构 + 每风格 CSS Token（建材）
-- `demo/scenes/<style>/`：每风格独占场景（楼型）——布局与**核心玩法**必须符合该类型游戏,禁止「同一套 DOM 换皮」或统一锁定开火模板
+- `library/components/`：共享建材（components.css / phone-frame.css / game-feel.css / scene-kit.js / styles/）
+- `library/scenes/<style>/`：每风格独占场景（楼型）——布局与**核心玩法**必须符合该类型游戏,禁止「同一套 DOM 换皮」或统一锁定开火模板
 - 调试时仍可用换 Token 对比建材,但**不得**作为对外主叙事
 - **竖屏硬规则**：场景 `#viewport` 默认 9:20；操作必须有可见触控控件；禁止以键鼠快捷键为唯一操作路径
 - **触控语义**：提示文案用点按/拖动/长按，不用 LMB/RMB/WASD 作为主说明
@@ -25,31 +25,39 @@
 游戏UI设计大全/
 ├── CLAUDE.md
 ├── README.md
-├── styles/                          # 每套风格一个 .md
-│   ├── 01-cyberpunk-hud.md
-│   ├── 02-dark-fantasy.md
-│   ├── 03-scifi-space.md
-│   ├── 04-pixel-retro.md
-│   ├── 05-hand-drawn-illustrative.md
-│   ├── 06-cartoon-comic.md
-│   ├── 07-survival-horror.md
-│   ├── 08-anime-colorful.md
-│   ├── 09-tactical-military.md
-│   └── 10-synthwave-neon.md
-├── demo/
-│   ├── lib/                         # 共享建材
-│   │   ├── components.css
-│   │   ├── styles/*.css ×10
-│   │   └── README.md
-│   └── scenes/                      # 按风格独占场景（竖屏触控）
-│       ├── index.html
-│       └── <nn-style>/<main>.html
+├── styles/                          # 每套风格一个 .md（纯文档）
+│   ├── README.md                    # 风格索引 + 矩阵摘要
+│   └── 01..10-*.md
+├── library/                         # UI 组件库 + 范例（其他游戏参考用）
+│   ├── index.html                   # 风格入口表
+│   ├── components/                  # 共享建材层
+│   │   ├── README.md
+│   │   ├── components.css           # 35+ 通用组件类
+│   │   ├── phone-frame.css          # 9:20 手机壳（CSS 变量可主题化）
+│   │   ├── game-feel.css            # HUD 层 / vignette / 锚点
+│   │   ├── scene-kit.js             # 交互 helper
+│   │   └── styles/                  # 10 套 token 覆写
+│   ├── scenes/                      # 每风格独占场景（竖屏触控）
+│   │   └── <nn-style>/
+│   │       ├── index.html           # 主场景
+│   │       └── <aux>.html           # 可选第二场景
+│   ├── assets/
+│   │   ├── CREDITS.md
+│   │   ├── _shared/                 # 第三方 CC0 / CC-BY 素材
+│   │   └── project/                 # 项目生成的场景素材（黑底/绿幕抠图）
+│   └── previews/                    # shoot.js 输出（gitignored）
 ├── research/
-│   ├── raw/
-│   ├── synthesis/                   # 含 mobile-portrait-first.md
-│   └── references.md
-├── docs/superpowers/                # 设计规格与实现计划
-└── tools/                           # shoot 等工具
+│   ├── README.md
+│   ├── references.md
+│   ├── raw/                         # 原始调研笔记
+│   └── synthesis/                   # 提炼的设计原则（不含 hard rules）
+├── docs/
+│   ├── README.md
+│   ├── rules/                       # 实践得出的硬规则
+│   │   └── mobile-portrait-first.md # 9:20 + 玩法矩阵（权威）
+│   ├── plans/                       # 实施计划
+│   └── specs/                       # 设计规格
+└── tools/                           # shoot.js / chroma_key.py
 ```
 
 ## 风格文档模板
@@ -80,7 +88,7 @@
 - Demo 场景必须类型正确:打开主场景应能辨认游戏大类与**玩法循环**,而非「换了颜色的同一锁定开火页」
 - Demo 默认 **移动端竖屏 9:20 + 触控**；键鼠仅调试捷径，不得作为玩家主路径
 - Demo / Spec 示例中**玩家可见 UI 文案必须为中文**
-- Spec「适用游戏类型」须写明**布局原型 + 核心玩法**（与 `mobile-portrait-first.md` §4 矩阵一致）
+- Spec「适用游戏类型」须写明**布局原型 + 核心玩法**（与 `docs/rules/mobile-portrait-first.md` §4 矩阵一致）
 
 ## 验证
 

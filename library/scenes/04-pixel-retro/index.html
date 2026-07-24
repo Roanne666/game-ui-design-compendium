@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>像素复古 — 战斗指令</title>
+  <link rel="stylesheet" href="../../components/components.css" />
+  <link rel="stylesheet" href="../../components/phone-frame.css" />
+    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/styles/pixel-retro.css" />
+  <style>
+    .game-world { image-rendering:pixelated; }
+    .enemies {
+      position:absolute; top:12%; left:8%; right:8%;
+      display:flex; align-items:flex-start; justify-content:space-around; flex-wrap:wrap; gap:12px;
+      pointer-events:none;
+    }
+    .enemies .foe { pointer-events:auto; }
+    .foe {
+      font-family:var(--font-mono); font-size:11px; color:var(--text);
+      border:2px solid var(--border); padding:16px 12px; background:var(--surface);
+      cursor:pointer; text-align:center; min-width:100px; transition:border-color .12s;
+    }
+    .foe img { width:40px; height:40px; image-rendering:pixelated; display:block; margin:0 auto 8px; }
+    .foe.selected { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+    .foe.dead { opacity:.35; pointer-events:none; }
+    .battle-window {
+      position:absolute; left:0; right:0; bottom:0;
+      display:grid; grid-template-columns:1fr minmax(180px,220px); gap:0;
+      border-top:4px solid var(--border-strong); background:var(--surface);
+      box-shadow:0 -4px 0 var(--shadow-color);
+    }
+    .cmds { display:flex; flex-direction:column; gap:4px; border-left:4px solid var(--border); }
+    .cmds .btn { width:100%; image-rendering:pixelated; border-radius:0; }
+    .battle-window .panel { border:none; border-radius:0; box-shadow:none; }
+    .hint { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--text-muted); letter-spacing:.1em; pointer-events:none; z-index:3; }
+  </style>
+</head>
+<body>
+  <div class="game-root">
+    <div class="game-world"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="game-hud">
+      <div class="enemies" id="enemies">
+        <button type="button" class="foe" data-id="slime" data-hp="30" data-name="史莱姆">
+          <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>史莱姆</span>
+          <div class="badge" data-hp-label>生命 30</div>
+        </button>
+        <button type="button" class="foe selected" data-id="bat" data-hp="22" data-name="蝙蝠">
+          <img src="../../assets/_shared/rpg-icons/bow.png" alt="" /><span>蝙蝠</span>
+          <div class="badge" data-hp-label>生命 22</div>
+        </button>
+        <button type="button" class="foe" data-id="orc" data-hp="45" data-name="兽人">
+          <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>兽人</span>
+          <div class="badge" data-hp-label>生命 45</div>
+        </button>
+      </div>
+
+      <div class="battle-window">
+        <div class="panel">
+          <div class="panel-title">英雄 · 隆</div>
+          <div class="panel-body">
+            <div class="hud-bar">
+              <span class="hud-bar-label">生命</span>
+              <div class="hud-bar-track"><div id="hp-fill" class="hud-bar-fill danger" style="width:72%"></div></div>
+              <span id="hp-val" class="hud-bar-value">72</span>
+            </div>
+            <div class="hud-bar">
+              <span class="hud-bar-label">魔法</span>
+              <div class="hud-bar-track"><div id="mp-fill" class="hud-bar-fill" style="width:40%;background:var(--accent-2)"></div></div>
+              <span id="mp-val" class="hud-bar-value">18</span>
+            </div>
+          </div>
+        </div>
+        <div class="cmds panel">
+          <div class="panel-title">指令</div>
+          <button type="button" class="btn btn-primary" id="cmd-fight">攻击</button>
+          <button type="button" class="btn" id="cmd-magic">魔法</button>
+          <button type="button" class="btn" id="cmd-item">道具</button>
+          <button type="button" class="btn btn-danger" id="cmd-run">逃跑</button>
+        </div>
+      </div>
+      <p class="hint">选择敌人 · 攻击/魔法/道具/逃跑 · 伤害以提示显示</p>
+    </div>
+  </div>
+  <script src="../../components/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let hp = 72, mp = 18, target = sk.$(".foe.selected");
+
+    function syncBars() {
+      sk.setFill(sk.$("#hp-fill"), hp);
+      sk.setText(sk.$("#hp-val"), String(hp));
+      sk.setFill(sk.$("#mp-fill"), (mp / 30) * 100);
+      sk.setText(sk.$("#mp-val"), String(mp));
+    }
+
+    function selectedEnemy() {
+      return sk.$(".foe.selected:not(.dead)");
+    }
+
+    sk.$all(".foe").forEach((foe) => {
+      sk.on(foe, "click", () => {
+        if (foe.classList.contains("dead")) return;
+        sk.$all(".foe").forEach((f) => f.classList.remove("selected"));
+        foe.classList.add("selected");
+        target = foe;
+        sk.toast("目标：" + foe.dataset.name);
+      });
+    });
+
+    function dealToTarget(dmg, label) {
+      const foe = selectedEnemy();
+      if (!foe) {
+        sk.toast("无有效目标", "warning");
+        return;
+      }
+      let ehp = parseInt(foe.dataset.hp, 10) - dmg;
+      foe.dataset.hp = String(Math.max(0, ehp));
+      foe.querySelector("[data-hp-label]").textContent = "生命 " + foe.dataset.hp;
+      sk.toast(label + " −" + dmg + "!", "success");
+      sk.pulse(foe);
+      if (parseInt(foe.dataset.hp, 10) <= 0) {
+        foe.classList.add("dead");
+        sk.toast(foe.dataset.name + " 已被击败！", "success");
+      }
+    }
+
+    sk.on(sk.$("#cmd-fight"), "click", () => {
+      if (!selectedEnemy()) return;
+      const dmg = 8 + Math.floor(Math.random() * 5);
+      dealToTarget(dmg, "打击");
+    });
+
+    sk.on(sk.$("#cmd-magic"), "click", () => {
+      if (mp < 6) {
+        sk.toast("魔法不足", "danger");
+        return;
+      }
+      if (!selectedEnemy()) return;
+      mp -= 6;
+      syncBars();
+      dealToTarget(14, "火焰");
+    });
+
+    sk.on(sk.$("#cmd-item"), "click", () => {
+      hp = Math.min(99, hp + 20);
+      syncBars();
+      sk.toast("药水 +20 生命", "success");
+      sk.pulse(sk.$("#hp-fill"));
+    });
+
+    sk.on(sk.$("#cmd-run"), "click", () => {
+      sk.modal({
+        title: "逃离战斗？",
+        body: "现在逃跑可能丢失 50 金币。",
+        onConfirm: () => sk.toast("成功逃脱！", "warning"),
+      });
+    });
+
+    syncBars();
+  </script>
+</body>
+</html>

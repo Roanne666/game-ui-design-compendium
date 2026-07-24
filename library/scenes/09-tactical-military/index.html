@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>战术军事 — 界面</title>
+  <link rel="stylesheet" href="../../components/components.css" />
+  <link rel="stylesheet" href="../../components/phone-frame.css" />
+    <link rel="stylesheet" href="../../components/game-feel.css" />
+  <link rel="stylesheet" href="../../components/styles/tactical-military.css" />
+  <style>
+    .compass {
+      width:72px; height:72px; border:2px solid var(--border); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; position:relative;
+      font-family:var(--font-mono); font-size:11px;
+    }
+    .compass img { width:14px; height:14px; position:absolute; top:6px; }
+    .compass .deg { font-size:15px; font-weight:700; }
+    .stance-group { display:flex; gap:4px; flex-wrap:nowrap; }
+    .stance-group .btn { padding:5px 8px; font-size:10px; letter-spacing:0.04em; }
+    .stance-group .btn.active { border-color:var(--accent); background:var(--accent-soft); }
+    .panel-clipped { clip-path: none; }
+    .icon { width:16px; height:16px; vertical-align:middle; }
+    .hint {
+      position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
+      font-size:9px; color:var(--text-muted); letter-spacing:.08em;
+      pointer-events:none; width:92%; text-align:center;
+    }
+    .bottom-left {
+      position:absolute; left:10px; bottom:46px;
+      width: 56%;
+      max-width: 200px;
+    }
+    .bottom-right {
+      position:absolute; right:10px; bottom:46px;
+      width: 38%;
+      max-width: 140px;
+    }
+    .bl-card, .br-card {
+      background:var(--surface); border:2px solid var(--border);
+      box-shadow:3px 3px 0 var(--shadow-color);
+      padding:8px 10px; flex:1; min-width:0;
+    }
+    .bl-card .lab, .br-card .lab {
+      font-family:var(--font-mono); font-size:9px; color:var(--text-muted);
+      letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px;
+    }
+    .stance-row { display:flex; gap:4px; }
+    .stance-row .btn { flex:1; padding:6px 4px; font-size:10px; }
+    .br-top, .br-mid { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+    .br-top { font-size:10px; color:var(--text); }
+    .br-top .v { font-family:var(--font-mono); font-size:13px; font-weight:700; }
+    .br-mid { font-size:9px; color:var(--text-muted); }
+    .br-mid .v { font-family:var(--font-mono); }
+    .br-actions { display:flex; gap:6px; margin-top:4px; }
+    .br-actions .btn { flex:1; padding:6px 0; font-size:11px; }
+    .stamina-row { display:flex; align-items:center; gap:6px; }
+    .stamina-row .hud-bar-track { flex:1; }
+  </style>
+</head>
+<body>
+  <div class="game-root letterbox">
+    <div class="game-world has-grid"></div>
+    <div class="meta-vignette" id="vignette"></div>
+    <div class="reticle-center"></div>
+    <div class="game-hud">
+      <div class="hud-anchor-tc">
+        <button type="button" class="compass" id="btn-compass" title="调整方位">
+          <img src="../../assets/_shared/kenney/icons/information.png" alt="" />
+          <span class="deg" id="compass-deg">274°</span>
+          <span style="position:absolute;bottom:8px;font-size:8px;color:var(--text-muted)">北</span>
+        </button>
+      </div>
+
+      <div class="bottom-left">
+        <div class="bl-card">
+          <div class="lab">姿态</div>
+          <div class="stance-row" id="stance-group">
+            <button type="button" class="btn active" data-stance="STAND">立</button>
+            <button type="button" class="btn" data-stance="CROUCH">蹲</button>
+            <button type="button" class="btn" data-stance="PRONE">卧</button>
+          </div>
+          <div class="lab" style="margin-top:8px">耐力</div>
+          <div class="stamina-row">
+            <div class="hud-bar-track"><div id="stm-fill" class="hud-bar-fill success" style="width:100%"></div></div>
+            <span id="stm-val" class="badge" style="font-size:10px">100</span>
+          </div>
+          <button type="button" class="btn btn-warning" id="btn-sprint" style="margin-top:8px;width:100%;padding:7px 0;font-size:11px">
+            <img class="icon" src="../../assets/_shared/kenney/icons/play.png" alt="" /> 冲刺
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom-right">
+        <div class="br-card">
+          <div class="lab">武器 · 方位</div>
+          <div class="br-top">
+            <img class="icon" src="../../assets/_shared/rpg-icons/gun.png" alt="" />
+            <span class="v" id="ammo-val">24 / 120</span>
+          </div>
+          <div class="br-mid">
+            <span>方位</span>
+            <span class="v" id="bearing-val">274° 西</span>
+          </div>
+          <div class="br-mid">
+            <span>姿态</span>
+            <span class="v" id="stance-val">站立</span>
+          </div>
+          <div class="br-actions">
+            <button type="button" class="btn" id="btn-reload" style="padding:7px 0;font-size:11px">换弹</button>
+            <button type="button" class="btn btn-primary" id="btn-fire" style="padding:7px 0;font-size:11px">
+              <img class="icon" src="../../assets/_shared/rpg-icons/bow.png" alt="" /> 点射
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="hint">罗盘 · 姿态 · 换弹 · 冲刺消耗耐力 · 点射</p>
+    </div>
+  </div>
+  <script src="../../components/scene-kit.js"></script>
+  <script>
+    const sk = SceneKit;
+    let mag = 24, reserve = 120, stamina = 100, bearing = 274;
+    const bearings = ["北", "东北", "东", "东南", "南", "西南", "西", "西北"];
+    const stanceLabels = { STAND: "站立", CROUCH: "蹲伏", PRONE: "卧倒" };
+
+    function syncAmmo() {
+      sk.setText(sk.$("#ammo-val"), mag + " / " + reserve);
+    }
+    function syncStamina() {
+      sk.setFill(sk.$("#stm-fill"), stamina);
+      sk.setText(sk.$("#stm-val"), String(stamina));
+      sk.$("#stm-fill").className = "hud-bar-fill " + (stamina > 40 ? "success" : stamina > 15 ? "warning" : "danger");
+    }
+    function syncBearing() {
+      sk.setText(sk.$("#compass-deg"), bearing + "°");
+      const idx = Math.round(bearing / 45) % 8;
+      sk.setText(sk.$("#bearing-val"), bearing + "° " + bearings[idx]);
+    }
+
+    sk.$all("[data-stance]").forEach((btn) => {
+      sk.on(btn, "click", () => {
+        sk.$all("[data-stance]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        sk.setText(sk.$("#stance-val"), stanceLabels[btn.dataset.stance]);
+        sk.toast("姿态：" + stanceLabels[btn.dataset.stance]);
+        sk.pulse(btn);
+      });
+    });
+
+    sk.on(sk.$("#btn-reload"), "click", () => {
+      if (reserve <= 0) {
+        sk.toast("备用弹药耗尽", "danger");
+        return;
+      }
+      const need = 30 - mag;
+      const take = Math.min(need, reserve);
+      mag += take;
+      reserve -= take;
+      syncAmmo();
+      sk.toast("换弹 +" + take, "success");
+      sk.pulse(sk.$("#btn-reload"));
+    });
+
+    sk.on(sk.$("#btn-compass"), "click", () => {
+      bearing = (bearing + 15) % 360;
+      syncBearing();
+      sk.pulse(sk.$("#btn-compass"));
+      sk.toast("方位已更新");
+    });
+
+    sk.on(sk.$("#btn-sprint"), "click", () => {
+      if (stamina < 12) {
+        sk.toast("力竭 — 请喘息恢复", "danger");
+        return;
+      }
+      stamina = Math.max(0, stamina - 12);
+      syncStamina();
+      sk.toast("冲刺 −12 耐力", "warning");
+    });
+
+    sk.on(sk.$("#btn-fire"), "click", () => {
+      if (mag <= 0) {
+        sk.toast("弹匣已空 — 请换弹！", "danger");
+        return;
+      }
+      const burst = Math.min(3, mag);
+      mag -= burst;
+      syncAmmo();
+      sk.toast("点射 −" + burst + " 发");
+    });
+
+    syncAmmo();
+    syncStamina();
+    syncBearing();
+  </script>
+</body>
+</html>
