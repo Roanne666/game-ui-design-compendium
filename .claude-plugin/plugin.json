@@ -1,0 +1,9 @@
+{
+  "name": "game-ui-encyclopedia",
+  "version": "1.0.0",
+  "description": "10 procedural mobile-portrait game UI styles: specs, shared components, per-style packs.",
+  "author": { "name": "Game UI Design Encyclopedia" },
+  "keywords": ["game-ui", "mobile", "portrait", "hud", "css-tokens"],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}
