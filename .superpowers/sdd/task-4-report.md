@@ -22,3 +22,10 @@ DONE
 
 - 未改动任何 pack 的玩法实现。
 - `.superpowers/sdd/` 内其他任务产物为既有未跟踪文件，本任务提交仅包含本报告。
+
+## FIX（Task 4 复审）
+
+- 更新 `tools/README.md`：`shoot.js` 输入路径由 `library/scenes/` 改为 `library/packs/<id>/index.html`。
+- 简化 `tools/shoot.js`：移除已删除 `library/scenes/` 的回退逻辑，仅读取 pack 入口；变量 `scenes` 重命名为 `packs`。
+- 修正 `tools/chroma_key.py` 示例输出路径，去除 `demo/scenes/` 残留。
+- `tools/` 内 `scenes` 残留搜索：0 命中。

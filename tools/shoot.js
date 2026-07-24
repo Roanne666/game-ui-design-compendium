@@ -1,6 +1,6 @@
-// Screenshot genre-bound interactive scenes (puppeteer-core + local Chrome)
+// Screenshot genre-bound pack demos (puppeteer-core + local Chrome)
 // Usage: node tools/shoot.js
-// Outputs PNG to library/previews/<style>.png (gitignored).
+// Outputs PNG to library/previews/<id>.png (gitignored).
 // Viewport is portrait 9:20 (390×867) to match delivery aspect.
 
 const puppeteer = require('puppeteer-core');
@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 
 const root = path.join(__dirname, '..');
-const scenes = [
+const packs = [
   '01-cyberpunk-hud',
   '02-dark-fantasy',
   '03-scifi-space',
@@ -51,14 +51,16 @@ async function shootOne(browser, url, out) {
   try {
     const previewRoot = path.join(root, 'library', 'previews');
     fs.mkdirSync(previewRoot, { recursive: true });
-    for (const dir of scenes) {
-      const packIndex = path.join(root, 'library', 'packs', dir, 'index.html');
-      const sceneIndex = path.join(root, 'library', 'scenes', dir, 'index.html');
-      const indexHtml = fs.existsSync(packIndex) ? packIndex : sceneIndex;
+    for (const id of packs) {
+      const indexHtml = path.join(root, 'library', 'packs', id, 'index.html');
+      if (!fs.existsSync(indexHtml)) {
+        console.warn('skip', id, '(missing index.html)');
+        continue;
+      }
       const url = 'file:///' + indexHtml.replace(/\\/g, '/');
-      const out = path.join(previewRoot, dir + '.png');
+      const out = path.join(previewRoot, id + '.png');
       await shootOne(browser, url, out);
-      console.log('shot', dir, VIEW_W + 'x' + VIEW_H);
+      console.log('shot', id, VIEW_W + 'x' + VIEW_H);
     }
   } finally {
     await browser.close();
