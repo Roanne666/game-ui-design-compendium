@@ -58,3 +58,10 @@
 - `library/assets/project/04-pixel-retro/foe-slime.png` / `foe-bat.png` / `foe-orc.png` — battle foe plates (black-keyed)
 - License: project original for this encyclopedia demo
 - **不含**商业 JRPG 官方或 Rip 素材
+
+## Project-generated scene plates (07 Survival Horror)
+
+- `library/assets/project/07-survival-horror/corridor-bg.png` — original maintenance corridor plate
+- `library/assets/project/07-survival-horror/door.png` — steel door prop (black-keyed)
+- License: project original for this encyclopedia demo
+- **不含**商业生存恐怖官方或 Rip 素材
