@@ -4,112 +4,280 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>动漫彩色 — 菜单与战斗指令</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Sans+SC:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/anime-colorful.css" />
   <style>
+    .game-root {
+      --bg: #0a0a0a;
+      --surface: #f5f5f5;
+      --text: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.62);
+      --accent: #e60012;
+      --accent-2: #3da9ff;
+      --border: #ffffff;
+      --font-display: "Black Ops One", "Noto Sans SC", Impact, sans-serif;
+      --font-body: "Noto Sans SC", sans-serif;
+      --phone-border-color: rgba(230, 0, 18, 0.45);
+      --phone-shadow-inset: inset 0 0 0 1px rgba(230, 0, 18, 0.2);
+    }
+
     .game-world {
       background:
-        radial-gradient(ellipse 60% 70% at 35% 45%, color-mix(in srgb, var(--accent) 14%, #120818), #050408 78%);
+        repeating-linear-gradient(-18deg, transparent 0 28px, rgba(230,0,18,0.06) 28px 29px),
+        radial-gradient(ellipse 70% 55% at 30% 40%, #3a0810 0%, #0a0a0a 70%);
     }
-    #menu-root[hidden], #battle-layer[hidden] { display: none; }
+    .game-world::before { opacity: 0.2; }
+    .game-world::after {
+      box-shadow: inset 0 0 80px 24px rgba(0, 0, 0, 0.55);
+    }
 
-    .poster-float {
-      position: absolute; left: 50%; top: 10%; transform: translate(-50%, 0) rotate(-3deg);
-      pointer-events: none; width: 42%; max-width: 150px;
+    #menu-root[hidden], #battle-layer[hidden] { display: none !important; }
+
+    /* 标题：海报主视觉，不是小卡片 */
+    .brand {
+      position: absolute; left: 8%; right: 8%; top: 12%;
+      pointer-events: none; z-index: 2;
     }
-    .poster-inner {
-      width: 100%; aspect-ratio: 3/4;
-      border: 3px solid var(--accent);
-      clip-path: polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-      padding: 12px 8px; background: var(--surface); box-shadow: 0 0 28px var(--glow);
+    .brand .mark {
+      display: inline-block;
+      padding: 6px 14px 4px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 12px; letter-spacing: 0.28em;
+      transform: skewX(-12deg);
+      box-shadow: 6px 6px 0 #000;
     }
-    .poster-inner img { width: 36px; height: 36px; }
-    .poster-title { font-family: var(--font-display); font-size: 13px; letter-spacing: 0.16em; }
+    .brand .mark span { display: inline-block; transform: skewX(12deg); }
+    .brand h1 {
+      margin: 14px 0 0;
+      font-family: var(--font-display);
+      font-size: clamp(36px, 11vw, 48px);
+      line-height: 0.95;
+      letter-spacing: 0.04em;
+      color: #fff;
+      text-shadow: 5px 5px 0 #e60012, 9px 9px 0 #000;
+      transform: skewX(-8deg);
+    }
+    .brand .chap {
+      margin-top: 12px;
+      font-family: var(--font-body);
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.2em; color: var(--text-muted);
+    }
 
     .menu-stack {
-      position: absolute; left: 10%; right: 8%; bottom: 56px;
-      display: flex; flex-direction: column; gap: 8px;
+      position: absolute; left: 8%; right: 10%; bottom: 52px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 3;
     }
-    .menu-stack .slash {
+    .slash {
+      appearance: none; -webkit-appearance: none;
       display: flex; align-items: center; gap: 12px;
-      min-height: 52px; padding: 0 16px 0 20px;
-      background: color-mix(in srgb, var(--surface) 88%, transparent);
-      border: 2px solid var(--border);
-      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
-      font-family: var(--font-display); font-size: 16px; letter-spacing: 0.18em;
-      color: var(--text); cursor: pointer; text-align: left;
-      transition: transform 100ms ease-out, border-color 100ms ease-out, background 100ms ease-out;
+      min-height: 54px; padding: 0 18px 0 16px; margin: 0; outline: none;
+      background: rgba(10, 10, 10, 0.82);
+      border: 3px solid #fff;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.16em;
+      color: #fff; cursor: pointer; text-align: left;
+      box-shadow: 5px 5px 0 #000;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 90ms ease-out, background 90ms ease-out;
     }
-    .menu-stack .slash.primary {
-      border-color: var(--accent); color: var(--accent);
-      box-shadow: 0 0 18px color-mix(in srgb, var(--glow) 50%, transparent);
+    .slash.primary {
+      background: var(--accent);
+      border-color: #fff;
+      box-shadow: 5px 5px 0 #5a0008;
     }
-    .menu-stack .slash img { width: 22px; height: 22px; }
-    .menu-stack .slash:active { transform: translateX(4px) scale(0.98); background: var(--accent-soft); }
+    .slash img { width: 22px; height: 22px; filter: brightness(0) invert(1); pointer-events: none; }
+    .slash:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 #000; }
 
-    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); }
-    #load-overlay, #loading-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,.78);
-      display: flex; align-items: center; justify-content: center; z-index: 30;
+    /* 战斗层 */
+    #battle-layer {
+      position: absolute; inset: 0; z-index: 12;
+      display: flex; flex-direction: column;
     }
-    #load-overlay[hidden], #loading-overlay[hidden] { display: none; }
-    [data-sk-panel] {
-      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      width: min(340px, 90%); z-index: 20;
+    .battle-stage {
+      flex: 1; position: relative; min-height: 0;
+      padding: 56px 12px 10px;
+    }
+    .foe-plate {
+      position: absolute; top: 10%; left: 50%; transform: translateX(-50%) skewX(-6deg);
+      width: min(72%, 210px);
+      padding: 16px 12px 14px;
+      background: #fff;
+      color: #0a0a0a;
+      border: 4px solid #0a0a0a;
+      box-shadow: 8px 8px 0 var(--accent);
+      text-align: center;
+    }
+    .foe-plate > * { transform: skewX(6deg); }
+    .foe-plate img { width: 48px; height: 48px; }
+    .foe-plate .name {
+      margin-top: 6px;
+      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.12em;
+    }
+    .foe-plate .hp {
+      margin-top: 10px; height: 10px;
+      background: #0a0a0a; border: 2px solid #0a0a0a;
+      overflow: hidden; text-align: left;
+    }
+    .foe-plate .hp i {
+      display: block; height: 100%; width: 100%;
+      background: var(--accent);
+      transition: width 120ms linear;
     }
 
-    #battle-layer { position: absolute; inset: 0; z-index: 12; display: flex; flex-direction: column; }
-    .battle-top {
-      flex: 1; position: relative; min-height: 0; padding: 56px 12px 8px;
+    .party-board {
+      position: absolute; left: 10px; right: 10px; bottom: 4px;
+      padding: 10px 10px 8px;
+      background: rgba(10, 10, 10, 0.88);
+      border: 3px solid #fff;
+      clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 0 100%);
     }
-    .foe-card {
-      position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
-      width: min(68%, 190px); text-align: center; padding: 14px 10px;
-      background: var(--surface); border: 3px solid var(--accent);
-      clip-path: polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));
-      box-shadow: 0 0 22px var(--glow);
+    .party-board .row {
+      display: grid; grid-template-columns: 42px 1fr 36px;
+      align-items: center; gap: 8px; margin-bottom: 6px;
     }
-    .foe-card img { width: 44px; height: 44px; }
-    .foe-card .name { font-family: var(--font-display); letter-spacing: 0.14em; margin-top: 6px; }
-    .party-strip { position: absolute; left: 12px; right: 12px; bottom: 0; display: flex; flex-direction: column; gap: 6px; }
-    .cmd-bar {
+    .party-board .row:last-child { margin-bottom: 0; }
+    .party-board .lab {
+      font-family: var(--font-display); font-size: 12px; letter-spacing: 0.08em;
+      color: #fff;
+    }
+    .party-board .trk {
+      height: 8px; background: #1a1a1a; border: 2px solid #fff; overflow: hidden;
+    }
+    .party-board .trk i {
+      display: block; height: 100%;
+      background: #fff; transition: width 120ms linear;
+    }
+    .party-board .trk.mp i { background: var(--accent-2); }
+    .party-board .val {
+      font-family: var(--font-body); font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-align: right;
+    }
+
+    .cmd-rail {
       display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-      padding: 12px 12px 22px;
-      background: color-mix(in srgb, var(--surface) 94%, transparent);
-      border-top: 3px solid var(--accent);
+      padding: 10px 10px 20px;
+      background: #0a0a0a;
+      border-top: 4px solid var(--accent);
     }
-    .cmd-bar .cmd {
-      min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: var(--font-display); letter-spacing: 0.12em; font-size: 14px;
-      background: var(--bg); border: 2px solid var(--border); color: var(--text); cursor: pointer;
-      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+    .cmd {
+      appearance: none; -webkit-appearance: none;
+      min-height: 52px; margin: 0; padding: 0 8px; outline: none;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: var(--font-display); letter-spacing: 0.14em; font-size: 15px;
+      background: #141414; color: #fff;
+      border: 3px solid #fff;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 3px 3px 0 #000;
     }
-    .cmd-bar .cmd img { width: 20px; height: 20px; }
-    .cmd-bar .cmd.primary { border-color: var(--accent); color: var(--accent); }
-    .cmd-bar .cmd.danger { border-color: var(--danger); color: var(--danger); }
-    .cmd-bar .cmd:active { transform: scale(0.96); background: var(--accent-soft); }
+    .cmd img { width: 20px; height: 20px; filter: brightness(0) invert(1); pointer-events: none; }
+    .cmd.primary { background: var(--accent); box-shadow: 3px 3px 0 #5a0008; }
+    .cmd.danger { border-color: #ff4d6d; color: #ff4d6d; }
+    .cmd.danger img { filter: none; }
+    .cmd:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; }
+    .cmd:disabled { opacity: 0.4; pointer-events: none; }
+
     .log-line {
-      position: absolute; top: 52px; left: 12px; right: 52px;
-      text-align: center; font-size: 12px; color: var(--text-muted); pointer-events: none;
+      position: absolute; top: 52px; left: 12px; right: 52px; z-index: 5;
+      text-align: center;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      color: #fff; text-shadow: 2px 2px 0 #000;
+      pointer-events: none;
     }
 
     .help-toggle {
-      position: absolute; top: 52px; right: 12px; z-index: 16;
-      width: 36px; height: 36px; padding: 0; border-radius: 50%;
-      border: 2px solid var(--accent); background: rgba(8,6,14,.75);
-      color: var(--accent); cursor: pointer; font-size: 14px;
+      appearance: none; -webkit-appearance: none;
+      position: absolute; top: 48px; right: 10px; z-index: 16;
+      width: 40px; height: 34px; padding: 0; margin: 0; outline: none;
+      border: 3px solid #fff; background: var(--accent); color: #fff;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%);
+      font-family: var(--font-display); font-size: 16px; cursor: pointer;
+      box-shadow: 3px 3px 0 #000;
+      -webkit-tap-highlight-color: transparent;
     }
-    .help-toggle:active { transform: scale(0.94); }
+    .help-toggle:active { transform: translate(2px, 2px); }
     .help {
-      position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
-      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
-      letter-spacing: 0.06em; color: var(--text-muted);
-      background: rgba(8,6,14,.9); border: 1px solid var(--border); pointer-events: none;
+      position: absolute; top: 92px; left: 12px; right: 12px; z-index: 15;
+      padding: 10px 12px; text-align: center;
+      font-family: var(--font-body); font-size: 12px; font-weight: 700; line-height: 1.45;
+      color: #0a0a0a; background: #fff;
+      border: 3px solid #0a0a0a;
+      box-shadow: 5px 5px 0 var(--accent);
+      pointer-events: none;
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
     }
     .help[hidden] { display: none !important; }
+
+    /* 模态：同斜切海报语汇，不用 .btn */
+    .slash-sheet {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) skewX(-8deg);
+      width: min(320px, 88%); z-index: 22;
+      background: #fff; color: #0a0a0a;
+      border: 4px solid #0a0a0a;
+      box-shadow: 10px 10px 0 var(--accent);
+      padding: 16px 14px 12px;
+    }
+    .slash-sheet[hidden] { display: none !important; }
+    .slash-sheet > * { transform: skewX(8deg); }
+    .slash-sheet .sheet-title {
+      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.12em;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 3px solid #0a0a0a;
+    }
+    .toggle-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 2px dashed rgba(10, 10, 10, 0.25);
+      font-family: var(--font-body); font-weight: 700; font-size: 14px;
+    }
+    .tog {
+      appearance: none; -webkit-appearance: none;
+      min-width: 52px; min-height: 36px; padding: 4px 10px; margin: 0; outline: none;
+      border: 3px solid #0a0a0a; background: #0a0a0a; color: #fff;
+      font-family: var(--font-display); font-size: 14px; cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%);
+    }
+    .tog.on { background: var(--accent); }
+    .sheet-line {
+      appearance: none; -webkit-appearance: none;
+      display: block; width: 100%; min-height: 46px; margin: 0 0 8px; padding: 0 12px; outline: none;
+      border: 3px solid #0a0a0a; background: #0a0a0a; color: #fff;
+      font-family: var(--font-display); font-size: 15px; letter-spacing: 0.1em;
+      text-align: left; cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+    }
+    .sheet-line:last-child { margin-bottom: 0; }
+    .sheet-line.ghost { background: #fff; color: #0a0a0a; }
+    .sheet-line:active { transform: translate(2px, 2px); }
+
+    #load-overlay, #loading-overlay {
+      position: absolute; inset: 0; z-index: 30;
+      background: rgba(0, 0, 0, 0.82);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #load-overlay[hidden], #loading-overlay[hidden] { display: none !important; }
+    .load-bar {
+      height: 14px; margin: 14px 0; background: #0a0a0a; border: 3px solid #0a0a0a; overflow: hidden;
+    }
+    .load-bar i { display: block; height: 100%; width: 0%; background: var(--accent); transition: width 80ms linear; }
+    .load-status {
+      display: block; text-align: center;
+      font-family: var(--font-body); font-weight: 700; font-size: 13px;
+    }
+
+    .whisper {
+      position: absolute; top: 48px; left: 12px; z-index: 18; pointer-events: none;
+      font-family: var(--font-body); font-weight: 700; font-size: 13px;
+      color: #fff; text-shadow: 2px 2px 0 #000;
+    }
   </style>
 </head>
 <body>
@@ -118,101 +286,90 @@
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
-      <div class="help" id="help" hidden>标题斜切菜单进入战斗 · 底栏点按指令 · 设置/读档用屏幕按钮关闭</div>
+      <div class="help" id="help" hidden>斜切菜单进战斗 · 底栏点指令 · 设置/读档用屏幕按钮关闭</div>
+      <div class="whisper" id="whisper" aria-live="polite"></div>
 
       <div id="menu-root">
-        <div class="poster-float">
-          <div class="poster-inner">
-            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
-            <div class="poster-title">幻影之刃</div>
-            <span class="badge accent">第四章</span>
-          </div>
+        <div class="brand">
+          <div class="mark"><span>CHAPTER 04</span></div>
+          <h1>幻影之刃</h1>
+          <div class="chap">怪盗 · 菜单栈</div>
         </div>
         <div class="menu-stack">
           <button type="button" class="slash primary" id="btn-start" aria-label="开始">
-            <img src="../../assets/_shared/rpg-icons/battle.png" alt="" /><span>开始</span>
+            <img src="../../assets/_shared/rpg-icons/battle.png" alt="" draggable="false" /><span>开始</span>
           </button>
           <button type="button" class="slash" id="btn-load" aria-label="读取">
-            <img src="../../assets/_shared/rpg-icons/book.png" alt="" /><span>读取</span>
+            <img src="../../assets/_shared/rpg-icons/book.png" alt="" draggable="false" /><span>读取</span>
           </button>
           <button type="button" class="slash" id="btn-config" aria-label="设置">
-            <img src="../../assets/_shared/kenney/icons/gear.png" alt="" /><span>设置</span>
+            <img src="../../assets/_shared/kenney/icons/gear.png" alt="" draggable="false" /><span>设置</span>
           </button>
           <button type="button" class="slash" id="btn-exit" aria-label="退出">
-            <img src="../../assets/_shared/rpg-icons/cancel.png" alt="" /><span>退出</span>
+            <img src="../../assets/_shared/rpg-icons/cancel.png" alt="" draggable="false" /><span>退出</span>
           </button>
         </div>
       </div>
 
       <div id="battle-layer" hidden>
         <div class="log-line" id="battle-log">点按指令条行动</div>
-        <div class="battle-top">
-          <div class="foe-card" id="foe-card">
-            <img src="../../assets/_shared/rpg-icons/bow.png" alt="" />
+        <div class="battle-stage">
+          <div class="foe-plate" id="foe-card">
+            <img src="../../assets/_shared/rpg-icons/bow.png" alt="" draggable="false" />
             <div class="name" id="foe-name">影狼</div>
-            <div class="hud-bar" style="margin-top:10px">
-              <span class="hud-bar-label">敌</span>
-              <div class="hud-bar-track"><div id="foe-hp-fill" class="hud-bar-fill danger" style="width:100%"></div></div>
-              <span id="foe-hp-val" class="hud-bar-value">40</span>
-            </div>
+            <div class="hp"><i id="foe-hp-fill" style="width:100%"></i></div>
           </div>
-          <div class="party-strip">
-            <div class="hud-bar">
-              <span class="hud-bar-label">幻影</span>
-              <div class="hud-bar-track"><div id="hero-hp-fill" class="hud-bar-fill" style="width:100%"></div></div>
-              <span id="hero-hp-val" class="hud-bar-value">72</span>
+          <div class="party-board">
+            <div class="row">
+              <span class="lab">幻影</span>
+              <div class="trk"><i id="hero-hp-fill" style="width:100%"></i></div>
+              <span class="val" id="hero-hp-val">72</span>
             </div>
-            <div class="hud-bar">
-              <span class="hud-bar-label">技力</span>
-              <div class="hud-bar-track"><div id="hero-mp-fill" class="hud-bar-fill" style="width:55%;background:var(--accent-2)"></div></div>
-              <span id="hero-mp-val" class="hud-bar-value">22</span>
+            <div class="row">
+              <span class="lab">技力</span>
+              <div class="trk mp"><i id="hero-mp-fill" style="width:55%"></i></div>
+              <span class="val" id="hero-mp-val">22</span>
             </div>
           </div>
         </div>
-        <div class="cmd-bar">
+        <div class="cmd-rail">
           <button type="button" class="cmd primary" id="cmd-atk" aria-label="攻击">
-            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" /><span>攻击</span>
+            <img src="../../assets/_shared/rpg-icons/sword.png" alt="" draggable="false" /><span>攻击</span>
           </button>
           <button type="button" class="cmd" id="cmd-skill" aria-label="技能">
-            <img src="../../assets/_shared/rpg-icons/fire.png" alt="" /><span>技能</span>
+            <img src="../../assets/_shared/rpg-icons/fire.png" alt="" draggable="false" /><span>技能</span>
           </button>
           <button type="button" class="cmd" id="cmd-item" aria-label="道具">
-            <img src="../../assets/_shared/rpg-icons/potion.png" alt="" /><span>道具</span>
+            <img src="../../assets/_shared/rpg-icons/potion.png" alt="" draggable="false" /><span>道具</span>
           </button>
           <button type="button" class="cmd danger" id="cmd-run" aria-label="逃跑">
-            <img src="../../assets/_shared/rpg-icons/boots.png" alt="" /><span>逃跑</span>
+            <img src="../../assets/_shared/rpg-icons/boots.png" alt="" draggable="false" /><span>逃跑</span>
           </button>
         </div>
       </div>
 
-      <div id="config-panel" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">设置</div>
-        <div class="panel-body">
-          <div class="toggle-row"><span>语音台词</span><button type="button" class="btn btn-success" data-toggle="voice" data-on="true">开</button></div>
-          <div class="toggle-row"><span>战斗动画</span><button type="button" class="btn" data-toggle="anim" data-on="false">关</button></div>
-          <div class="toggle-row"><span>自动保存</span><button type="button" class="btn btn-success" data-toggle="save" data-on="true">开</button></div>
-          <button type="button" class="btn btn-ghost" id="config-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
-        </div>
+      <div id="config-panel" class="slash-sheet" hidden>
+        <div class="sheet-title">设置</div>
+        <div class="toggle-row"><span>语音台词</span><button type="button" class="tog on" data-toggle="voice" data-on="true">开</button></div>
+        <div class="toggle-row"><span>战斗动画</span><button type="button" class="tog" data-toggle="anim" data-on="false">关</button></div>
+        <div class="toggle-row"><span>自动保存</span><button type="button" class="tog on" data-toggle="save" data-on="true">开</button></div>
+        <button type="button" class="sheet-line ghost" id="config-close" style="margin-top:12px">关闭</button>
       </div>
 
       <div id="load-overlay" hidden>
-        <div class="panel frame-brackets" style="min-width:280px">
-          <div class="panel-title">读取存档</div>
-          <div class="panel-body">
-            <button type="button" class="btn" data-slot="1" style="width:100%;margin-bottom:8px;min-height:44px">槽位 1 · 米德加 14:32</button>
-            <button type="button" class="btn" data-slot="2" style="width:100%;margin-bottom:8px;min-height:44px">槽位 2 · 空</button>
-            <button type="button" class="btn btn-ghost" id="load-close" style="width:100%;min-height:44px">取消</button>
-          </div>
+        <div class="slash-sheet">
+          <div class="sheet-title">读取存档</div>
+          <button type="button" class="sheet-line" data-slot="1">槽位 1 · 米德加 14:32</button>
+          <button type="button" class="sheet-line" data-slot="2">槽位 2 · 空</button>
+          <button type="button" class="sheet-line ghost" id="load-close">取消</button>
         </div>
       </div>
 
       <div id="loading-overlay" hidden>
-        <div class="panel frame-brackets" style="min-width:280px;text-align:center">
-          <div class="panel-title">加载中</div>
-          <div class="progress progress-linear" style="height:14px;margin:16px 0">
-            <div id="load-bar" class="progress-fill" style="width:0%"></div>
-          </div>
-          <span class="badge" id="load-status">正在准备资源…</span>
+        <div class="slash-sheet" style="text-align:center">
+          <div class="sheet-title">加载中</div>
+          <div class="load-bar"><i id="load-bar"></i></div>
+          <span class="load-status" id="load-status">正在准备资源…</span>
         </div>
       </div>
     </div>
@@ -222,27 +379,39 @@
     const sk = SceneKit;
     const state = { heroHp: 72, heroHpMax: 72, heroMp: 22, heroMpMax: 40, foeHp: 40, foeHpMax: 40, busy: false, potions: 2 };
 
+    function whisper(msg) {
+      const el = sk.$("#whisper");
+      sk.setText(el, msg);
+      clearTimeout(whisper._t);
+      whisper._t = setTimeout(() => sk.setText(el, ""), 1600);
+    }
+
     function syncBars() {
-      sk.setFill(sk.$("#hero-hp-fill"), (state.heroHp / state.heroHpMax) * 100);
+      sk.$("#hero-hp-fill").style.width = ((state.heroHp / state.heroHpMax) * 100) + "%";
       sk.setText(sk.$("#hero-hp-val"), String(state.heroHp));
-      sk.setFill(sk.$("#hero-mp-fill"), (state.heroMp / state.heroMpMax) * 100);
+      sk.$("#hero-mp-fill").style.width = ((state.heroMp / state.heroMpMax) * 100) + "%";
       sk.setText(sk.$("#hero-mp-val"), String(state.heroMp));
-      sk.setFill(sk.$("#foe-hp-fill"), (state.foeHp / state.foeHpMax) * 100);
-      sk.setText(sk.$("#foe-hp-val"), String(state.foeHp));
+      sk.$("#foe-hp-fill").style.width = ((state.foeHp / state.foeHpMax) * 100) + "%";
     }
     function setLog(msg) { sk.setText(sk.$("#battle-log"), msg); }
+    function setBusy(on) {
+      state.busy = on;
+      sk.$all(".cmd").forEach((c) => { c.disabled = on; });
+    }
 
     function enterBattle() {
       Object.assign(state, { heroHp: 72, heroMp: 22, foeHp: 40, potions: 2, busy: false });
       sk.$("#menu-root").hidden = true;
       sk.$("#battle-layer").hidden = false;
+      setBusy(false);
       syncBars();
       setLog("遭遇影狼！选择指令");
     }
     function returnMenu(msg) {
       sk.$("#battle-layer").hidden = true;
       sk.$("#menu-root").hidden = false;
-      if (msg) sk.toast(msg, "success");
+      setBusy(false);
+      if (msg) whisper(msg);
     }
     function foeTurn() {
       if (state.foeHp <= 0) return;
@@ -253,15 +422,15 @@
       sk.$("#vignette").classList.add("on");
       setTimeout(() => sk.$("#vignette").classList.remove("on"), 280);
       if (state.heroHp <= 0) {
-        state.busy = true;
+        setBusy(true);
         setLog("幻影倒下了…");
         setTimeout(() => returnMenu("战斗失败，回到标题"), 700);
-      } else state.busy = false;
+      } else setBusy(false);
     }
     function afterPlayerAct(msg) {
       setLog(msg); syncBars();
       if (state.foeHp <= 0) {
-        state.busy = true;
+        setBusy(true);
         setLog("影狼倒下！胜利");
         setTimeout(() => returnMenu("章节继续…"), 800);
         return;
@@ -278,7 +447,7 @@
 
     sk.on(sk.$("#cmd-atk"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      state.busy = true;
+      setBusy(true);
       const dmg = 9 + Math.floor(Math.random() * 6);
       state.foeHp = Math.max(0, state.foeHp - dmg);
       sk.pulse(sk.$("#foe-card"));
@@ -286,8 +455,8 @@
     });
     sk.on(sk.$("#cmd-skill"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      if (state.heroMp < 8) { sk.toast("技力不足", "warning"); return; }
-      state.busy = true; state.heroMp -= 8;
+      if (state.heroMp < 8) { whisper("技力不足"); return; }
+      setBusy(true); state.heroMp -= 8;
       const dmg = 16 + Math.floor(Math.random() * 5);
       state.foeHp = Math.max(0, state.foeHp - dmg);
       sk.pulse(sk.$("#foe-card"));
@@ -295,25 +464,25 @@
     });
     sk.on(sk.$("#cmd-item"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
-      if (state.potions <= 0) { sk.toast("没有恢复药", "warning"); return; }
-      state.busy = true; state.potions -= 1;
+      if (state.potions <= 0) { whisper("没有恢复药"); return; }
+      setBusy(true); state.potions -= 1;
       state.heroHp = Math.min(state.heroHpMax, state.heroHp + 18);
       afterPlayerAct("使用恢复药 +18（剩 " + state.potions + "）");
     });
     sk.on(sk.$("#cmd-run"), "click", () => {
       if (state.busy || sk.$("#battle-layer").hidden) return;
       if (Math.random() < 0.55) returnMenu("成功逃跑");
-      else { state.busy = true; setLog("逃跑失败！"); setTimeout(foeTurn, 380); }
+      else { setBusy(true); setLog("逃跑失败！"); setTimeout(foeTurn, 380); }
     });
 
-    sk.on(sk.$("#btn-config"), "click", () => sk.openPanel("#config-panel"));
-    sk.on(sk.$("#config-close"), "click", () => sk.closePanel("#config-panel"));
+    sk.on(sk.$("#btn-config"), "click", () => { sk.$("#config-panel").hidden = false; });
+    sk.on(sk.$("#config-close"), "click", () => { sk.$("#config-panel").hidden = true; });
     sk.$all("[data-toggle]").forEach((btn) => {
       sk.on(btn, "click", () => {
         const on = btn.dataset.on !== "true";
         btn.dataset.on = String(on);
         btn.textContent = on ? "开" : "关";
-        btn.className = "btn" + (on ? " btn-success" : "");
+        btn.classList.toggle("on", on);
       });
     });
     sk.on(sk.$("#btn-load"), "click", () => { sk.$("#load-overlay").hidden = false; });
@@ -321,26 +490,28 @@
     sk.$all("[data-slot]").forEach((btn) => {
       sk.on(btn, "click", () => {
         sk.$("#load-overlay").hidden = true;
-        if (btn.dataset.slot === "2") sk.toast("空槽位", "warning");
+        if (btn.dataset.slot === "2") whisper("空槽位");
         else enterBattle();
       });
     });
     sk.on(sk.$("#btn-start"), "click", () => {
       const overlay = sk.$("#loading-overlay");
+      const bar = sk.$("#load-bar");
       overlay.hidden = false;
       let pct = 0;
+      bar.style.width = "0%";
       const tick = setInterval(() => {
         pct += 10 + Math.floor(Math.random() * 8);
         if (pct >= 100) {
           clearInterval(tick);
-          sk.setFill(sk.$("#load-bar"), 100);
+          bar.style.width = "100%";
           overlay.hidden = true;
           enterBattle();
-        } else sk.setFill(sk.$("#load-bar"), pct);
+        } else bar.style.width = pct + "%";
       }, 100);
     });
     sk.on(sk.$("#btn-exit"), "click", () => {
-      sk.modal({ title: "退出游戏？", body: "未保存进度将会丢失。", onConfirm: () => sk.toast("感谢游玩！", "warning") });
+      sk.modal({ title: "退出游戏？", body: "未保存进度将会丢失。", onConfirm: () => whisper("感谢游玩！") });
     });
   </script>
 </body>
