@@ -11,17 +11,13 @@
   <style>
     .game-world {
       image-rendering: pixelated;
-      background:
-        linear-gradient(180deg,
-          #1D2B53 0%,
-          #1D2B53 38%,
-          #008751 38%,
-          #008751 40%,
-          #AB5236 40%,
-          #5F574F 70%,
-          #1D2B53 100%);
+      background: #1D2B53 center top / cover no-repeat;
+      background-image: url("../../assets/project/04-pixel-retro/battle-bg.png");
     }
-    .game-world::before { opacity: 0.15; }
+    .game-world::before { opacity: 0.1; }
+    .game-world::after {
+      box-shadow: inset 0 0 80px 24px rgba(0, 0, 0, 0.45);
+    }
 
     .stage {
       position: absolute;
@@ -51,17 +47,22 @@
     }
 
     .party {
-      position: absolute; left: 10%; bottom: 10%;
+      position: absolute; left: 6%; bottom: 6%;
       display: flex; flex-direction: column; align-items: center; gap: 0;
       transition: filter 80ms step-end;
+      z-index: 3;
     }
-    .party.flash { filter: brightness(2.4); }
+    .party.flash { filter: brightness(2.2); }
     .party .sprite {
-      width: 56px; height: 56px; image-rendering: pixelated;
-      filter: drop-shadow(0 4px 0 rgba(0,0,0,.55));
+      width: 108px; height: 128px;
+      object-fit: contain;
+      object-position: center bottom;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,.75));
+      background: transparent !important;
     }
     .party .shadow {
-      width: 40px; height: 8px; margin-top: -4px;
+      width: 56px; height: 10px; margin-top: -6px;
       background: rgba(0,0,0,.45);
       border-radius: 50%;
     }
@@ -73,28 +74,41 @@
     }
 
     .enemies {
-      position: absolute; top: 8%; right: 8%; bottom: 8%;
+      position: absolute; top: 6%; right: 4%; bottom: 4%;
+      width: 46%;
       display: flex; flex-direction: column; justify-content: space-evenly;
-      align-items: flex-end; gap: 4px;
+      align-items: flex-end; gap: 2px;
       pointer-events: none;
+      z-index: 3;
     }
     .foe {
       position: relative;
       display: flex; flex-direction: column; align-items: center;
-      min-width: 56px; min-height: 72px;
-      padding: 4px 8px 2px;
-      background: transparent; border: none; cursor: pointer;
+      min-width: 72px; min-height: 88px;
+      padding: 4px 6px 2px;
+      background: transparent !important; border: none; cursor: pointer;
       pointer-events: auto;
       -webkit-tap-highlight-color: transparent;
       transition: transform 80ms step-end;
     }
     .foe .sprite {
-      width: 44px; height: 44px; image-rendering: pixelated;
-      filter: drop-shadow(0 3px 0 rgba(0,0,0,.5));
+      width: 78px; height: 92px;
+      object-fit: contain;
+      object-position: center bottom;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.7));
+      background: transparent !important;
       transition: filter 80ms step-end, transform 80ms step-end;
     }
+    .foe[data-id="bat"] .sprite {
+      width: 96px; height: 56px;
+      object-position: center center;
+    }
+    .foe[data-id="slime"] .sprite {
+      width: 72px; height: 64px;
+    }
     .foe .shadow {
-      width: 32px; height: 6px; margin-top: -2px;
+      width: 40px; height: 8px; margin-top: -4px;
       background: rgba(0,0,0,.4); border-radius: 50%;
     }
     .foe .name {
@@ -108,15 +122,15 @@
       margin-top: 2px;
     }
     .foe.selected .sprite {
-      filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 3px 0 rgba(0,0,0,.5));
+      filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 8px 10px rgba(0,0,0,.7));
     }
     .foe.selected::before {
       content: "▶";
-      position: absolute; left: -16px; top: 18px;
+      position: absolute; left: -14px; top: 28%;
       color: var(--accent); font-size: 12px;
       text-shadow: 1px 1px 0 #000;
     }
-    .foe.hit .sprite { transform: translateX(6px); filter: brightness(2.2); }
+    .foe.hit .sprite { transform: translateX(6px); filter: brightness(2.1); }
     .foe.dead {
       opacity: 0.28; pointer-events: none;
     }
@@ -243,25 +257,25 @@
       <div class="stage" id="stage">
         <div class="float-layer" id="floats"></div>
         <div class="party" id="party">
-          <img class="sprite" src="../../assets/_shared/rpg-icons/brave.png" alt="" />
+          <img class="sprite" src="../../assets/project/04-pixel-retro/hero.png" alt="" draggable="false" />
           <div class="shadow" aria-hidden="true"></div>
           <span class="tag">隆</span>
         </div>
         <div class="enemies" id="enemies">
           <button type="button" class="foe" data-id="slime" data-hp="30" data-max="30" data-name="史莱姆" aria-label="选择史莱姆">
-            <img class="sprite" src="../../assets/_shared/rpg-icons/potion.png" alt="" />
+            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-slime.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">史莱姆</span>
             <span class="hp-mini" data-hp-label>30</span>
           </button>
           <button type="button" class="foe selected" data-id="bat" data-hp="22" data-max="22" data-name="蝙蝠" aria-label="选择蝙蝠">
-            <img class="sprite" src="../../assets/_shared/rpg-icons/bow.png" alt="" />
+            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-bat.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">蝙蝠</span>
             <span class="hp-mini" data-hp-label>22</span>
           </button>
           <button type="button" class="foe" data-id="orc" data-hp="45" data-max="45" data-name="兽人" aria-label="选择兽人">
-            <img class="sprite" src="../../assets/_shared/rpg-icons/sword.png" alt="" />
+            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-orc.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">兽人</span>
             <span class="hp-mini" data-hp-label>45</span>
@@ -321,10 +335,11 @@
     const sk = SceneKit;
     const HP_MAX = 99;
     const MP_MAX = 30;
+    const ASSET = "../../assets/project/04-pixel-retro/";
     const FOE_DEFAULTS = [
-      { id: "slime", hp: 30, name: "史莱姆", icon: "potion.png" },
-      { id: "bat", hp: 22, name: "蝙蝠", icon: "bow.png" },
-      { id: "orc", hp: 45, name: "兽人", icon: "sword.png" },
+      { id: "slime", hp: 30, name: "史莱姆", src: ASSET + "foe-slime.png" },
+      { id: "bat", hp: 22, name: "蝙蝠", src: ASSET + "foe-bat.png" },
+      { id: "orc", hp: 45, name: "兽人", src: ASSET + "foe-orc.png" },
     ];
 
     let hp = 72;
@@ -469,7 +484,7 @@
         foe.dataset.name = def.name;
         foe.dataset.id = def.id;
         foe.setAttribute("aria-label", "选择" + def.name);
-        foe.querySelector(".sprite").src = "../../assets/_shared/rpg-icons/" + def.icon;
+        foe.querySelector(".sprite").src = def.src;
         foe.querySelector(".name").textContent = def.name;
         updateFoeHp(foe);
       });

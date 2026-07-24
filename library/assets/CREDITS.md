@@ -50,3 +50,11 @@
 - `library/assets/project/03-scifi-space/hostile-ship.png` — hostile fighter plate (black-keyed)
 - `library/assets/project/03-scifi-space/icons/` — HUD touch icons (lock / fire / power / nav / mode / help), black-keyed
 - License: project original for this encyclopedia demo
+
+## Project-generated scene plates (04 Pixel Retro)
+
+- `library/assets/project/04-pixel-retro/battle-bg.png` — original night meadow battle plate (pixel)
+- `library/assets/project/04-pixel-retro/hero.png` — hero「隆」plate (black-keyed)
+- `library/assets/project/04-pixel-retro/foe-slime.png` / `foe-bat.png` / `foe-orc.png` — battle foe plates (black-keyed)
+- License: project original for this encyclopedia demo
+- **不含**商业 JRPG 官方或 Rip 素材
