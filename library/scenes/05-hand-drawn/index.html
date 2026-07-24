@@ -44,20 +44,10 @@
 
     /* 石台：世界物件，不是 UI chrome */
     .stone-ledge {
-      position: absolute; left: 4%; right: 4%; bottom: 0; height: 26%;
+      position: absolute; left: 0; right: 0; bottom: 0; height: 22%;
       pointer-events: none; z-index: 2;
       background:
-        linear-gradient(180deg, transparent 0%, rgba(18, 14, 10, 0.4) 18%, #1a1510 38%, #0e0b08 100%);
-      clip-path: polygon(
-        2% 28%, 8% 18%, 18% 22%, 32% 14%, 48% 20%, 62% 12%, 78% 18%, 92% 14%, 100% 24%,
-        100% 100%, 0 100%
-      );
-      border-top: 2px solid rgba(80, 64, 42, 0.55);
-    }
-    .stone-ledge::before {
-      content: "";
-      position: absolute; left: 10%; right: 10%; top: 22%; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(217, 179, 108, 0.25), transparent);
+        linear-gradient(180deg, transparent 0%, rgba(12, 9, 6, 0.55) 40%, rgba(8, 6, 4, 0.92) 100%);
     }
 
     .altar {
@@ -200,61 +190,84 @@
       pointer-events: none;
     }
 
-    /* 底栏：火漆印 + 骨骰，不是双按钮 */
+    /* 底栏：两张撕纸，与献礼同语汇；不要光泽圆钮 */
     .rite-bar {
-      position: absolute; left: 0; right: 0; bottom: 4%;
+      position: absolute; left: 0; right: 0; bottom: 5%;
       display: flex; align-items: flex-end; justify-content: center;
-      gap: 28px; z-index: 8; pointer-events: none;
+      gap: 18px; z-index: 8; pointer-events: none;
     }
     .rite-bar > * { pointer-events: auto; }
 
-    .wax-seal {
-      width: 78px; height: 78px; border: none; padding: 0;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 35% 30%, #c45a48 0%, #8b3a2e 48%, #5c2218 100%);
-      box-shadow:
-        0 4px 0 #2a100c,
-        inset 0 2px 0 rgba(255, 200, 180, 0.25),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.35);
-      color: #f0e0c8;
-      font-family: "IM Fell English", serif;
-      font-size: 15px; letter-spacing: 0.12em;
-      cursor: pointer;
+    .scrap {
+      border: none; padding: 0; cursor: pointer;
+      color: var(--ink);
+      font-family: "Caveat", cursive; font-weight: 700;
       -webkit-tap-highlight-color: transparent;
-      transform: rotate(-4deg);
+      filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.75));
+      transition: transform 80ms ease-out, filter 80ms step-end;
     }
-    .wax-seal:active { transform: rotate(-4deg) scale(0.94) translateY(2px); }
-    .wax-seal:disabled {
-      filter: grayscale(0.7) brightness(0.55);
-      pointer-events: none;
+    .scrap .face {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 240, 210, 0.3), transparent 50%),
+        linear-gradient(150deg, #d8b888 0%, #c4a574 50%, #a88752 100%);
+      box-shadow: inset 0 0 0 2px #1a1410;
+      position: relative;
     }
-    .wax-seal .rim {
-      display: grid; place-items: center; width: 100%; height: 100%;
-      border-radius: 50%;
-      box-shadow: inset 0 0 0 3px rgba(240, 224, 200, 0.35);
+    .scrap .face::after {
+      content: "";
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.16;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    .scrap .label {
+      position: relative; z-index: 1;
+      line-height: 1.05; text-align: center;
+    }
+    .scrap .label em {
+      display: block; font-style: normal;
+      font-family: "IM Fell English", serif; font-size: 11px;
+      letter-spacing: 0.14em; color: #5c4030; margin-top: 2px;
+    }
+    .scrap:active { filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.75)); }
+    .scrap:disabled {
+      opacity: 0.38; pointer-events: none; filter: grayscale(0.8);
     }
 
-    .bone-die {
-      width: 56px; height: 56px; border: none; padding: 0;
-      background: #e8dcc4;
-      color: #1a1410;
-      font-family: "Caveat", cursive; font-size: 22px; font-weight: 700;
-      cursor: pointer;
-      clip-path: polygon(8% 0%, 92% 4%, 100% 18%, 96% 88%, 80% 100%, 12% 96%, 0% 78%, 4% 12%);
-      box-shadow: 3px 4px 0 #000;
-      transform: rotate(6deg);
-      -webkit-tap-highlight-color: transparent;
-      line-height: 1;
+    /* 重抽：小撕角 */
+    .scrap-reroll { transform: rotate(5deg); }
+    .scrap-reroll .face {
+      width: 64px; height: 58px;
+      clip-path: polygon(6% 0%, 94% 5%, 100% 22%, 96% 90%, 78% 100%, 10% 96%, 0% 74%, 3% 14%);
     }
-    .bone-die small {
-      display: block; font-size: 11px; letter-spacing: 0.04em;
-      font-family: "Cormorant Garamond", serif; margin-top: -2px;
+    .scrap-reroll .label { font-size: 22px; }
+    .scrap-reroll:active { transform: rotate(5deg) scale(0.96); }
+
+    /* 接受：大撕纸 + 暗红墨印，扁平手绘 */
+    .scrap-accept { transform: rotate(-3deg); }
+    .scrap-accept .face {
+      width: 118px; min-height: 70px; padding: 10px 14px 12px;
+      clip-path: polygon(
+        2% 8%, 8% 0%, 40% 4%, 70% 0%, 94% 6%, 100% 18%,
+        98% 78%, 92% 100%, 58% 96%, 28% 100%, 4% 92%, 0% 70%, 3% 30%
+      );
     }
-    .bone-die:active { transform: rotate(6deg) scale(0.95); }
-    .bone-die:disabled {
-      opacity: 0.35; pointer-events: none; filter: grayscale(1);
+    .scrap-accept .ink-blot {
+      position: absolute; left: 50%; top: 50%;
+      width: 54px; height: 54px; transform: translate(-50%, -52%);
+      border-radius: 42% 58% 50% 50% / 48% 42% 58% 52%;
+      background: #6b2a22;
+      opacity: 0.88;
+      box-shadow: inset 0 0 0 2px rgba(26, 20, 16, 0.45);
+      z-index: 0;
     }
+    .scrap-accept .label {
+      font-family: "IM Fell English", serif;
+      font-size: 18px; letter-spacing: 0.18em;
+      color: #f0e0c8; text-shadow: 1px 1px 0 #1a1410;
+    }
+    .scrap-accept .label em { color: rgba(240, 224, 200, 0.75); }
+    .scrap-accept:active { transform: rotate(-3deg) scale(0.97); }
 
     /* 铭刻卷轴，不是 modal panel */
     .scroll {
@@ -346,16 +359,19 @@
 
       <div class="whisper" id="feed" aria-live="polite"></div>
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">指引</button>
-      <div class="help" id="help" hidden>点按一张羊皮纸献礼 · 按下火漆印带走 · 骨骰可重抽一次</div>
+      <div class="help" id="help" hidden>点按一张羊皮纸献礼 · 按下墨印纸带走 · 撕角可重抽一次</div>
 
       <div class="boon-col" id="boon-nodes" role="listbox" aria-label="恩赐献礼"></div>
 
       <div class="rite-bar">
-        <button type="button" class="bone-die" id="btn-reroll" aria-label="重新抽取，剩余 1 次">
-          骰<small>重抽</small>
+        <button type="button" class="scrap scrap-reroll" id="btn-reroll" aria-label="重新抽取，剩余 1 次">
+          <span class="face"><span class="label">重抽<em>一次</em></span></span>
         </button>
-        <button type="button" class="wax-seal" id="btn-confirm" aria-label="确认恩赐">
-          <span class="rim">接受</span>
+        <button type="button" class="scrap scrap-accept" id="btn-confirm" aria-label="确认恩赐">
+          <span class="face">
+            <span class="ink-blot" aria-hidden="true"></span>
+            <span class="label">接受<em>带走</em></span>
+          </span>
         </button>
       </div>
 
@@ -415,13 +431,14 @@
 
     function updateRerollBtn() {
       const btn = sk.$("#btn-reroll");
+      const label = btn.querySelector(".label");
       if (rerollsLeft <= 0) {
         btn.disabled = true;
-        btn.innerHTML = "尽<small>用尽</small>";
+        if (label) label.innerHTML = "用尽<em>无</em>";
         btn.setAttribute("aria-label", "重抽已用尽");
       } else {
         btn.disabled = locked;
-        btn.innerHTML = "骰<small>重抽</small>";
+        if (label) label.innerHTML = "重抽<em>一次</em>";
         btn.setAttribute("aria-label", "重新抽取，剩余 " + rerollsLeft + " 次");
       }
     }
@@ -513,7 +530,7 @@
       currentIds = shuffle([...POOL.keys()]).slice(0, 3);
       renderBoons(currentIds);
       updateRerollBtn();
-      feed("骨骰一掷");
+      feed("撕角重抽");
       setPrompt("新的道路", 1400);
     });
 
