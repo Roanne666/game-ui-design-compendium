@@ -4,164 +4,249 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>06 卡通漫画 — 单一大拍键</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/cartoon-comic.css" />
   <style>
-    .game-world {
-      background:
-        repeating-linear-gradient(45deg, transparent 0 18px, rgba(0,0,0,0.05) 18px 19px),
-        radial-gradient(circle at 50% 32%, #FFF1DC 0%, #FFD900 55%, #FF9F1C 100%);
-    }
-    .game-world::before { opacity: 0; }
-    .speed-lines {
-      position: absolute; inset: 18% 0 42% 0; pointer-events: none; z-index: 1;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent 0 28px,
-        rgba(0,0,0,0.06) 28px 30px
-      );
+    .game-root {
+      --phone-border-color: rgba(26, 26, 26, 0.85);
+      --phone-shadow-inset: inset 0 0 0 1px rgba(255, 217, 0, 0.25);
     }
 
-    .hud-chip {
-      position: absolute; top: 52px; z-index: 5;
-      padding: 8px 12px;
-      background: var(--surface);
-      border: 3px solid var(--border);
-      box-shadow: 4px 4px 0 var(--shadow-color);
-      font-family: var(--font-display);
-      letter-spacing: 0.08em;
-      text-align: center;
-      min-width: 72px;
+    .game-world {
+      background:
+        radial-gradient(circle at 50% 28%, #fff8e0 0%, #ffd900 42%, #ff9f1c 78%, #e63946 120%);
     }
-    .hud-chip.combo { left: 12px; }
-    .hud-chip.score { right: 52px; }
-    .hud-chip .lab { display: block; font-size: 10px; color: var(--text-muted); }
-    .hud-chip .num { display: block; font-size: 22px; line-height: 1.1; color: var(--accent); }
-    .hud-chip.score .num { color: var(--accent-2); }
+    .game-world::before {
+      opacity: 0.55;
+      background-image: radial-gradient(#1a1a1a 1.1px, transparent 1.2px);
+      background-size: 10px 10px;
+      mix-blend-mode: multiply;
+    }
+    .game-world::after {
+      box-shadow: inset 0 0 70px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .speed-lines {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        repeating-conic-gradient(from 0deg at 50% 38%, transparent 0 8deg, rgba(0,0,0,0.045) 8deg 9deg);
+      opacity: 0.85;
+      mask-image: radial-gradient(ellipse 70% 55% at 50% 38%, #000 20%, transparent 72%);
+    }
+
+    /* 顶栏：漫画印戳，不是网页 chip */
+    .stamp {
+      position: absolute; top: 48px; z-index: 5;
+      min-width: 78px; padding: 10px 14px 8px;
+      background: var(--surface);
+      border: 4px solid var(--border);
+      box-shadow: 5px 5px 0 var(--shadow-color);
+      font-family: var(--font-display);
+      text-align: center;
+      text-transform: uppercase;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .stamp.combo {
+      left: 10px;
+      transform: rotate(-4deg);
+      clip-path: polygon(8% 0, 100% 6%, 94% 100%, 0 92%);
+    }
+    .stamp.score {
+      right: 52px;
+      transform: rotate(3deg);
+      background: #ffe566;
+      clip-path: polygon(0 8%, 92% 0, 100% 90%, 6% 100%);
+    }
+    .stamp .lab {
+      display: block; font-size: 11px; letter-spacing: 0.12em;
+      color: var(--text); line-height: 1;
+    }
+    .stamp .num {
+      display: block; font-size: 28px; line-height: 1; margin-top: 2px;
+      color: var(--accent);
+      -webkit-text-stroke: 1px var(--border);
+    }
+    .stamp.score .num { color: #1a5fb4; -webkit-text-stroke: 1px var(--border); }
 
     .lane {
       position: absolute;
-      top: 26%; left: 0; right: 0;
-      height: 26%;
+      top: 24%; left: 0; right: 0;
+      height: 28%;
       overflow: hidden;
       z-index: 3;
-      border-top: 4px solid var(--border);
-      border-bottom: 4px solid var(--border);
-      background: rgba(255, 241, 220, 0.35);
+      border-top: 5px solid var(--border);
+      border-bottom: 5px solid var(--border);
+      background:
+        repeating-linear-gradient(90deg, #fff1dc 0 22px, #ffe8c0 22px 44px);
+      box-shadow: inset 0 0 0 3px rgba(26, 26, 26, 0.08);
+    }
+    .lane::before {
+      content: "HIT!";
+      position: absolute; left: 8px; top: 6px;
+      font-family: var(--font-display); font-size: 12px; letter-spacing: 0.08em;
+      color: rgba(26, 26, 26, 0.2); pointer-events: none;
     }
     .sweet {
       position: absolute; top: 0; bottom: 0;
-      left: 50%; width: 64px; transform: translateX(-50%);
-      border-left: 4px solid var(--accent);
-      border-right: 4px solid var(--accent);
-      background: rgba(230, 57, 70, 0.16);
+      left: 50%; width: 70px; transform: translateX(-50%);
+      border-left: 4px dashed var(--accent);
+      border-right: 4px dashed var(--accent);
+      background: rgba(230, 57, 70, 0.14);
       pointer-events: none;
     }
     .sweet::before, .sweet::after {
       content: ""; position: absolute; left: 50%; transform: translateX(-50%);
-      width: 16px; height: 16px; background: var(--accent);
+      width: 18px; height: 18px; background: var(--accent);
+      border: 2px solid var(--border);
       clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
     }
-    .sweet::before { top: -2px; }
-    .sweet::after { bottom: -2px; }
+    .sweet::before { top: -6px; }
+    .sweet::after { bottom: -6px; }
 
     .target {
       position: absolute; top: 50%; transform: translateY(-50%);
-      width: 56px; height: 56px;
+      width: 62px; height: 62px;
       display: flex; align-items: center; justify-content: center;
-      background: var(--warning);
+      background: #ffa300;
       border: 4px solid var(--border);
       box-shadow: 5px 5px 0 var(--shadow-color);
-      font-size: 28px;
       will-change: left;
+      clip-path: polygon(6% 0, 100% 8%, 94% 100%, 0 90%);
     }
-    .target img { width: 32px; height: 32px; }
+    .target img { width: 34px; height: 34px; pointer-events: none; }
     .target.hit { animation: pop 240ms ease-out forwards; }
     .target.miss { animation: shake 240ms ease-out forwards; opacity: 0.55; }
     @keyframes pop {
       0% { transform: translateY(-50%) scale(1); }
-      40% { transform: translateY(-50%) scale(1.4) rotate(8deg); background: var(--success); }
+      40% { transform: translateY(-50%) scale(1.45) rotate(10deg); background: var(--success); }
       100% { transform: translateY(-50%) scale(0); opacity: 0; }
     }
     @keyframes shake {
       0%,100% { transform: translateY(-50%) translateX(0); }
-      25% { transform: translateY(-50%) translateX(-7px); }
-      75% { transform: translateY(-50%) translateX(7px); }
+      25% { transform: translateY(-50%) translateX(-8px); }
+      75% { transform: translateY(-50%) translateX(8px); }
     }
 
+    /* 单一大拍键：漫画爆炸钮，同语汇厚墨 */
     .fire-pad {
-      position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%);
-      width: min(200px, 58%); z-index: 5;
+      position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%);
+      width: min(210px, 60%); z-index: 5;
+      filter: drop-shadow(6px 8px 0 #1a1a1a);
     }
     .punch {
+      appearance: none; -webkit-appearance: none;
       width: 100%; aspect-ratio: 1;
+      padding: 0; margin: 0; outline: none;
       border-radius: 50%;
-      background: var(--accent);
-      color: var(--surface);
-      border: 5px solid var(--border);
-      box-shadow: 6px 6px 0 var(--shadow-color);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-      font-family: var(--font-display); font-size: 18px; letter-spacing: 0.14em;
+      background:
+        radial-gradient(circle at 35% 30%, #ff6b6b 0%, var(--accent) 48%, #9e1b28 100%);
+      color: #fff1dc;
+      border: 6px solid var(--border);
+      box-shadow:
+        inset 0 0 0 4px rgba(255, 241, 220, 0.25),
+        inset 0 -18px 28px rgba(0, 0, 0, 0.25);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      font-family: var(--font-display); font-size: 34px; letter-spacing: 0.06em;
       cursor: pointer;
-      transition: transform 80ms ease-out, box-shadow 80ms ease-out, background 80ms ease-out;
+      transition: transform 70ms ease-out, filter 70ms ease-out;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation; user-select: none;
+      position: relative;
     }
-    .punch img { width: 48px; height: 48px; filter: brightness(0) invert(1); pointer-events: none; }
+    .punch::before {
+      content: "";
+      position: absolute; inset: -14px;
+      border-radius: 50%;
+      border: 3px dashed rgba(26, 26, 26, 0.35);
+      pointer-events: none;
+    }
+    .punch img {
+      width: 52px; height: 52px;
+      filter: brightness(0) invert(1);
+      pointer-events: none;
+    }
+    .punch .boom {
+      line-height: 1;
+      -webkit-text-stroke: 2px var(--border);
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+    }
     .punch:active, .punch.pressed {
-      transform: translate(4px, 4px) scale(0.96);
-      box-shadow: 2px 2px 0 var(--shadow-color);
-      background: var(--danger);
+      transform: scale(0.92) translate(2px, 3px);
+      filter: brightness(1.05);
     }
 
     .burst {
-      position: absolute; pointer-events: none; z-index: 6;
-      font-family: var(--font-display); font-size: 26px; color: var(--accent);
-      text-shadow: 3px 3px 0 var(--border);
-      animation: fly 620ms ease-out forwards; letter-spacing: 0.06em;
+      position: absolute; pointer-events: none; z-index: 8;
+      font-family: var(--font-display); font-size: 28px; color: var(--accent);
+      -webkit-text-stroke: 2px var(--border);
+      text-shadow: 4px 4px 0 #fff1dc;
+      animation: fly 620ms ease-out forwards; letter-spacing: 0.04em;
+      white-space: nowrap;
     }
+    .burst.good { color: #1a5fb4; }
+    .burst.bad { color: #444; font-size: 22px; }
     @keyframes fly {
-      0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
-      20% { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
-      100% { transform: translate(-50%, -90px) scale(0.9); opacity: 0; }
+      0% { transform: translate(-50%, 0) scale(0.4) rotate(-8deg); opacity: 0; }
+      18% { transform: translate(-50%, -12px) scale(1.2) rotate(4deg); opacity: 1; }
+      100% { transform: translate(-50%, -100px) scale(0.95) rotate(-2deg); opacity: 0; }
     }
 
     .help-toggle {
-      position: absolute; top: 52px; right: 12px; z-index: 16;
-      width: 36px; height: 36px; padding: 0; border-radius: 50%;
-      border: 3px solid var(--border); background: var(--surface);
-      box-shadow: 3px 3px 0 var(--shadow-color);
-      font-family: var(--font-display); font-size: 16px; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      position: absolute; top: 48px; right: 10px; z-index: 16;
+      width: 40px; height: 40px; padding: 0; margin: 0; outline: none;
+      border-radius: 50%;
+      border: 4px solid var(--border); background: #3da9ff; color: #fff1dc;
+      box-shadow: 4px 4px 0 var(--shadow-color);
+      font-family: var(--font-display); font-size: 20px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .help-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow-color); }
     .help {
-      position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
-      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.4;
-      background: var(--surface); border: 3px solid var(--border);
-      box-shadow: 4px 4px 0 var(--shadow-color); pointer-events: none;
+      position: absolute; top: 100px; left: 14px; right: 14px; z-index: 15;
+      padding: 12px 14px 14px;
+      text-align: center; font-size: 13px; line-height: 1.4;
+      font-family: "Comic Neue", cursive;
+      background: var(--surface);
+      border: 4px solid var(--border);
+      box-shadow: 5px 5px 0 var(--shadow-color);
+      pointer-events: none;
+      clip-path: polygon(0 0, 100% 0, 100% 82%, 62% 82%, 54% 100%, 46% 82%, 0 82%);
     }
     .help[hidden] { display: none !important; }
+
+    .game-root.shake .game-hud {
+      animation: punchShake 120ms ease-out;
+    }
+    @keyframes punchShake {
+      0%, 100% { transform: translate(0, 0); }
+      30% { transform: translate(-3px, 2px); }
+      60% { transform: translate(3px, -2px); }
+    }
   </style>
 </head>
 <body>
-  <div class="game-root">
+  <div class="game-root" id="root">
     <div class="game-world"></div>
     <div class="speed-lines" aria-hidden="true"></div>
     <div class="meta-vignette" id="vignette"></div>
-    <div class="game-hud">
-      <div class="hud-chip combo">
+    <div class="game-hud" id="hud">
+      <div class="stamp combo" aria-label="连击">
         <span class="lab">连击</span>
         <span class="num" id="combo">0</span>
       </div>
-      <div class="hud-chip score">
+      <div class="stamp score" aria-label="分数">
         <span class="lab">分数</span>
         <span class="num" id="score">000</span>
       </div>
 
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
-      <div class="help" id="help" hidden>目标驶入中线菱形区时点按大拍键 · 命中涨连击 · 偏了断连</div>
+      <div class="help" id="help" hidden>目标驶入中线菱形区时猛拍大钮 · 命中涨连击 · 偏了断连</div>
 
       <div class="lane" id="lane">
         <div class="sweet" aria-hidden="true"></div>
@@ -169,8 +254,8 @@
 
       <div class="fire-pad">
         <button type="button" class="punch hit" id="btn-punch" aria-label="出拳">
-          <img src="../../assets/_shared/rpg-icons/hand.png" alt="" />
-          <span>砰</span>
+          <img src="../../assets/_shared/rpg-icons/hand.png" alt="" draggable="false" />
+          <span class="boom">砰</span>
         </button>
       </div>
     </div>
@@ -178,6 +263,8 @@
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
+    const root = sk.$("#root");
+    const hud = sk.$("#hud");
     const lane = sk.$("#lane");
     const punch = sk.$("#btn-punch");
     const SWEET_TOLERANCE = 36;
@@ -191,22 +278,30 @@
       sk.setText(sk.$("#score"), String(score).padStart(3, "0"));
     }
 
-    function burst(x, y, text) {
+    function burst(x, y, text, kind) {
       const el = document.createElement("div");
-      el.className = "burst";
+      el.className = "burst" + (kind ? " " + kind : "");
       el.textContent = text;
-      el.style.left = x + "px";
-      el.style.top = y + "px";
-      document.body.appendChild(el);
+      const hudRect = hud.getBoundingClientRect();
+      el.style.left = (x - hudRect.left) + "px";
+      el.style.top = (y - hudRect.top) + "px";
+      hud.appendChild(el);
       setTimeout(() => el.remove(), 640);
     }
 
-    function finishActive(outcome, label) {
+    function shake() {
+      root.classList.remove("shake");
+      void root.offsetWidth;
+      root.classList.add("shake");
+      setTimeout(() => root.classList.remove("shake"), 140);
+    }
+
+    function finishActive(outcome, label, kind) {
       if (!active || active.hit) return;
       active.el.classList.add(outcome);
       active.hit = true;
       const rect = active.el.getBoundingClientRect();
-      burst(rect.left + rect.width / 2, rect.top, label);
+      burst(rect.left + rect.width / 2, rect.top, label, kind);
       setTimeout(() => active && active.el.remove(), 260);
       active = null;
     }
@@ -214,6 +309,7 @@
     function fire() {
       punch.classList.add("pressed");
       setTimeout(() => punch.classList.remove("pressed"), 90);
+      shake();
       if (!active || active.hit) return;
       const laneRect = lane.getBoundingClientRect();
       const tRect = active.el.getBoundingClientRect();
@@ -222,13 +318,14 @@
       const dist = Math.abs(tCenter - sweet);
       if (dist <= SWEET_TOLERANCE) {
         const bonus = 1 + Math.floor(combo / 5);
-        score += 10 * bonus;
+        const gain = 10 * bonus;
+        score += gain;
         combo += 1;
         best = Math.max(best, combo);
-        finishActive("hit", "砰！+" + (10 * bonus));
+        finishActive("hit", (combo >= 5 ? "连击！" : "砰！") + "+" + gain, "good");
       } else {
         combo = 0;
-        finishActive("miss", tCenter < sweet ? "太早" : "太晚");
+        finishActive("miss", tCenter < sweet ? "太早" : "太晚", "bad");
         const v = sk.$("#vignette");
         v.classList.add("on");
         setTimeout(() => v.classList.remove("on"), 200);
@@ -242,6 +339,7 @@
       const img = document.createElement("img");
       img.src = "../../assets/_shared/rpg-icons/" + icons[Math.floor(Math.random() * icons.length)];
       img.alt = "";
+      img.draggable = false;
       el.appendChild(img);
       lane.appendChild(el);
       const startX = -60;
@@ -256,7 +354,7 @@
         if (p >= 1) {
           if (active && active.el === el && !active.hit) {
             combo = 0;
-            finishActive("miss", "错过");
+            finishActive("miss", "错过", "bad");
             sync();
           }
           return;
