@@ -116,6 +116,6 @@
 ## 研究综合 / 项目准则
 
 - [风格互斥边界](./synthesis/style-boundaries.md)
-- [游戏感 vs 网页感](./synthesis/game-feel-vs-web.md)
+- [游戏感 vs 网页壳 — 通用 UI 思路](./synthesis/game-feel-vs-web.md) — 反网页壳、控件同语汇、05 正反例
 - [赛博朋克 UI 全景](./synthesis/cyberpunk-ui-landscape.md)
-- [移动端竖屏优先 — 通用 HUD 思路](./synthesis/mobile-portrait-first.md) — 本仓库默认交付：9:20 竖屏 + 触控分层 + 图标主键
+- [移动端竖屏优先（硬规则）](../docs/rules/mobile-portrait-first.md) — 9:20 + 触控 + 类型玩法矩阵

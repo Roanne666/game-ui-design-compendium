@@ -2,7 +2,7 @@
 
 > 本仓库**所有风格**的默认交付：竖屏 **9:20** 游戏 UI。桌面浏览器仅作预览壳。  
 > **画幅统一；楼型与玩法循环按游戏类型区分。** 禁止把「左锁定 + 右开火 + 中口袋」当成全库默认模板。  
-> 相关：[`game-feel-vs-web.md`](../../research/synthesis/game-feel-vs-web.md)。
+> 相关：[`game-feel-vs-web.md`](../../research/synthesis/game-feel-vs-web.md)（通用 UI 思路：反网页壳、控件同语汇）。
 
 日期: 2026-07-24
 

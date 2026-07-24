@@ -1,26 +1,120 @@
-# Game Feel vs Web Layout
+# 游戏感 vs 网页壳 — 通用 UI 思路
 
-Scenes must feel like HUD over a game world (diegetic / non-diegetic / meta), not web landing pages.
+> 场景必须是「盖在游戏世界上的 HUD」，不是落地页 / SaaS 面板。  
+> 硬规则（9:20、玩法矩阵、触控）见 [`docs/rules/mobile-portrait-first.md`](../../docs/rules/mobile-portrait-first.md)。  
+> 本文是可跨风格复用的**观感与控件语汇**原则；05 手绘恩赐台是近期正反例来源。
 
-## Principles
+---
 
-- **Playfield first**: `game-world` sits behind all UI; the player should sense a space, not a document.
-- **Edge anchors**: Use `hud-anchor-tl/tr/bl/br/bc/tc` — avoid `max-width` centered columns and vertical blog stacks.
-- **Anti-web chrome**: Prefer brackets, vignette, letterbox over Material card stacks and SaaS spacing.
-- **Damage feedback**: Meta vignette flash (`#vignette.on` for ~400ms) on player damage where applicable.
+## 1. 一句话
 
-## Implementation
+> **世界在先；控件认形；同风格同语汇；文案留给情境与菜单。**
 
-Shared layer: `library/components/game-feel.css` — import after `components.css` in every scene.
+打开场景应先感到「有一块可玩的空间」，再感到「上面有操作物」——而不是「一叠居中卡片 + 双按钮底栏」。
 
-Structure:
+---
+
+## 2. 四层 UI（Fagerholt & Lorentzon）
+
+| 层 | 含义 | 本仓库用法 |
+|----|------|------------|
+| Diegetic | 世界里真实存在的物件 | 祭坛火、石台、羊皮纸献礼、仪表刻度 |
+| Non-diegetic | 玩家浮层，世界角色看不见 | 血条、指令窗、分数 |
+| Spatial | 挂在 3D/2D 空间里但对角色不可交互 | 锁定框、伤害飘字 |
+| Meta | 打破第四面墙的反馈 | vignette 受伤闪、暂停幕 |
+
+竖屏 Demo 允许 Non-diegetic，但**形状与材质要像该风格的世界物件**，不能退回 Material / 网页组件默认皮。
+
+---
+
+## 3. 反网页壳（硬清单）
+
+落地时逐条过；命中越多，网页感越重。
+
+| 网页壳 | 游戏感替代 |
+|--------|------------|
+| 等宽圆角卡片竖列表 + 均匀 gap | 错位、微旋转、撕边/角标/双线框等**风格化容器** |
+| `.btn` / `.btn-primary` 双栏底栏 | 该风格的**主物件**（墨印撕纸、指令字条、仪表键、街机大钮） |
+| 圆形 `?` + 白底 toast | 撕角指引、手写低语、角标图标 |
+| `max-width` 居中文档柱 | `game-world` 铺满；HUD 用边锚点 |
+| 依赖 `:hover` 辨认 | `selected` / `pressed` / `active` |
+| 主键面大段汉字胶囊 | 认形（图标/物件）；中文放情境、菜单、`aria-label` |
+| 光泽渐变圆 CTA 混进手绘/像素场 | **同一屏内控件语汇必须一致** |
+
+共享 `components.css` 的 `.btn` / `.panel` 是**建材**，不是最终皮肤。场景应用风格语汇覆写或干脆不用类名、自写物件。
+
+---
+
+## 4. 同语汇原则（05 提炼）
+
+**问题**：羊皮纸献礼已经成立，底栏却放光泽红圆钮 / 白底方块 → 立刻「网页按钮贴在插画上」。
+
+**原则**：
+
+1. **主操作也是同材质物件**  
+   选卡是撕纸，则确认/重抽也应是撕纸或墨印，而不是另一套 Chrome。
+2. **主操作可以比选项更大、更沉，但不能换皮**  
+   尺寸与对比拉开层级；材质、描边、字体、阴影语言保持同一家族。
+3. **先消默认控件皮**  
+   `button` 必须 `appearance: none; background: transparent`。否则 `clip-path` 撕边外会露出系统白底方块。
+4. **阴影跟剪影走**  
+   `filter: drop-shadow` 与 `clip-path` 放在同一绘制层；矩形 `box-shadow` 会把撕纸读回卡片。
+5. **装饰服从风格**  
+   胶带、墨点、火光是氛围；不要做成未抠图的白贴条或 App 徽章。
+
+可迁移到其它风格：
+
+| 风格 | 选项物件 | 主操作物件（同语汇） |
+|------|----------|----------------------|
+| 05 手绘 | 羊皮纸献礼 | 墨书撕纸「接受」/ 撕角「重抽」 |
+| 04 像素 | 指令条字列 | 同一指令窗内的焦点行（不是 Material 大钮） |
+| 02 魂系 | 世界内交互 | 底栏极少键 + 露滴；禁止双圆动作条硬套 |
+| 03 舰桥 | 仪表格 | 能量滑块 / 锁定环（禁止网页表单） |
+
+---
+
+## 5. 结构模板
 
 ```html
-<div class="game-root letterbox">
-  <div class="game-world has-grid"></div> <!-- omit has-grid when grid fights style -->
+<div class="game-root">
+  <div class="game-world"></div>           <!-- 世界：有纵深/材质，不是纯色文档底 -->
   <div class="meta-vignette" id="vignette"></div>
-  <div class="game-hud">…</div>
+  <div class="game-hud">
+    <!-- 边锚信息 · 世界内可选中物件 · 风格化主操作 -->
+  </div>
 </div>
 ```
 
-Refs: Fagerholt & Lorentzon 2009 (diegetic UI); Gamasutra diegesis articles; Unity immersion UI guidance.
+共享层：`components.css` → `phone-frame.css` → `game-feel.css` → `styles/<token>.css` → 场景覆写。
+
+手机壳几何以 02 为标准（见 `phone-frame.css`）；**壳统一 ≠ 玩法/控件语汇统一**。
+
+---
+
+## 6. 验收（盲测以外的观感测）
+
+1. 截掉帮助文案后，能否完成该类型矩阵循环？（规则已有）  
+2. 把主操作截出来单独看：像**世界里的物件**，还是像**后台管理系统按钮**？  
+3. 选项区与底栏是否同一材质家族？有无「插画 + 现代 CTA」混排？  
+4. 放大到 200%：控件边缘有无系统白底、未透明的矩形角？  
+5. 并排另一风格：能否只靠楼型/玩法区分，而不是只靠换色？
+
+---
+
+## 7. 反例（近期踩过）
+
+- 05：圆角卡片列表 + `.btn` 双栏 → 网页表单感  
+- 05：火漆光泽圆钮混羊皮纸 → 语汇破裂  
+- 05：`button` 默认底色 + 轻撕边 → 白角方块  
+- 全库：为「统一」给 03/04/05/07/08/10 硬套锁定开火双圆键 → 玩法污染（见规则矩阵）
+
+---
+
+## 8. 相关
+
+- 硬规则与玩法矩阵：[`docs/rules/mobile-portrait-first.md`](../../docs/rules/mobile-portrait-first.md)  
+- 风格互斥：[`style-boundaries.md`](./style-boundaries.md)  
+- 实现：`library/components/game-feel.css`、`phone-frame.css`  
+- 正例场景：`library/scenes/05-hand-drawn/index.html`（羊皮纸献礼台）
+
+Refs: Fagerholt & Lorentzon 2009；Nasty Rodent 四层 UI；本仓库 05 迭代（去卡片栏 → 去光泽圆钮 → 去 button 白底）。

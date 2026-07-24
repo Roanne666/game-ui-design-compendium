@@ -11,7 +11,7 @@
 ## 当前 synthesis
 
 - `style-boundaries.md` — 10 套风格的互斥边界（核心特征对比表）
-- `game-feel-vs-web.md` — diegetic vs 网页壳（研究综述）
+- `game-feel-vs-web.md` — 游戏感 vs 网页壳（通用 UI 思路：同语汇控件、反 Material 底栏）
 - `cyberpunk-ui-landscape.md` — 赛博朋克 UI 视觉调研
 
 ## 注意

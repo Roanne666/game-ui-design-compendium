@@ -11,7 +11,7 @@
 
 **建材共享,楼型按游戏类型分；画幅统一 9:20，玩法不统一。**
 
-场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 `research/synthesis/game-feel-vs-web.md`。
+场景必须是「盖在游戏世界上的 HUD」（diegetic / non-diegetic / meta），不是网页落地页。详见 [`research/synthesis/game-feel-vs-web.md`](research/synthesis/game-feel-vs-web.md)（含控件同语汇、反 Material 底栏）。
 
 - 共享：`library/components/components.css` + `library/components/phone-frame.css` + `library/components/game-feel.css` + `library/components/scene-kit.js` + `library/components/styles/<name>.css`
 - 独占：`library/scenes/<style>/index.html`——**完整可交互** UI 原型，**9:20 竖屏触控**，布局与玩法符合该类型
