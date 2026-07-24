@@ -2,6 +2,8 @@
 
 `library/packs/` 是自包含风格包的根目录。每个风格包集中保存参数规格、Token、可打开场景与专属资产。
 
+**10 套均使用同一共享栈**（见 `references/library-map.md`）。无对应风格时用 [`../examples/generic/`](../examples/generic/)，不要硬套本表。
+
 | # | 风格 | 类型 | SPEC | 主场景 |
 |---|---|---|---|---|
 | 01 | 赛博朋克 | 赛博 RPG / 潜入 | [SPEC.md](./01-cyberpunk-hud/SPEC.md) | [index.html](./01-cyberpunk-hud/index.html) |

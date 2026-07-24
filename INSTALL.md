@@ -12,12 +12,13 @@
 在 Cursor / Claude 中安装或加载本仓库为 Agent Plugin 后，Agent 可通过 Skills 与 Commands 生成 UI：
 
 - **有对应风格** → 套用 `library/packs/<id>/`
-- **无对应** → 走通用竖屏游戏 UI 思路（硬规则 + 共享组件，不硬套 pack）
+- **无对应** → 走通用竖屏游戏 UI（`library/examples/generic/` + 硬规则 + 共享组件）
 
 ## 本地预览
 
 - **入口页**：打开 [`library/index.html`](library/index.html) 浏览全部 10 套风格
 - **单包场景**：`library/packs/<id>/index.html`（例：[`02-dark-fantasy`](library/packs/02-dark-fantasy/index.html) 魂类）
+- **通用骨架**：[`library/examples/generic/index.html`](library/examples/generic/index.html)（无对应风格时）
 
 ## 开发期目录
 

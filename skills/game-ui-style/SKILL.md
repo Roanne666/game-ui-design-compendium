@@ -15,8 +15,8 @@ description: >-
 1. 读 `references/style-matrix.md` + `references/hard-rules.md`
 2. 对照用户游戏的**类型 / 核心玩法 / 布局需求**与矩阵各行
 3. **判定**（二选一，须在回复里写明）：
-   - **A. 有对应** — 某一行的类型与玩法循环明显匹配（可有小幅气质差，但楼型一致）→ 走「套用 pack」
-   - **B. 无对应** — 对不上任何一行，或强行套用会扭曲玩法 → 走「通用 UI」；**禁止**为凑合硬选最近 pack 换皮
+   - **A. 有对应** — 某一行的类型与玩法循环明显匹配，且未命中 `style-matrix` 否决条件 → 套用 pack
+   - **B. 无对应** — 对不上 / 命中否决 → 通用 UI；**禁止**为凑合硬选最近 pack 换皮
 
 不确定时：先说明候选与风险，请用户确认；仍模糊则默认 **B**，并说明原因。
 
@@ -43,16 +43,17 @@ components.css → phone-frame.css → game-feel.css → ./tokens.css → 可选
 **不打开**任意 pack 的 SPEC / 场景 HTML 当皮肤源；不复制某套霓虹/像素/斜切等专有视觉。
 
 1. **必读**：`references/hard-rules.md` → 权威稿 `docs/rules/mobile-portrait-first.md`、`docs/rules/game-feel-vs-web.md`
-2. **选型楼型**：仍按目标游戏自己的类型决定信息架构与操作循环（矩阵可作「同类游戏怎么分区」参考，但**不绑**某一 pack 的色板/几何/动效）
-3. **建材**：只用 `library/components/` 共享层（`components.css`、`phone-frame.css`、`game-feel.css`、`scene-kit.js`）；token 在用户项目内按硬规则自拟（色板、圆角、字重），保持中性、可读、触控热区 ≥44
-4. **加载序（无 pack tokens）**：
+2. **对照骨架**：`library/examples/generic/`（`index.html` + `tokens.css` + README）
+3. **选型楼型**：按目标游戏自己的类型决定信息架构与操作循环（矩阵可作分区参考，不绑 pack 视觉）
+4. **建材**：`library/components/` 共享层 + 自拟或从 generic 复制的 `tokens.css`
+5. **加载序**（与 pack 路径相同，仅 token 来源不同）：
 
 ```
-components.css → phone-frame.css → game-feel.css → （项目自拟 tokens.css）→ scene-kit.js
+components.css → phone-frame.css → game-feel.css → ./tokens.css → scene-kit.js
 ```
 
-5. 文案中文；触控语义；禁止统一锁定开火模板、禁止网页壳冒充 HUD
-6. 可选：`audit-game-hud`（按目标游戏自述的核心循环验收，不按某 pack 盲测）
+6. 文案中文；触控语义；禁止统一锁定开火模板、禁止网页壳冒充 HUD
+7. 可选：`audit-game-hud`（按目标游戏自述的核心循环验收）
 
 ---
 
@@ -67,7 +68,8 @@ components.css → phone-frame.css → game-feel.css → （项目自拟 tokens.
 ## 本地预览
 
 - 全库入口：[`library/index.html`](../../library/index.html)
-- 单包：`library/packs/<id>/index.html`（仅路径 A 需要对照）
+- 单包：`library/packs/<id>/index.html`（仅路径 A）
+- 通用骨架：[`library/examples/generic/index.html`](../../library/examples/generic/index.html)（路径 B）
 
 ## 相关
 

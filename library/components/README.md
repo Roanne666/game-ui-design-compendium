@@ -38,7 +38,7 @@ components/
 ## phone-frame.css 可覆写变量
 
 标准几何对齐 **02 Dark Fantasy**：`min(92vw, 96dvh×9/20)`、圆角 28、双层阴影。  
-`#viewport`（01–03）与 `.game-root`（04–10）共用同一套壳。
+`#viewport` 与 `.game-root` 共用同一套壳；**推荐同元素双标**（`id="viewport" class="game-root"`）或仅用 `.game-root`。全部 pack 挂载标准共享栈（见 `references/library-map.md`）。
 
 ```css
 :root {

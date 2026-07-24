@@ -2,8 +2,8 @@
    Phone Frame — desktop preview shell (standard = style 02)
    ------------------------------------------------------------
    Single 9:20 fake-phone for ALL scenes:
-   - Shared stack scenes: .game-root
-   - Custom HUD scenes (01–03): #viewport
+   - Preferred: .game-root (optionally also id="viewport")
+   - Legacy id alone: #viewport (same geometry)
 
    Geometry locked to 02 Dark Fantasy reference:
    width: min(92vw, calc(96dvh * 9 / 20)); max-height: 96dvh;

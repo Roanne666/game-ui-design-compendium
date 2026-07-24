@@ -24,8 +24,8 @@
 
 1. 确认目标游戏**无合适 pack**（或用户显式要求通用）
 2. 遵循 `skills/game-ui-style/SKILL.md` **路径 B**
-3. 必读硬规则权威稿；只用共享 `library/components/`；自拟 tokens，不复制某 pack 专有视觉
-4. 楼型按该游戏自身类型设计；可选 `/audit-hud`（按自述核心循环验收）
+3. 对照 `library/examples/generic/`；必读硬规则；共享栈 + 自拟/复制 generic tokens
+4. 楼型按该游戏自身类型设计；可选 `/audit-hud`（报告须写明路径 `generic` 与约定循环）
 
 ## 约束
 
