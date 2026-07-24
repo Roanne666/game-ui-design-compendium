@@ -38,7 +38,8 @@ Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 
 │   ├── packs/<id>/                ← 每风格独立包
 │   │   ├── SPEC.md
 │   │   ├── tokens.css
-│   │   ├── scene.css              ← 场景楼型（从页内 style 外置）
+│   │   ├── scene.css
+│   │   ├── scene.js
 │   │   ├── index.html
 │   │   └── assets/                ← 可空
 │   ├── examples/generic/          ← 无对应时的最小通用 HUD

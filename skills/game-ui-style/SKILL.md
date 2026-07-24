@@ -25,7 +25,7 @@ description: >-
 ## 路径 A — 套用 pack
 
 1. 选定 **一个** `library/packs/<id>/`
-2. 读该 pack 的 `SPEC.md`、`tokens.css`、`index.html`（需要时再读本地 css / assets）
+2. 读该 pack 的 `SPEC.md`、`tokens.css`、`scene.css`、`scene.js`、`index.html`（需要时再读 assets）
 3. 按 `references/library-map.md` 加载序在用户项目生成/改造
 4. 文案中文；触控语义；楼型与矩阵该行玩法一致
 5. 可选：`audit-game-hud`
@@ -33,7 +33,7 @@ description: >-
 加载序：
 
 ```
-components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js
+components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js → ./scene.js
 ```
 
 ---
@@ -49,7 +49,7 @@ components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scen
 5. **加载序**（与 pack 路径相同，仅 token 来源不同）：
 
 ```
-components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js
+components.css → phone-frame.css → game-feel.css → ./tokens.css → ./scene.css → scene-kit.js → ./scene.js
 ```
 
 6. 文案中文；触控语义；禁止统一锁定开火模板、禁止网页壳冒充 HUD

@@ -16,7 +16,7 @@
 
 - `library/components/`：共享建材（components.css / phone-frame.css / game-feel.css / scene-kit.js）
 - `library/packs/<id>/`：每风格独立包（Spec + Token + 场景 + 专属素材）；场景楼型与**核心玩法**必须符合该类型游戏,禁止「同一套 DOM 换皮」或统一锁定开火模板
-- **栈约定（全库统一）**：主场景必须挂共享栈（components → phone-frame → game-feel → pack 内 `tokens.css` → `scene.css` → 可选额外 css → scene-kit）。根容器 `.game-root`（可与历史 `#viewport` 同元素）。禁止旁路省略共享栈
+- **栈约定（全库统一）**：主场景必须挂共享栈（components → phone-frame → game-feel → `tokens.css` → `scene.css` → `scene-kit.js` → `scene.js`）。根容器 `.game-root`（可与历史 `#viewport` 同元素）。禁止旁路省略共享栈
 - 调试时仍可用换 Token 对比建材,但**不得**作为对外主叙事
 - **竖屏硬规则**：场景 `#viewport` 默认 9:20；操作必须有可见触控控件；禁止以键鼠快捷键为唯一操作路径
 - **触控语义**：提示文案用点按/拖动/长按，不用 LMB/RMB/WASD 作为主说明

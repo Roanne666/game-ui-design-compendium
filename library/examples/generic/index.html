@@ -22,16 +22,7 @@
     <p class="hint">点按主键 · 热区 ≥44px</p>
     <button type="button" class="primary" id="act" aria-label="主操作">主操作</button>
   </div>
-  <script src="../../components/scene-kit.js" defer></script>
-  <script>
-    document.getElementById("help-btn").addEventListener("click", () => {
-      const h = document.getElementById("help");
-      if (h.hasAttribute("hidden")) h.removeAttribute("hidden");
-      else h.setAttribute("hidden", "");
-    });
-    document.getElementById("act").addEventListener("click", () => {
-      if (window.SceneKit && SceneKit.toast) SceneKit.toast("已执行主操作", "ok");
-    });
-  </script>
+  <script src="../../components/scene-kit.js"></script>
+  <script src="./scene.js"></script>
 </body>
 </html>
