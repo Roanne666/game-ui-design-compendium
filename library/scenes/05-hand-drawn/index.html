@@ -4,105 +4,216 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>手绘风 — 恩赐选择</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/hand-drawn.css" />
   <style>
+    /* 场景覆写：冥府羊皮纸（Hades 向），非默认浅底 token */
+    .game-root {
+      --bg: #0e0c09;
+      --surface: #2a2218;
+      --surface-2: #1c1812;
+      --text: #e8dcc4;
+      --text-muted: #8a7d68;
+      --accent: #d9b36c;
+      --accent-2: #8b3a2e;
+      --accent-soft: rgba(217, 179, 108, 0.14);
+      --border: #c9b896;
+      --border-strong: #e8dcc4;
+      --shadow-color: rgba(8, 6, 4, 0.85);
+      --phone-border-color: rgba(217, 179, 108, 0.28);
+      --phone-shadow-inset: inset 0 0 0 1px rgba(217, 179, 108, 0.1);
+    }
+
     .game-world {
       background:
-        radial-gradient(ellipse 70% 50% at 50% 28%, color-mix(in srgb, var(--accent) 16%, #2a2218), transparent 70%),
-        linear-gradient(180deg, #1c1812 0%, #0e0c09 55%, #16120e 100%);
+        radial-gradient(ellipse 80% 45% at 50% 18%, rgba(139, 58, 46, 0.22), transparent 65%),
+        radial-gradient(ellipse 60% 40% at 50% 88%, rgba(217, 179, 108, 0.08), transparent 55%),
+        linear-gradient(180deg, #1a1410 0%, #0a0908 48%, #14100c 100%);
     }
+    .game-world::before {
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    }
+    .game-world::after {
+      box-shadow: inset 0 0 90px 28px rgba(0, 0, 0, 0.55);
+    }
+
     .altar {
-      position: absolute; left: 50%; top: 10%; transform: translateX(-50%);
-      width: min(70%, 220px); text-align: center; pointer-events: none;
+      position: absolute; left: 50%; top: 5%; transform: translateX(-50%);
+      width: min(78%, 260px); text-align: center; pointer-events: none; z-index: 4;
     }
     .altar .flame {
-      width: 40px; height: 40px; margin: 0 auto 8px;
-      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 60%, transparent));
+      width: 44px; height: 44px; margin: 0 auto 6px;
+      filter: drop-shadow(0 0 12px rgba(217, 179, 108, 0.55));
+      animation: flameIdle 1.1s ease-in-out infinite alternate;
+    }
+    @keyframes flameIdle {
+      from { transform: translateY(0) scale(1); filter: drop-shadow(0 0 10px rgba(217, 179, 108, 0.45)); }
+      to   { transform: translateY(-3px) scale(1.06); filter: drop-shadow(0 0 16px rgba(139, 58, 46, 0.55)); }
     }
     .altar .place {
-      font-family: var(--font-display); font-size: 13px; letter-spacing: 0.22em;
-      color: var(--text-muted); text-shadow: 1px 1px 0 var(--shadow-color);
+      font-family: var(--font-display); font-size: 12px; letter-spacing: 0.28em;
+      color: var(--text-muted); text-shadow: 1px 1px 0 #000;
     }
+    .altar .room {
+      margin-top: 4px;
+      font-family: var(--font-mono); font-size: 13px; color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
     .prompt {
-      position: absolute; left: 50%; top: 22%; transform: translateX(-50%);
+      position: absolute; left: 50%; top: 17%; transform: translateX(-50%);
       opacity: 0; transition: opacity 180ms ease-out;
-      font-family: var(--font-display); font-size: 15px; letter-spacing: 0.14em;
-      text-shadow: 2px 2px 0 var(--shadow-color); pointer-events: none; z-index: 6;
+      font-family: var(--font-display); font-size: 15px; letter-spacing: 0.12em;
+      color: var(--text); text-shadow: 2px 2px 0 #000; pointer-events: none; z-index: 6;
+      white-space: nowrap;
     }
     .prompt.show { opacity: 1; }
 
     .boon-col {
-      position: absolute; left: 50%; top: 28%; bottom: 22%;
+      position: absolute; left: 50%; top: 21%; bottom: 108px;
       transform: translateX(-50%);
-      width: min(88%, 300px);
-      display: flex; flex-direction: column; gap: 10px;
-      overflow: auto; padding: 4px 2px;
+      width: min(90%, 320px);
+      display: flex; flex-direction: column; gap: 10px; justify-content: center;
+      overflow: auto; padding: 2px 4px 4px;
+      z-index: 5;
     }
     .boon-card {
-      display: grid; grid-template-columns: 56px 1fr; gap: 10px; align-items: center;
-      border: 2px solid var(--border); background: color-mix(in srgb, var(--surface) 92%, transparent);
-      border-radius: var(--radius-lg); padding: 12px 14px; cursor: pointer; text-align: left;
-      min-height: 72px; transition: transform 100ms ease-out, border-color 100ms ease-out, box-shadow 100ms ease-out;
+      position: relative;
+      display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center;
+      border: 2px solid var(--border);
+      background:
+        linear-gradient(165deg, rgba(58, 46, 32, 0.96) 0%, rgba(32, 26, 18, 0.96) 100%);
+      border-radius: 14px 16px 12px 15px;
+      padding: 12px 14px 12px 12px;
+      cursor: pointer; text-align: left;
+      min-height: 86px;
+      box-shadow: 3px 4px 0 var(--shadow-color);
+      transition: transform 100ms ease-out, border-color 100ms ease-out, box-shadow 100ms ease-out;
       -webkit-tap-highlight-color: transparent;
     }
-    .boon-card img { width: 48px; height: 48px; }
-    .boon-card h3 { margin: 0 0 4px; font-size: 15px; font-family: var(--font-display); letter-spacing: 0.06em; }
-    .boon-card p { margin: 0; font-size: 11px; color: var(--text-muted); line-height: 1.35; }
-    .boon-card:active { transform: scale(0.98) rotate(-0.4deg); }
+    .boon-card:nth-child(1) { transform: rotate(-1.1deg); }
+    .boon-card:nth-child(2) { transform: rotate(0.6deg); }
+    .boon-card:nth-child(3) { transform: rotate(-0.5deg); }
+    .boon-card::before {
+      content: "";
+      position: absolute; inset: 4px;
+      border: 1px solid rgba(232, 220, 196, 0.12);
+      border-radius: 10px; pointer-events: none;
+    }
+    .boon-card .icon-wrap {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: grid; place-items: center;
+      border: 2px solid var(--border);
+      background: rgba(14, 12, 9, 0.65);
+      box-shadow: inset 0 0 0 1px rgba(217, 179, 108, 0.15);
+    }
+    .boon-card img { width: 34px; height: 34px; image-rendering: auto; }
+    .boon-card .meta { min-width: 0; }
+    .boon-card .god {
+      display: block; margin-bottom: 2px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+      color: var(--accent); opacity: 0.9;
+    }
+    .boon-card h3 {
+      margin: 0 0 4px; font-size: 16px; font-family: var(--font-display);
+      letter-spacing: 0.04em; color: var(--text); font-weight: 600;
+    }
+    .boon-card p {
+      margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.4;
+    }
+    .boon-card .rarity {
+      position: absolute; top: 10px; right: 12px;
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1px solid #000;
+      background: var(--accent);
+    }
+    .boon-card[data-rarity="rare"] .rarity { background: #6a9bd1; }
+    .boon-card[data-rarity="epic"] .rarity { background: #a87bc9; }
+    .boon-card:active {
+      transform: scale(0.98) rotate(-0.2deg);
+      box-shadow: 1px 2px 0 var(--shadow-color);
+    }
     .boon-card.selected {
       border-color: var(--accent);
-      background: var(--accent-soft);
-      box-shadow: 4px 4px 0 var(--shadow-color);
+      background:
+        linear-gradient(165deg, rgba(72, 54, 28, 0.98) 0%, rgba(40, 30, 18, 0.98) 100%);
+      box-shadow: 4px 5px 0 #000, 0 0 0 1px rgba(217, 179, 108, 0.35);
+    }
+    .boon-card.selected::after {
+      content: "▶";
+      position: absolute; left: 8px; bottom: 8px;
+      color: var(--accent); font-size: 11px; text-shadow: 1px 1px 0 #000;
+    }
+
+    .pick-chip {
+      position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.1em; color: var(--text-muted);
+      pointer-events: none; z-index: 5; text-shadow: 1px 1px 0 #000;
     }
 
     .action-bar {
-      position: absolute; left: 12px; right: 12px; bottom: 28px;
-      display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px;
+      position: absolute; left: 12px; right: 12px; bottom: 22px;
+      display: grid; grid-template-columns: 1.45fr 1fr; gap: 10px; z-index: 6;
     }
     .action-bar .btn {
       min-height: 52px; font-family: var(--font-display); letter-spacing: 0.1em;
+      border-width: 2px; box-shadow: 3px 3px 0 #000;
     }
-    .action-bar .btn:active { transform: scale(0.96); }
-    .pick-chip {
-      position: absolute; left: 50%; bottom: 92px; transform: translateX(-50%);
-      font-size: 11px; letter-spacing: 0.12em; color: var(--text-muted);
-      pointer-events: none;
+    .action-bar .btn:active { transform: scale(0.96) translate(1px, 1px); box-shadow: 1px 1px 0 #000; }
+    .action-bar .btn:disabled {
+      opacity: 0.38; pointer-events: none; box-shadow: none;
     }
 
     [data-sk-panel] {
-      position: absolute; left: 50%; top: 36%; transform: translate(-50%, 0);
+      position: absolute; left: 50%; top: 34%; transform: translate(-50%, 0);
       width: min(320px, 90%); z-index: 20;
+      background: #2a2218; border: 2px solid var(--accent);
+      box-shadow: 6px 8px 0 #000;
+    }
+    [data-sk-panel] .panel-title {
+      color: var(--accent); border-bottom: 1px solid rgba(201, 184, 150, 0.25);
+    }
+    [data-sk-panel] .panel-body {
+      color: var(--text); font-size: 14px; line-height: 1.5;
+      font-family: var(--font-body);
     }
 
     .feed {
-      position: absolute; top: 52px; left: 12px; width: 48%;
+      position: absolute; top: 52px; left: 12px; width: 46%;
       z-index: 8; pointer-events: none; font-size: 11px;
     }
     .feed div {
       margin-bottom: 4px; padding: 4px 8px;
-      background: rgba(14,12,9,.75); border: 1px solid var(--border);
-      animation: fadeFeed 2.2s ease-out forwards;
+      background: rgba(14, 12, 9, 0.82); border: 1px solid rgba(217, 179, 108, 0.35);
+      color: var(--text); animation: fadeFeed 2.2s ease-out forwards;
     }
-    @keyframes fadeFeed { 0%,70%{opacity:1} 100%{opacity:0} }
+    @keyframes fadeFeed { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
 
     .help-toggle {
       position: absolute; top: 52px; right: 12px; z-index: 16;
       width: 36px; height: 36px; border-radius: 50%; padding: 0;
-      border: 1px solid var(--border); background: rgba(14,12,9,.7);
+      border: 2px solid var(--border); background: rgba(14, 12, 9, 0.78);
       color: var(--text-muted); cursor: pointer; font-size: 14px;
+      box-shadow: 2px 2px 0 #000;
     }
     .help-toggle:active { transform: scale(0.94); }
     .help {
       position: absolute; top: 96px; left: 12px; right: 12px; z-index: 15;
       padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
-      letter-spacing: 0.06em; color: var(--text-muted);
-      background: rgba(14,12,9,.88); border: 1px solid var(--border);
+      letter-spacing: 0.05em; color: var(--text-muted);
+      background: rgba(14, 12, 9, 0.9); border: 1px solid var(--border);
       pointer-events: none;
     }
     .help[hidden] { display: none !important; }
+
+    body.boon-locked .boon-card { pointer-events: none; opacity: 0.55; }
+    body.boon-locked .boon-card.selected { opacity: 1; }
   </style>
 </head>
 <body>
@@ -111,62 +222,62 @@
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
       <div class="altar">
-        <img class="flame" src="../../assets/_shared/rpg-icons/fire.png" alt="" />
-        <div class="place">祭坛 · 三择一</div>
+        <img class="flame" src="../../assets/_shared/rpg-icons/fire.png" alt="" draggable="false" />
+        <div class="place">冥府祭坛 · 三择一</div>
+        <div class="room" id="room-label">密室 · 第 1 间</div>
       </div>
       <div class="prompt show" id="prompt">诸神注视着你</div>
 
       <div class="feed" id="feed" aria-live="polite"></div>
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
-      <div class="help" id="help" hidden>点选一张恩赐卡 · 底栏确认带走 · 可重抽一次选项 · 无悬停，靠选中态辨认</div>
+      <div class="help" id="help" hidden>点选一张恩赐卡 · 底栏确认带走 · 每间密室可重抽一次 · 无悬停，靠选中态辨认</div>
 
-      <div class="boon-col" id="boon-nodes">
-        <button type="button" class="boon-card" data-boon="strike" data-next="你的利刃渴求鲜血 — 冲刺斩击攻速 +15%。" aria-label="赫尔墨斯之击">
-          <img src="../../assets/_shared/rpg-icons/sword.png" alt="" />
-          <div>
-            <h3>赫尔墨斯之击</h3>
-            <p>冲刺攻击造成额外伤害并留下墨迹轨迹。</p>
-          </div>
-        </button>
-        <button type="button" class="boon-card selected" data-boon="ward" data-next="神盾绽放 — 完美格挡每次恢复 8 生命。" aria-label="神盾守护">
-          <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
-          <div>
-            <h3>神盾守护</h3>
-            <p>完美格挡治疗并击退附近敌人。</p>
-          </div>
-        </button>
-        <button type="button" class="boon-card" data-boon="flux" data-next="混沌涌动 — 特技冷却 −20%，每次施放随机元素。" aria-label="混沌余烬">
-          <img src="../../assets/_shared/rpg-icons/fire.png" alt="" />
-          <div>
-            <h3>混沌余烬</h3>
-            <p>特技轮换元素，击杀返还魔力。</p>
-          </div>
-        </button>
-      </div>
+      <div class="boon-col" id="boon-nodes" role="listbox" aria-label="恩赐选项"></div>
 
-      <div class="pick-chip" id="pick-label">已选：神盾守护</div>
+      <div class="pick-chip" id="pick-label">已选：—</div>
 
       <div class="action-bar">
         <button type="button" class="btn btn-primary" id="btn-confirm" aria-label="确认恩赐">确认恩赐</button>
-        <button type="button" class="btn" id="btn-reroll" aria-label="重新抽取">重抽</button>
+        <button type="button" class="btn" id="btn-reroll" aria-label="重新抽取">重抽 ×1</button>
       </div>
 
       <div id="boon-result" class="panel panel-clipped frame-brackets" data-sk-panel hidden>
-        <div class="panel-title">下一恩赐 · 尾声</div>
+        <div class="panel-title">恩赐铭刻</div>
         <div class="panel-body" id="boon-text">—</div>
-        <button type="button" class="btn btn-success" id="btn-continue" style="margin-top:12px;width:100%;min-height:48px">继续征程</button>
+        <button type="button" class="btn btn-success" id="btn-continue" style="margin-top:12px;width:100%;min-height:48px">进入下一密室</button>
       </div>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
   <script>
     const sk = SceneKit;
-    let selected = sk.$(".boon-card.selected");
-    const rerollPool = [
-      { icon: "potion.png", name: "花蜜啜饮", desc: "药水持续恢复生命。", next: "活力滴注 — 使用药水后 8 秒内每秒恢复 2 生命。" },
-      { icon: "bow.png", name: "阿尔忒弥斯之触", desc: "远程暴击穿透一名敌人。", next: "穿透射击 — 暴击以 50% 伤害连锁第二名目标。" },
-      { icon: "key.png", name: "万能钥匙", desc: "解锁隐藏密室。", next: "本区域地图显示秘密通道。" },
+    const ICON = "../../assets/_shared/rpg-icons/";
+
+    const POOL = [
+      { god: "赫尔墨斯", name: "赫尔墨斯之击", desc: "冲刺攻击留下墨迹轨迹并追加伤害。", next: "利刃渴血 — 冲刺斩击攻速 +15%。", icon: "sword.png", rarity: "common" },
+      { god: "雅典娜", name: "神盾守护", desc: "完美格挡治疗并击退附近敌人。", next: "神盾绽放 — 完美格挡每次恢复 8 生命。", icon: "shield.png", rarity: "rare" },
+      { god: "混沌", name: "混沌余烬", desc: "特技轮换元素，击杀返还魔力。", next: "混沌涌动 — 特技冷却 −20%。", icon: "fire.png", rarity: "epic" },
+      { god: "得墨忒耳", name: "花蜜啜饮", desc: "药水持续恢复生命。", next: "活力滴注 — 用药后 8 秒内每秒恢复 2 生命。", icon: "potion.png", rarity: "common" },
+      { god: "阿尔忒弥斯", name: "月神之触", desc: "远程暴击穿透一名敌人。", next: "穿透射击 — 暴击以 50% 伤害连锁次目标。", icon: "bow.png", rarity: "rare" },
+      { god: "赫淮斯托斯", name: "万能钥匙", desc: "解锁隐藏密室。", next: "本区域地图显示秘密通道。", icon: "key.png", rarity: "common" },
+      { god: "阿瑞斯", name: "血债刀锋", desc: "受伤后短时攻速提升。", next: "怒血 — 受击后 3 秒内伤害 +20%。", icon: "sword.png", rarity: "rare" },
+      { god: "波塞冬", name: "潮汐护符", desc: "冲刺溅起浪潮击退敌人。", next: "裂浪 — 冲刺命中回复 1 点魔力。", icon: "potion.png", rarity: "epic" },
     ];
+
+    let room = 1;
+    let rerollsLeft = 1;
+    let selectedId = null;
+    let locked = false;
+    let currentIds = [];
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
 
     function feed(msg) {
       const el = document.createElement("div");
@@ -183,6 +294,66 @@
       if (ms) setPrompt._t = setTimeout(() => p.classList.remove("show"), ms);
     }
 
+    function updateRerollBtn() {
+      const btn = sk.$("#btn-reroll");
+      if (rerollsLeft <= 0) {
+        btn.disabled = true;
+        sk.setText(btn, "已用尽");
+        btn.setAttribute("aria-label", "重抽已用尽");
+      } else {
+        btn.disabled = locked;
+        sk.setText(btn, "重抽 ×" + rerollsLeft);
+        btn.setAttribute("aria-label", "重新抽取，剩余 " + rerollsLeft + " 次");
+      }
+    }
+
+    function selectCard(btn) {
+      if (locked || !btn) return;
+      sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedId = btn.dataset.id;
+      const name = btn.querySelector("h3").textContent;
+      sk.setText(sk.$("#pick-label"), "已选：" + name);
+      sk.pulse(btn);
+      feed("注视：" + name);
+      setPrompt(name, 1400);
+    }
+
+    function renderBoons(ids) {
+      const col = sk.$("#boon-nodes");
+      col.innerHTML = "";
+      ids.forEach((id, i) => {
+        const b = POOL[id];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "boon-card";
+        btn.dataset.id = String(id);
+        btn.dataset.rarity = b.rarity;
+        btn.setAttribute("role", "option");
+        btn.setAttribute("aria-label", b.god + " · " + b.name);
+        btn.innerHTML =
+          '<span class="rarity" aria-hidden="true"></span>' +
+          '<span class="icon-wrap"><img src="' + ICON + b.icon + '" alt="" draggable="false" /></span>' +
+          '<span class="meta"><span class="god">' + b.god + "</span><h3>" + b.name + "</h3><p>" + b.desc + "</p></span>";
+        sk.on(btn, "click", () => selectCard(btn));
+        col.appendChild(btn);
+        if (i === 1) selectCard(btn);
+      });
+    }
+
+    function dealRoom(keepReroll) {
+      locked = false;
+      document.body.classList.remove("boon-locked");
+      sk.$("#btn-confirm").disabled = false;
+      sk.closePanel("#boon-result");
+      if (!keepReroll) rerollsLeft = 1;
+      currentIds = shuffle([...POOL.keys()]).slice(0, 3);
+      sk.setText(sk.$("#room-label"), "密室 · 第 " + room + " 间");
+      renderBoons(currentIds);
+      updateRerollBtn();
+      setPrompt(room === 1 ? "诸神注视着你" : "新的道路", 1600);
+    }
+
     sk.on(sk.$("#btn-help"), "click", () => {
       const help = sk.$("#help");
       const open = help.hidden;
@@ -190,53 +361,37 @@
       sk.$("#btn-help").setAttribute("aria-expanded", String(open));
     });
 
-    sk.$all(".boon-card").forEach((card) => {
-      sk.on(card, "click", () => {
-        sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
-        card.classList.add("selected");
-        selected = card;
-        const name = card.querySelector("h3").textContent;
-        sk.setText(sk.$("#pick-label"), "已选：" + name);
-        sk.pulse(card);
-        feed("注视：" + name);
-        setPrompt(name, 1400);
-      });
-    });
-
     sk.on(sk.$("#btn-confirm"), "click", () => {
-      if (!selected) { feed("请先选择恩赐"); return; }
-      sk.setText(sk.$("#boon-text"), selected.dataset.next);
+      if (locked) return;
+      if (selectedId == null) { feed("请先选择恩赐"); return; }
+      const b = POOL[parseInt(selectedId, 10)];
+      locked = true;
+      document.body.classList.add("boon-locked");
+      sk.$("#btn-confirm").disabled = true;
+      updateRerollBtn();
+      sk.setText(sk.$("#boon-text"), b.god + " 赐予「" + b.name + "」。\n" + b.next);
       sk.openPanel("#boon-result");
       feed("恩赐已铭刻");
       setPrompt("命运已定", 1600);
-      sk.pulse(selected);
     });
 
     sk.on(sk.$("#btn-reroll"), "click", () => {
-      const cards = sk.$all(".boon-card");
-      cards.forEach((card, i) => {
-        const pick = rerollPool[i % rerollPool.length];
-        card.querySelector("img").src = "../../assets/_shared/rpg-icons/" + pick.icon;
-        card.querySelector("h3").textContent = pick.name;
-        card.querySelector("p").textContent = pick.desc;
-        card.dataset.boon = "r" + i;
-        card.dataset.next = pick.next;
-        card.setAttribute("aria-label", pick.name);
-      });
-      sk.$all(".boon-card").forEach((c) => c.classList.remove("selected"));
-      cards[1].classList.add("selected");
-      selected = cards[1];
-      sk.setText(sk.$("#pick-label"), "已选：" + selected.querySelector("h3").textContent);
-      sk.closePanel("#boon-result");
+      if (locked || rerollsLeft <= 0) return;
+      rerollsLeft -= 1;
+      currentIds = shuffle([...POOL.keys()]).slice(0, 3);
+      renderBoons(currentIds);
+      updateRerollBtn();
       feed("祭坛重抽");
       setPrompt("新的道路", 1400);
     });
 
     sk.on(sk.$("#btn-continue"), "click", () => {
-      sk.closePanel("#boon-result");
-      feed("进入下一密室…");
-      setPrompt("前路未明", 1800);
+      room += 1;
+      dealRoom(false);
+      feed("进入第 " + room + " 间密室…");
     });
+
+    dealRoom(false);
   </script>
 </body>
 </html>
