@@ -24,3 +24,27 @@ DONE
 ## 备注
 
 Cursor 内置浏览器服务在验收时不可用，因此改用本机 Playwright Chromium 完成等价浏览器渲染检查；HTTP 请求日志未出现 404。
+
+## FIX（Task 2 review 遗留链接）
+
+### 文件变更
+
+- `library/scenes/index.html` — 04 行主场景链接改为 `../packs/04-pixel-retro/index.html`
+- `styles/README.md` — 04 行 SPEC 链接改为 `../library/packs/04-pixel-retro/SPEC.md`，主场景列改为 `library/packs/04-pixel-retro/`
+- `tools/shoot.js` — 优先 `library/packs/<id>/index.html`，不存在则回退 `library/scenes/<id>/index.html`
+
+### 命令
+
+```text
+node -e "…path resolution check…"
+git status / git diff / git log
+git add library/scenes/index.html styles/README.md tools/shoot.js .superpowers/sdd/task-2-report.md
+git commit -m "Fix stale entry links after pixel-retro pack move."
+git push
+```
+
+### 结果
+
+- 04 链接：`scenes/index.html` → `library/packs/04-pixel-retro/index.html`；`styles/README.md` → `library/packs/04-pixel-retro/SPEC.md`
+- shoot 路径：`04-pixel-retro` → pack；`01-cyberpunk-hud` / `05-hand-drawn` → scenes（未迁移风格不变）
+- 其它风格行未改动
