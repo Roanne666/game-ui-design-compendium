@@ -27,79 +27,197 @@
     }
 
     .game-world {
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 18%, transparent 82%, rgba(0,0,0,.55) 100%),
-        linear-gradient(180deg, #12100e 0%, #0a0807 40%, #050404 100%);
+      background: #050403;
     }
     .game-world::before {
-      opacity: 0.35;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       mix-blend-mode: soft-light;
     }
     .game-world::after {
-      box-shadow: inset 0 0 100px 36px rgba(0, 0, 0, 0.72);
+      box-shadow: inset 0 0 90px 28px rgba(0, 0, 0, 0.75);
     }
 
+    /* 透视走廊：世界纵深，不是空黑底 */
     .corridor {
       position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      overflow: hidden;
+    }
+    .ceil {
+      position: absolute; left: 0; right: 0; top: 0; height: 28%;
       background:
-        linear-gradient(180deg, transparent 0%, rgba(8,6,6,.2) 55%, rgba(0,0,0,.55) 100%),
-        repeating-linear-gradient(90deg, transparent 0 46px, rgba(59,85,112,0.04) 46px 48px);
+        linear-gradient(180deg, #1a1614 0%, #0e0c0a 70%, transparent 100%),
+        repeating-linear-gradient(90deg, transparent 0 36px, rgba(0,0,0,.35) 36px 38px);
+      clip-path: polygon(0 0, 100% 0, 72% 100%, 28% 100%);
+      border-bottom: 1px solid rgba(74, 100, 128, 0.15);
+    }
+    .floor {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(20, 16, 12, 0.5) 18%, #0c0a08 55%, #060504 100%),
+        repeating-linear-gradient(90deg, #12100e 0 28px, #0e0c0a 28px 56px);
+      clip-path: polygon(28% 0, 72% 0, 100% 100%, 0 100%);
+      box-shadow: inset 0 40px 60px rgba(0, 0, 0, 0.45);
+    }
+    .floor::after {
+      content: "";
+      position: absolute; left: 50%; top: 8%; transform: translateX(-50%);
+      width: 44%; height: 70%;
+      background: linear-gradient(180deg, rgba(216, 152, 48, 0.07), transparent 55%);
+      filter: blur(8px);
+    }
+    .wall-l, .wall-r {
+      position: absolute; top: 0; bottom: 0; width: 38%;
+    }
+    .wall-l {
+      left: 0;
+      background:
+        linear-gradient(90deg, #181412 0%, #100e0c 70%, transparent 100%),
+        repeating-linear-gradient(180deg, transparent 0 52px, rgba(59,85,112,0.07) 52px 53px);
+      clip-path: polygon(0 0, 100% 22%, 100% 68%, 0 100%);
+      box-shadow: inset -20px 0 40px rgba(0, 0, 0, 0.5);
+    }
+    .wall-r {
+      right: 0;
+      background:
+        linear-gradient(270deg, #181412 0%, #100e0c 70%, transparent 100%),
+        repeating-linear-gradient(180deg, transparent 0 52px, rgba(59,85,112,0.07) 52px 53px);
+      clip-path: polygon(0 22%, 100% 0, 100% 100%, 0 68%);
+      box-shadow: inset 20px 0 40px rgba(0, 0, 0, 0.5);
     }
     .wall-pipe {
-      position: absolute; left: 8%; top: 18%; width: 3px; height: 42%;
-      background: linear-gradient(180deg, #2a3848, #12161c);
-      box-shadow: 1px 0 0 rgba(216, 208, 188, 0.08);
+      position: absolute; width: 7px;
+      background: linear-gradient(90deg, #1a222c, #3a4a58 45%, #121820);
+      box-shadow: 2px 0 0 rgba(0,0,0,.5), inset 1px 0 0 rgba(216,208,188,.12);
     }
-    .wall-pipe.r { left: auto; right: 10%; top: 22%; height: 38%; }
+    .wall-pipe.l1 { left: 7%; top: 20%; height: 48%; }
+    .wall-pipe.l2 { left: 12%; top: 28%; height: 36%; width: 4px; opacity: 0.7; }
+    .wall-pipe.r1 { right: 8%; top: 18%; height: 52%; }
+    .hazard {
+      position: absolute; left: 4%; bottom: 26%; width: 18%; height: 10px;
+      background: repeating-linear-gradient(90deg, #d89830 0 8px, #0a0a08 8px 16px);
+      opacity: 0.35; transform: skewY(-8deg);
+    }
+    .hazard.r { left: auto; right: 4%; transform: skewY(8deg); }
+    .stain {
+      position: absolute; width: 40px; height: 70px; border-radius: 40% 40% 50% 50%;
+      background: radial-gradient(ellipse, rgba(90, 30, 28, 0.35), transparent 70%);
+      filter: blur(1px); opacity: 0.55;
+    }
+    .stain.a { left: 14%; top: 42%; }
+    .stain.b { right: 16%; top: 48%; width: 28px; height: 50px; opacity: 0.4; }
+    .back-wall {
+      position: absolute; left: 28%; right: 28%; top: 22%; bottom: 38%;
+      background:
+        linear-gradient(180deg, #161310 0%, #0c0a08 100%);
+      border: 1px solid rgba(74, 100, 128, 0.2);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.65);
+    }
+    .back-wall::before {
+      content: "B-07";
+      position: absolute; left: 10px; top: 8px;
+      font-family: var(--font-display); font-size: 10px; letter-spacing: 0.2em;
+      color: rgba(74, 100, 128, 0.45);
+    }
+    .lamp {
+      position: absolute; left: 50%; top: 8%; transform: translateX(-50%);
+      width: 64px; height: 10px;
+      background: #1a1814;
+      border: 1px solid rgba(74, 100, 128, 0.35);
+      z-index: 2;
+    }
+    .lamp::after {
+      content: "";
+      position: absolute; left: 8%; right: 8%; top: 100%;
+      height: 160px;
+      background: linear-gradient(180deg, rgba(216, 152, 48, 0.18), transparent 70%);
+      animation: lampFlicker 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes lampFlicker {
+      0%, 100% { opacity: 0.75; }
+      48% { opacity: 0.9; }
+      50% { opacity: 0.35; }
+      52% { opacity: 0.85; }
+      78% { opacity: 0.7; }
+      80% { opacity: 0.95; }
+    }
+    .mist {
+      position: absolute; left: 0; right: 0; bottom: 18%; height: 28%;
+      background: radial-gradient(ellipse at 50% 80%, rgba(40, 48, 55, 0.35), transparent 65%);
+      animation: mistDrift 7s ease-in-out infinite alternate;
+      z-index: 2;
+    }
+    @keyframes mistDrift {
+      from { transform: translateY(0); opacity: 0.5; }
+      to { transform: translateY(-10px); opacity: 0.75; }
+    }
 
     .door-hotspot {
       appearance: none; -webkit-appearance: none;
-      position: absolute; top: 36%; left: 50%; transform: translate(-50%, -50%);
-      width: 72px; height: 128px; padding: 0; margin: 0; outline: none;
-      border: 1px solid rgba(74, 100, 128, 0.55);
+      position: absolute; top: 34%; left: 50%; transform: translate(-50%, -50%);
+      width: 96px; height: 168px; padding: 0; margin: 0; outline: none;
+      border: 2px solid rgba(90, 70, 45, 0.55);
       background:
-        linear-gradient(180deg, #1a1614 0%, #0e0c0b 55%, #161210 100%);
+        linear-gradient(90deg, rgba(0,0,0,.35) 0%, transparent 12%, transparent 88%, rgba(0,0,0,.35) 100%),
+        linear-gradient(180deg, #2a221c 0%, #1a1510 40%, #120e0c 78%, #1c1612 100%);
       box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.65),
-        inset 8px 0 16px rgba(0, 0, 0, 0.35),
-        0 12px 28px rgba(0, 0, 0, 0.55);
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-      gap: 8px; padding-bottom: 14px;
+        inset 0 0 0 1px rgba(0, 0, 0, 0.75),
+        inset 0 20px 30px rgba(255, 220, 160, 0.03),
+        inset 12px 0 24px rgba(0, 0, 0, 0.4),
+        0 16px 40px rgba(0, 0, 0, 0.65);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       z-index: 3;
     }
+    .door-hotspot::before {
+      content: "";
+      position: absolute; left: 8px; right: 8px; top: 10px; bottom: 10px;
+      border: 1px solid rgba(74, 100, 128, 0.25);
+      pointer-events: none;
+    }
     .door-hotspot .plate {
-      width: 18px; height: 28px;
-      border: 1px solid rgba(74, 100, 128, 0.7);
-      background: rgba(8, 10, 12, 0.9);
+      width: 22px; height: 34px;
+      border: 1px solid rgba(120, 100, 60, 0.7);
+      background: linear-gradient(180deg, #1c1814, #0a0908);
       position: relative;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
     }
     .door-hotspot .plate::after {
       content: "";
-      position: absolute; right: 3px; top: 11px;
-      width: 5px; height: 5px; border-radius: 50%;
-      background: #d89830; box-shadow: 0 0 6px rgba(216, 152, 48, 0.55);
+      position: absolute; right: 4px; top: 14px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #d89830; box-shadow: 0 0 10px rgba(216, 152, 48, 0.7);
+      animation: lampFlicker 4.2s ease-in-out infinite;
     }
-    .door-hotspot img { width: 20px; height: 20px; opacity: 0.45; filter: grayscale(0.4); }
+    .door-hotspot img { width: 28px; height: 28px; opacity: 0.5; filter: grayscale(0.35) brightness(0.9); }
     .door-hotspot:active { transform: translate(-50%, -50%) scale(0.97); }
     .door-hotspot.near {
-      border-color: rgba(216, 152, 48, 0.45);
+      border-color: rgba(216, 152, 48, 0.55);
       box-shadow:
-        inset 0 0 0 1px rgba(216, 152, 48, 0.15),
-        0 0 28px rgba(216, 152, 48, 0.12),
-        0 12px 28px rgba(0, 0, 0, 0.55);
+        inset 0 0 0 1px rgba(216, 152, 48, 0.18),
+        inset 12px 0 24px rgba(0, 0, 0, 0.4),
+        0 0 36px rgba(216, 152, 48, 0.14),
+        0 16px 40px rgba(0, 0, 0, 0.65);
     }
 
     .ctx-prompt {
       position: absolute; left: 50%; top: 58%; transform: translateX(-50%);
       opacity: 0; transition: opacity 200ms ease-out;
       font-family: var(--font-display); font-size: 11px; letter-spacing: 0.28em;
-      color: rgba(216, 208, 188, 0.55); text-shadow: 0 1px 8px #000;
+      color: rgba(216, 208, 188, 0.62); text-shadow: 0 1px 8px #000;
       pointer-events: none; z-index: 4; text-transform: uppercase;
     }
     .ctx-prompt.show { opacity: 1; }
+
+    .place-tag {
+      position: absolute; left: 50%; top: 52px; transform: translateX(-50%);
+      z-index: 4; pointer-events: none;
+      font-family: var(--font-display); font-size: 10px; letter-spacing: 0.32em;
+      color: rgba(74, 100, 128, 0.55); text-transform: uppercase;
+    }
 
     /* 底中：工程挂件入口，不是网页方钮 */
     .bag-entry {
@@ -279,11 +397,26 @@
   <div class="game-root">
     <div class="game-world"></div>
     <div class="corridor" aria-hidden="true">
-      <div class="wall-pipe"></div>
-      <div class="wall-pipe r"></div>
+      <div class="ceil"></div>
+      <div class="floor"></div>
+      <div class="wall-l">
+        <div class="wall-pipe l1"></div>
+        <div class="wall-pipe l2"></div>
+        <div class="hazard"></div>
+        <div class="stain a"></div>
+      </div>
+      <div class="wall-r">
+        <div class="wall-pipe r1"></div>
+        <div class="hazard r"></div>
+        <div class="stain b"></div>
+      </div>
+      <div class="back-wall"></div>
+      <div class="lamp"></div>
+      <div class="mist"></div>
     </div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
+      <div class="place-tag">维修通道 · B-07</div>
       <div class="feed" id="feed" aria-live="polite"></div>
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" aria-expanded="false">?</button>
       <div class="help" id="help" hidden>几乎无常驻界面 · 点门锁检查 · 底中打开脊骨背包 · 钥匙在包内 · 受伤时角标闪红</div>
