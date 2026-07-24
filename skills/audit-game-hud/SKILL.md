@@ -17,21 +17,21 @@ description: >-
 |---|--------|-------------|
 | 1 | **画幅 9:20** — `.game-root` / `#viewport` 为竖屏 9:20 手机框 | 设 `aspect-ratio: 9 / 20`；用 phone-frame 壳 |
 | 2 | **共享栈** — 加载序为 components → phone-frame → game-feel → tokens →（可选私有）→ scene-kit | 按 `references/library-map.md` 补全；禁止省略共享栈 |
-| 3 | **玩法可辨** — **有 pack**：符合矩阵该行；**generic**：符合自述循环与类型楼型 | 禁止换皮统一锁定开火 |
+| 3 | **玩法可辨** — **有 pack**：符合矩阵该行；**路径 B / custom**：符合自述循环与类型楼型 | 禁止换皮统一锁定开火 |
 | 4 | **可见触控热区** — 主操作 ≥44×44 CSS px 可见控件 | 加大热区；补图标/物件键 |
 | 5 | **中文文案** — 玩家可见 UI 与 `aria-label` 中文 | 替换英文主文案 |
 | 6 | **无键鼠主路径** — 主流程非 LMB/WASD/Tab | 改触控语义 |
 | 7 | **非网页壳** — 非卡片柱 / Material 底栏 | 见 `game-feel-vs-web.md` |
-| 8 | **风格边界** — pack：互斥可辨；generic：未冒充某 pack 专有视觉 | 还原独有楼型或保持中性自拟 |
+| 8 | **风格边界** — pack：互斥可辨；路径 B：未冒充某 pack 专有视觉 | 还原独有楼型或自拟一致视觉 |
 
-报告开头必须写明：**路径 A（pack id）或路径 B（generic）**，以及**约定核心循环**一句话。
+报告开头必须写明：**路径 A（pack id）或路径 B（custom）**，以及**约定核心循环**一句话。
 
 ## 输出格式
 
 ```markdown
 ## HUD 验收报告
 
-**路径**：（A / `NN-id` 或 B / `generic`）  
+**路径**：（A / `NN-id` 或 B / `custom`）  
 **约定循环**：（一句话）
 
 | 检查项 | 结果 | 说明 |
