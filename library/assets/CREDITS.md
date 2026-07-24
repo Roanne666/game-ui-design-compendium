@@ -67,3 +67,11 @@
 - `library/assets/project/07-survival-horror/icons/` — bag entry + item props (med / key / knife / ammo / shield), black-keyed
 - License: project original for this encyclopedia demo
 - **不含**商业生存恐怖官方或 Rip 素材
+
+## Project-generated scene plates (08 Anime Colorful)
+
+- `library/assets/project/08-anime-colorful/city-bg.png` — night city street plate (Persona-like graphic mood)
+- `library/assets/project/08-anime-colorful/foe-shadow.png` — shadow foe plate (black-keyed)
+- `library/assets/project/08-anime-colorful/icons/` — slash menu + battle command icons (start / load / gear / exit / atk / skill / item / run), keyed
+- License: project original for this encyclopedia demo
+- **不含**商业 Persona / Atlus 官方或 Rip 素材
