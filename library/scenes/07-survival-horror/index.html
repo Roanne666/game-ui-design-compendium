@@ -46,91 +46,124 @@
     .ceil {
       position: absolute; left: 0; right: 0; top: 0; height: 28%;
       background:
-        linear-gradient(180deg, #1a1614 0%, #0e0c0a 70%, transparent 100%),
-        repeating-linear-gradient(90deg, transparent 0 36px, rgba(0,0,0,.35) 36px 38px);
+        linear-gradient(180deg, #2a2420 0%, #161210 55%, #0e0c0a 100%),
+        repeating-linear-gradient(90deg, transparent 0 28px, rgba(0,0,0,.45) 28px 30px);
       clip-path: polygon(0 0, 100% 0, 72% 100%, 28% 100%);
-      border-bottom: 1px solid rgba(74, 100, 128, 0.15);
+      border-bottom: 1px solid rgba(120, 140, 160, 0.22);
+      box-shadow: inset 0 -20px 40px rgba(216, 152, 48, 0.06);
     }
     .floor {
       position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
       background:
-        linear-gradient(180deg, transparent 0%, rgba(20, 16, 12, 0.5) 18%, #0c0a08 55%, #060504 100%),
-        repeating-linear-gradient(90deg, #12100e 0 28px, #0e0c0a 28px 56px);
+        linear-gradient(180deg, rgba(30, 26, 22, 0.15) 0%, #14110e 35%, #0a0806 100%),
+        repeating-linear-gradient(90deg, #1a1612 0 22px, #12100c 22px 44px);
       clip-path: polygon(28% 0, 72% 0, 100% 100%, 0 100%);
-      box-shadow: inset 0 40px 60px rgba(0, 0, 0, 0.45);
+      box-shadow: inset 0 50px 70px rgba(0, 0, 0, 0.55);
+    }
+    .floor::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 48.5%, rgba(216, 208, 188, 0.08) 49.5%, rgba(216, 208, 188, 0.08) 50.5%, transparent 51.5%),
+        repeating-linear-gradient(180deg, transparent 0 36px, rgba(0,0,0,.28) 36px 37px);
+      clip-path: inherit;
     }
     .floor::after {
       content: "";
-      position: absolute; left: 50%; top: 8%; transform: translateX(-50%);
-      width: 44%; height: 70%;
-      background: linear-gradient(180deg, rgba(216, 152, 48, 0.07), transparent 55%);
-      filter: blur(8px);
+      position: absolute; left: 50%; top: 4%; transform: translateX(-50%);
+      width: 52%; height: 78%;
+      background: linear-gradient(180deg, rgba(216, 152, 48, 0.14), transparent 60%);
+      filter: blur(10px);
     }
     .wall-l, .wall-r {
-      position: absolute; top: 0; bottom: 0; width: 38%;
+      position: absolute; top: 0; bottom: 0; width: 40%;
+      overflow: hidden;
     }
     .wall-l {
       left: 0;
       background:
-        linear-gradient(90deg, #181412 0%, #100e0c 70%, transparent 100%),
-        repeating-linear-gradient(180deg, transparent 0 52px, rgba(59,85,112,0.07) 52px 53px);
+        linear-gradient(90deg, #221c18 0%, #181410 55%, #100e0c 100%),
+        repeating-linear-gradient(180deg, transparent 0 44px, rgba(100,120,140,0.14) 44px 45px);
       clip-path: polygon(0 0, 100% 22%, 100% 68%, 0 100%);
-      box-shadow: inset -20px 0 40px rgba(0, 0, 0, 0.5);
+      box-shadow: inset -28px 0 48px rgba(0, 0, 0, 0.55);
     }
     .wall-r {
       right: 0;
       background:
-        linear-gradient(270deg, #181412 0%, #100e0c 70%, transparent 100%),
-        repeating-linear-gradient(180deg, transparent 0 52px, rgba(59,85,112,0.07) 52px 53px);
+        linear-gradient(270deg, #221c18 0%, #181410 55%, #100e0c 100%),
+        repeating-linear-gradient(180deg, transparent 0 44px, rgba(100,120,140,0.14) 44px 45px);
       clip-path: polygon(0 22%, 100% 0, 100% 100%, 0 68%);
-      box-shadow: inset 20px 0 40px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 28px 0 48px rgba(0, 0, 0, 0.55);
     }
     .wall-pipe {
-      position: absolute; width: 7px;
-      background: linear-gradient(90deg, #1a222c, #3a4a58 45%, #121820);
-      box-shadow: 2px 0 0 rgba(0,0,0,.5), inset 1px 0 0 rgba(216,208,188,.12);
+      position: absolute; width: 10px;
+      background: linear-gradient(90deg, #243040, #5a7088 42%, #1a2430 100%);
+      box-shadow: 3px 0 0 rgba(0,0,0,.55), inset 1px 0 0 rgba(216,208,188,.22);
     }
-    .wall-pipe.l1 { left: 7%; top: 20%; height: 48%; }
-    .wall-pipe.l2 { left: 12%; top: 28%; height: 36%; width: 4px; opacity: 0.7; }
-    .wall-pipe.r1 { right: 8%; top: 18%; height: 52%; }
+    .wall-pipe::after {
+      content: "";
+      position: absolute; left: -4px; right: -4px; top: 28%;
+      height: 14px;
+      background: linear-gradient(180deg, #4a5c6e, #2a3848);
+      border: 1px solid rgba(0,0,0,.4);
+      box-shadow: inset 0 1px 0 rgba(216,208,188,.15);
+    }
+    .wall-pipe.l1 { left: 10%; top: 18%; height: 52%; }
+    .wall-pipe.l2 { left: 20%; top: 26%; height: 40%; width: 6px; opacity: 0.85; }
+    .wall-pipe.r1 { right: 11%; top: 16%; height: 56%; }
     .hazard {
-      position: absolute; left: 4%; bottom: 26%; width: 18%; height: 10px;
-      background: repeating-linear-gradient(90deg, #d89830 0 8px, #0a0a08 8px 16px);
-      opacity: 0.35; transform: skewY(-8deg);
+      position: absolute; left: 6%; bottom: 24%; width: 26%; height: 12px;
+      background: repeating-linear-gradient(90deg, #d89830 0 9px, #0a0a08 9px 18px);
+      opacity: 0.7; transform: skewY(-10deg);
+      box-shadow: 0 0 12px rgba(216, 152, 48, 0.2);
     }
-    .hazard.r { left: auto; right: 4%; transform: skewY(8deg); }
+    .hazard.r { left: auto; right: 6%; transform: skewY(10deg); }
     .stain {
-      position: absolute; width: 40px; height: 70px; border-radius: 40% 40% 50% 50%;
-      background: radial-gradient(ellipse, rgba(90, 30, 28, 0.35), transparent 70%);
-      filter: blur(1px); opacity: 0.55;
+      position: absolute; width: 48px; height: 90px; border-radius: 40% 40% 50% 50%;
+      background: radial-gradient(ellipse, rgba(110, 28, 24, 0.55), transparent 72%);
+      filter: blur(1px); opacity: 0.75;
     }
-    .stain.a { left: 14%; top: 42%; }
-    .stain.b { right: 16%; top: 48%; width: 28px; height: 50px; opacity: 0.4; }
+    .stain.a { left: 18%; top: 40%; }
+    .stain.b { right: 18%; top: 46%; width: 34px; height: 64px; opacity: 0.55; }
+    .drip {
+      position: absolute; width: 2px; height: 58px;
+      background: linear-gradient(180deg, rgba(90, 40, 36, 0.7), transparent);
+      opacity: 0.65;
+    }
+    .drip.a { left: 24%; top: 36%; }
+    .drip.b { right: 22%; top: 40%; height: 72px; }
     .back-wall {
       position: absolute; left: 28%; right: 28%; top: 22%; bottom: 38%;
       background:
-        linear-gradient(180deg, #161310 0%, #0c0a08 100%);
-      border: 1px solid rgba(74, 100, 128, 0.2);
+        linear-gradient(180deg, #1e1a16 0%, #100e0c 100%);
+      border: 1px solid rgba(100, 120, 140, 0.28);
       box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.65);
     }
     .back-wall::before {
       content: "B-07";
-      position: absolute; left: 10px; top: 8px;
-      font-family: var(--font-display); font-size: 10px; letter-spacing: 0.2em;
-      color: rgba(74, 100, 128, 0.45);
+      position: absolute; left: 8px; top: 6px;
+      font-family: var(--font-display); font-size: 11px; letter-spacing: 0.22em;
+      color: rgba(120, 150, 175, 0.7);
+    }
+    .back-wall::after {
+      content: "";
+      position: absolute; left: 12%; right: 12%; bottom: 14%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216,152,48,.35), transparent);
     }
     .lamp {
-      position: absolute; left: 50%; top: 8%; transform: translateX(-50%);
-      width: 64px; height: 10px;
-      background: #1a1814;
-      border: 1px solid rgba(74, 100, 128, 0.35);
+      position: absolute; left: 50%; top: 7%; transform: translateX(-50%);
+      width: 72px; height: 12px;
+      background: linear-gradient(180deg, #2a2620, #141210);
+      border: 1px solid rgba(120, 140, 160, 0.45);
+      box-shadow: 0 0 18px rgba(216, 152, 48, 0.25);
       z-index: 2;
     }
     .lamp::after {
       content: "";
-      position: absolute; left: 8%; right: 8%; top: 100%;
-      height: 160px;
-      background: linear-gradient(180deg, rgba(216, 152, 48, 0.18), transparent 70%);
+      position: absolute; left: 4%; right: 4%; top: 100%;
+      height: 200px;
+      background: linear-gradient(180deg, rgba(216, 152, 48, 0.28), rgba(216,152,48,0.06) 35%, transparent 75%);
       animation: lampFlicker 3.6s ease-in-out infinite;
       pointer-events: none;
     }
@@ -156,18 +189,18 @@
     .door-hotspot {
       appearance: none; -webkit-appearance: none;
       position: absolute; top: 34%; left: 50%; transform: translate(-50%, -50%);
-      width: 96px; height: 168px; padding: 0; margin: 0; outline: none;
-      border: 2px solid rgba(90, 70, 45, 0.55);
+      width: 108px; height: 176px; padding: 0; margin: 0; outline: none;
+      border: 2px solid rgba(120, 95, 55, 0.65);
       background:
-        linear-gradient(90deg, rgba(0,0,0,.35) 0%, transparent 12%, transparent 88%, rgba(0,0,0,.35) 100%),
-        linear-gradient(180deg, #2a221c 0%, #1a1510 40%, #120e0c 78%, #1c1612 100%);
+        linear-gradient(90deg, rgba(0,0,0,.4) 0%, transparent 14%, transparent 86%, rgba(0,0,0,.4) 100%),
+        linear-gradient(180deg, #322820 0%, #1e1814 38%, #14100e 72%, #221a16 100%);
       box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.75),
-        inset 0 20px 30px rgba(255, 220, 160, 0.03),
-        inset 12px 0 24px rgba(0, 0, 0, 0.4),
-        0 16px 40px rgba(0, 0, 0, 0.65);
+        inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+        inset 0 24px 36px rgba(255, 220, 160, 0.05),
+        inset 14px 0 28px rgba(0, 0, 0, 0.45),
+        0 18px 44px rgba(0, 0, 0, 0.7);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 14px;
+      gap: 16px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       z-index: 3;
@@ -175,7 +208,21 @@
     .door-hotspot::before {
       content: "";
       position: absolute; left: 8px; right: 8px; top: 10px; bottom: 10px;
-      border: 1px solid rgba(74, 100, 128, 0.25);
+      border: 1px solid rgba(100, 120, 140, 0.35);
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 12%, #6a5848 0 2px, transparent 2.5px),
+        radial-gradient(circle at 88% 12%, #6a5848 0 2px, transparent 2.5px),
+        radial-gradient(circle at 12% 88%, #6a5848 0 2px, transparent 2.5px),
+        radial-gradient(circle at 88% 88%, #6a5848 0 2px, transparent 2.5px);
+    }
+    .door-hotspot::after {
+      content: "";
+      position: absolute; right: 14px; top: 46%;
+      width: 8px; height: 28px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #3a342c, #8a7860 45%, #2a241c);
+      box-shadow: 1px 0 0 rgba(0,0,0,.5), inset 0 1px 0 rgba(216,208,188,.2);
       pointer-events: none;
     }
     .door-hotspot .plate {
@@ -216,7 +263,8 @@
       position: absolute; left: 50%; top: 52px; transform: translateX(-50%);
       z-index: 4; pointer-events: none;
       font-family: var(--font-display); font-size: 10px; letter-spacing: 0.32em;
-      color: rgba(74, 100, 128, 0.55); text-transform: uppercase;
+      color: rgba(140, 165, 185, 0.72); text-transform: uppercase;
+      text-shadow: 0 1px 10px #000;
     }
 
     /* 底中：工程挂件入口，不是网页方钮 */
@@ -404,11 +452,13 @@
         <div class="wall-pipe l2"></div>
         <div class="hazard"></div>
         <div class="stain a"></div>
+        <div class="drip a"></div>
       </div>
       <div class="wall-r">
         <div class="wall-pipe r1"></div>
         <div class="hazard r"></div>
         <div class="stain b"></div>
+        <div class="drip b"></div>
       </div>
       <div class="back-wall"></div>
       <div class="lamp"></div>
