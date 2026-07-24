@@ -22,7 +22,7 @@
 - 主场景:`library/scenes/02-dark-fantasy/index.html`（9:20）
 - 布局原型:顶弱地名；中空世界；底极少金属铭牌键 + 露滴侧置（无口袋、无小地图）
 - 核心玩法:靠近篝火休息；锁定；翻滚/攻击；喝露滴
-- HUD 语汇:无字生命细条；篝火石板铭文选项；古金金属铭牌（非正圆 App 钮）
+- HUD 语汇:无字生命细条；篝火石板铭文选项；古金金属正圆键 + 露滴（非网页填色钮）
 - 竖屏通用思路:`docs/rules/mobile-portrait-first.md`
 - 控件同语汇:`docs/rules/game-feel-vs-web.md`
 - 扩展:篝火菜单、装备对比石板
