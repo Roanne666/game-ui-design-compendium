@@ -21,7 +21,8 @@ UI 大量"diegetic"(in-world):健康显示在角色脊柱上(Dead Space 经典),
 **本风格推荐场景包**
 - 主场景:`library/scenes/07-survival-horror/index.html`（9:20）
 - 布局原型:几乎无常驻条；底一枚背包入口；资源在 spine/背包模态
-- 核心玩法:打开背包管理资源；世界内紧张探索
+- 核心玩法:打开背包管理资源；世界内紧张探索（门锁 / 钥匙）
+- HUD 语汇:稀疏 diegetic、钢框 RIG、无网页按钮栏；见 `docs/rules/game-feel-vs-web.md`
 - 扩展:门禁读卡、磁带提示
 
 ## 3. 视觉关键词

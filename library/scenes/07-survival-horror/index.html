@@ -4,112 +4,284 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>生存恐怖 — 稀疏探索</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/survival-horror.css" />
   <style>
+    .game-root {
+      --bg: #070605;
+      --surface: rgba(14, 12, 11, 0.94);
+      --text: #d8d0bc;
+      --text-muted: #6a6660;
+      --accent: #3b5570;
+      --accent-2: #d89830;
+      --border: #4a6480;
+      --font-display: "Allerta Stencil", sans-serif;
+      --font-body: "Courier Prime", monospace;
+      --phone-border-color: rgba(59, 85, 112, 0.45);
+      --phone-shadow-inset: inset 0 0 0 1px rgba(59, 85, 112, 0.2);
+    }
+
     .game-world {
       background:
-        radial-gradient(ellipse at 50% 40%, #1a1212 0%, #080606 70%),
-        #050404;
+        linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 18%, transparent 82%, rgba(0,0,0,.55) 100%),
+        linear-gradient(180deg, #12100e 0%, #0a0807 40%, #050404 100%);
     }
-    .game-world::before { opacity: 0.55; }
-    .fog {
+    .game-world::before {
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+    .game-world::after {
+      box-shadow: inset 0 0 100px 36px rgba(0, 0, 0, 0.72);
+    }
+
+    .corridor {
       position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background: radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(0,0,0,.55) 100%);
-    }
-    .door-hotspot {
-      position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%);
-      width: 64px; height: 110px;
-      border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
       background:
-        linear-gradient(180deg, transparent 0%, rgba(20,12,12,.55) 100%);
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 10px;
-      min-width: 48px; min-height: 48px;
-      opacity: 0.85;
+        linear-gradient(180deg, transparent 0%, rgba(8,6,6,.2) 55%, rgba(0,0,0,.55) 100%),
+        repeating-linear-gradient(90deg, transparent 0 46px, rgba(59,85,112,0.04) 46px 48px);
     }
-    .door-hotspot img { width: 22px; height: 22px; opacity: 0.55; }
-    .door-hotspot:active { opacity: 1; transform: translate(-50%, -50%) scale(0.97); }
+    .wall-pipe {
+      position: absolute; left: 8%; top: 18%; width: 3px; height: 42%;
+      background: linear-gradient(180deg, #2a3848, #12161c);
+      box-shadow: 1px 0 0 rgba(216, 208, 188, 0.08);
+    }
+    .wall-pipe.r { left: auto; right: 10%; top: 22%; height: 38%; }
+
+    .door-hotspot {
+      appearance: none; -webkit-appearance: none;
+      position: absolute; top: 36%; left: 50%; transform: translate(-50%, -50%);
+      width: 72px; height: 128px; padding: 0; margin: 0; outline: none;
+      border: 1px solid rgba(74, 100, 128, 0.55);
+      background:
+        linear-gradient(180deg, #1a1614 0%, #0e0c0b 55%, #161210 100%);
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.65),
+        inset 8px 0 16px rgba(0, 0, 0, 0.35),
+        0 12px 28px rgba(0, 0, 0, 0.55);
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      gap: 8px; padding-bottom: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 3;
+    }
+    .door-hotspot .plate {
+      width: 18px; height: 28px;
+      border: 1px solid rgba(74, 100, 128, 0.7);
+      background: rgba(8, 10, 12, 0.9);
+      position: relative;
+    }
+    .door-hotspot .plate::after {
+      content: "";
+      position: absolute; right: 3px; top: 11px;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #d89830; box-shadow: 0 0 6px rgba(216, 152, 48, 0.55);
+    }
+    .door-hotspot img { width: 20px; height: 20px; opacity: 0.45; filter: grayscale(0.4); }
+    .door-hotspot:active { transform: translate(-50%, -50%) scale(0.97); }
     .door-hotspot.near {
-      box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
-      opacity: 1;
+      border-color: rgba(216, 152, 48, 0.45);
+      box-shadow:
+        inset 0 0 0 1px rgba(216, 152, 48, 0.15),
+        0 0 28px rgba(216, 152, 48, 0.12),
+        0 12px 28px rgba(0, 0, 0, 0.55);
     }
 
     .ctx-prompt {
       position: absolute; left: 50%; top: 58%; transform: translateX(-50%);
-      opacity: 0; transition: opacity 160ms ease-out;
-      font-size: 11px; letter-spacing: 0.16em; color: var(--text-muted);
-      pointer-events: none; z-index: 4;
+      opacity: 0; transition: opacity 200ms ease-out;
+      font-family: var(--font-display); font-size: 11px; letter-spacing: 0.28em;
+      color: rgba(216, 208, 188, 0.55); text-shadow: 0 1px 8px #000;
+      pointer-events: none; z-index: 4; text-transform: uppercase;
     }
     .ctx-prompt.show { opacity: 1; }
 
+    /* 底中：工程挂件入口，不是网页方钮 */
     .bag-entry {
-      position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%);
-      width: 58px; height: 58px; min-width: 48px; min-height: 48px;
-      border-radius: 4px;
+      appearance: none; -webkit-appearance: none;
+      position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%);
+      width: 56px; height: 56px; min-width: 48px; min-height: 48px;
+      padding: 0; margin: 0; outline: none;
       display: flex; align-items: center; justify-content: center;
-      background: color-mix(in srgb, var(--surface) 70%, transparent);
-      border: 1px solid var(--border);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+      background:
+        linear-gradient(165deg, rgba(28, 32, 38, 0.95), rgba(10, 10, 8, 0.95));
+      border: 1px solid rgba(74, 100, 128, 0.65);
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+        0 6px 18px rgba(0, 0, 0, 0.55);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 6;
     }
-    .bag-entry img { width: 26px; height: 26px; opacity: 0.8; }
+    .bag-entry img { width: 24px; height: 24px; opacity: 0.75; filter: grayscale(0.25); }
     .bag-entry .dot {
-      position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%;
-      background: var(--danger); box-shadow: 0 0 6px var(--danger);
+      position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--danger); box-shadow: 0 0 8px var(--danger);
     }
     .bag-entry:active { transform: translateX(-50%) scale(0.94); }
+    .bag-entry::before,
+    .bag-entry::after {
+      content: ""; position: absolute; width: 6px; height: 6px;
+      border-color: rgba(74, 100, 128, 0.8); border-style: solid; pointer-events: none;
+    }
+    .bag-entry::before { top: 4px; left: 4px; border-width: 1px 0 0 1px; }
+    .bag-entry::after { bottom: 4px; right: 4px; border-width: 0 1px 1px 0; }
 
-    #inv-modal[hidden] { display: none; }
+    #inv-modal[hidden] { display: none !important; }
     #inv-modal {
       position: absolute; inset: 0; z-index: 25;
-      background: rgba(0,0,0,.78);
+      background: rgba(0, 0, 0, 0.82);
       display: flex; align-items: flex-end; justify-content: center;
-      padding: 12px 12px 28px;
+      padding: 12px 10px 24px;
     }
-    .inv-sheet { width: min(92%, 360px); max-height: 78%; overflow: auto; }
-    .spine-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .spine-row .spine-bar-vertical { transform: scale(0.9); transform-origin: center left; }
-    .spine-row img { width: 22px; height: 22px; opacity: 0.7; }
+    .rig {
+      width: min(94%, 360px); max-height: 80%; overflow: auto;
+      background:
+        linear-gradient(180deg, rgba(22, 26, 30, 0.98), rgba(10, 10, 8, 0.98));
+      border: 1px solid rgba(74, 100, 128, 0.7);
+      box-shadow:
+        inset 0 0 0 1px rgba(59, 85, 112, 0.25),
+        0 18px 48px rgba(0, 0, 0, 0.75);
+      padding: 14px 12px 12px;
+    }
+    .rig-title {
+      font-family: var(--font-display); font-size: 12px; letter-spacing: 0.32em;
+      color: rgba(216, 208, 188, 0.7); text-align: center;
+      padding-bottom: 10px; margin-bottom: 12px;
+      border-bottom: 1px solid rgba(74, 100, 128, 0.35);
+      text-transform: uppercase;
+    }
+    .spine-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+      padding: 8px 6px;
+      border: 1px solid rgba(74, 100, 128, 0.28);
+      background: rgba(0, 0, 0, 0.28);
+    }
+    .spine-row img { width: 20px; height: 20px; opacity: 0.55; }
+    .spine-row .spine-bar-vertical { transform: scale(0.95); transform-origin: center left; }
+    .spine-row .hp-read {
+      margin-left: auto;
+      font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
     .inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .slot img { width: 24px; height: 24px; }
-    .slot { cursor: pointer; min-height: 54px; }
-    .detail { margin-top: 10px; }
-    .detail .btn { padding: 8px 10px; font-size: 11px; min-height: 44px; }
+    .slot {
+      appearance: none; -webkit-appearance: none;
+      min-height: 56px; padding: 0; margin: 0; outline: none;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(74, 100, 128, 0.4);
+      color: var(--text);
+      cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .slot.has { border-color: rgba(91, 125, 160, 0.55); }
+    .slot.selected {
+      border-color: rgba(216, 152, 48, 0.7);
+      box-shadow: inset 0 0 0 1px rgba(216, 152, 48, 0.25);
+    }
+    .slot img { width: 24px; height: 24px; opacity: 0.85; }
+    .slot .qty {
+      position: absolute; right: 4px; bottom: 3px;
+      font-size: 10px; letter-spacing: 0.04em; color: var(--text-muted);
+    }
+    .detail { margin-top: 12px; }
+    .sel-line {
+      font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em;
+      color: var(--text-muted); margin-bottom: 10px;
+      min-height: 1.2em;
+    }
+    .sel-line strong { color: var(--text); font-weight: 400; letter-spacing: 0.12em; }
+    .rig-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    }
+    .rig-line {
+      appearance: none; -webkit-appearance: none;
+      width: 100%; min-height: 46px; padding: 10px 8px; margin: 0; outline: none;
+      background: transparent;
+      border: 1px solid rgba(74, 100, 128, 0.45);
+      color: var(--text);
+      font-family: var(--font-display); font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .rig-line:active {
+      border-color: rgba(216, 208, 188, 0.55);
+      background: rgba(59, 85, 112, 0.18);
+    }
+    .rig-line.hazard { border-color: rgba(160, 56, 56, 0.55); color: #c06060; }
+    .rig-line.ghost { grid-column: 1 / -1; color: var(--text-muted); margin-top: 2px; }
 
     .feed {
-      position: absolute; top: 52px; left: 12px; width: 55%;
-      z-index: 8; pointer-events: none; font-size: 11px; letter-spacing: 0.08em;
+      position: absolute; top: 48px; left: 12px; width: 58%;
+      z-index: 8; pointer-events: none;
+      font-family: var(--font-body); font-size: 12px; letter-spacing: 0.04em;
+      color: rgba(216, 208, 188, 0.7); text-shadow: 0 1px 6px #000;
     }
     .feed div {
-      margin-bottom: 4px; padding: 4px 8px;
-      background: rgba(8,6,6,.8); border: 1px solid var(--border);
-      color: var(--text-muted); animation: fadeFeed 2.4s ease-out forwards;
+      margin-bottom: 3px; padding: 0;
+      background: none; border: none;
+      animation: fadeFeed 2.4s ease-out forwards;
     }
-    @keyframes fadeFeed { 0%,70%{opacity:1} 100%{opacity:0} }
+    @keyframes fadeFeed { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
 
     .help-toggle {
-      position: absolute; top: 52px; right: 12px; z-index: 16;
-      width: 32px; height: 32px; padding: 0; border-radius: 2px;
-      border: 1px solid var(--border); background: rgba(8,6,6,.65);
-      color: var(--text-muted); font-size: 13px; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      position: absolute; top: 46px; right: 12px; z-index: 16;
+      width: 30px; height: 30px; padding: 0; margin: 0; outline: none;
+      border: 1px solid rgba(74, 100, 128, 0.5);
+      background: rgba(8, 6, 6, 0.7);
+      color: var(--text-muted);
+      font-family: var(--font-display); font-size: 13px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
-    .help-toggle:active { transform: scale(0.94); }
+    .help-toggle:active { transform: scale(0.94); color: var(--text); }
     .help {
-      position: absolute; top: 92px; left: 12px; right: 12px; z-index: 15;
-      padding: 8px 10px; text-align: center; font-size: 11px; line-height: 1.45;
-      letter-spacing: 0.06em; color: var(--text-muted);
-      background: rgba(8,6,6,.9); border: 1px solid var(--border);
+      position: absolute; top: 86px; left: 12px; right: 12px; z-index: 15;
+      padding: 10px 12px; text-align: center;
+      font-family: var(--font-body); font-size: 11px; line-height: 1.5;
+      letter-spacing: 0.04em; color: var(--text-muted);
+      background: rgba(8, 6, 6, 0.92);
+      border: 1px solid rgba(74, 100, 128, 0.4);
       pointer-events: none;
     }
     .help[hidden] { display: none !important; }
+
+    .exit-note {
+      position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%);
+      width: min(86%, 300px); z-index: 30;
+      padding: 18px 16px 14px;
+      background: rgba(12, 12, 10, 0.96);
+      border: 1px solid rgba(74, 100, 128, 0.65);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+    .exit-note[hidden] { display: none !important; }
+    .exit-note h3 {
+      margin: 0 0 10px; font-family: var(--font-display);
+      font-size: 12px; letter-spacing: 0.28em; color: var(--accent-2);
+      font-weight: 400; text-transform: uppercase;
+    }
+    .exit-note p {
+      margin: 0 0 14px; font-family: var(--font-body);
+      font-size: 13px; line-height: 1.5; color: var(--text);
+    }
+    .exit-note .rig-line { width: 100%; }
   </style>
 </head>
 <body>
   <div class="game-root">
     <div class="game-world"></div>
-    <div class="fog" aria-hidden="true"></div>
+    <div class="corridor" aria-hidden="true">
+      <div class="wall-pipe"></div>
+      <div class="wall-pipe r"></div>
+    </div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
       <div class="feed" id="feed" aria-live="polite"></div>
@@ -117,55 +289,60 @@
       <div class="help" id="help" hidden>几乎无常驻界面 · 点门锁检查 · 底中打开脊骨背包 · 钥匙在包内 · 受伤时角标闪红</div>
 
       <button type="button" class="door-hotspot near" id="btn-world-door" aria-label="检查门锁">
-        <img src="../../assets/_shared/rpg-icons/door.png" alt="" />
+        <span class="plate" aria-hidden="true"></span>
+        <img src="../../assets/_shared/rpg-icons/door.png" alt="" draggable="false" />
       </button>
       <div class="ctx-prompt show" id="ctx">检查门锁</div>
 
       <button type="button" class="bag-entry" id="btn-bag" aria-label="打开脊骨背包">
-        <img src="../../assets/_shared/rpg-icons/box.png" alt="" />
+        <img src="../../assets/_shared/rpg-icons/box.png" alt="" draggable="false" />
         <span class="dot" id="bag-dot" hidden></span>
       </button>
 
       <div id="inv-modal" hidden>
-        <div class="inv-sheet panel frame-brackets">
-          <div class="panel-title">脊骨背包 · 8 格</div>
-          <div class="panel-body">
-            <div class="spine-row">
-              <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" />
-              <div class="spine-bar-vertical" id="spine-bar"></div>
-              <span class="badge" id="hp-label">生命 72%</span>
-            </div>
-            <div class="inv-grid" id="inv">
-              <button type="button" class="slot has" data-item="med" data-qty="2" data-label="医疗包">
-                <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" /><span class="qty">×2</span>
-              </button>
-              <button type="button" class="slot has" data-item="key" data-qty="1" data-label="黄铜钥匙">
-                <img src="../../assets/_shared/rpg-icons/key.png" alt="" /><span class="qty">×1</span>
-              </button>
-              <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="生存刀">
-                <img src="../../assets/_shared/rpg-icons/knife.png" alt="" />
-              </button>
-              <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm 子弹">
-                <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span class="qty">×12</span>
-              </button>
-              <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="破损盾牌">
-                <img src="../../assets/_shared/rpg-icons/shield.png" alt="" />
-              </button>
-              <button type="button" class="slot"></button>
-              <button type="button" class="slot"></button>
-              <button type="button" class="slot"></button>
-            </div>
-            <div class="detail">
-              <div class="stat-row"><span class="stat-key">已选</span><span class="stat-val" id="sel-name">—</span></div>
-              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                <button type="button" class="btn btn-primary" id="btn-use">使用</button>
-                <button type="button" class="btn" id="btn-door">开门</button>
-                <button type="button" class="btn btn-danger" id="btn-hurt">受伤</button>
-                <button type="button" class="btn btn-ghost" id="btn-close-bag" style="flex:1">合上</button>
-              </div>
+        <div class="rig" role="dialog" aria-label="脊骨背包">
+          <div class="rig-title">脊骨背包 · 8 格</div>
+          <div class="spine-row">
+            <img src="../../assets/_shared/rpg-icons/darkness.png" alt="" draggable="false" />
+            <div class="spine-bar-vertical" id="spine-bar"></div>
+            <span class="hp-read" id="hp-label">72%</span>
+          </div>
+          <div class="inv-grid" id="inv">
+            <button type="button" class="slot has" data-item="med" data-qty="2" data-label="医疗包">
+              <img src="../../assets/_shared/rpg-icons/medicine.png" alt="" draggable="false" /><span class="qty">×2</span>
+            </button>
+            <button type="button" class="slot has" data-item="key" data-qty="1" data-label="黄铜钥匙">
+              <img src="../../assets/_shared/rpg-icons/key.png" alt="" draggable="false" /><span class="qty">×1</span>
+            </button>
+            <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="生存刀">
+              <img src="../../assets/_shared/rpg-icons/knife.png" alt="" draggable="false" />
+            </button>
+            <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm 子弹">
+              <img src="../../assets/_shared/rpg-icons/gun.png" alt="" draggable="false" /><span class="qty">×12</span>
+            </button>
+            <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="破损护板">
+              <img src="../../assets/_shared/rpg-icons/shield.png" alt="" draggable="false" />
+            </button>
+            <button type="button" class="slot" aria-label="空槽"></button>
+            <button type="button" class="slot" aria-label="空槽"></button>
+            <button type="button" class="slot" aria-label="空槽"></button>
+          </div>
+          <div class="detail">
+            <div class="sel-line">已选 <strong id="sel-name">—</strong></div>
+            <div class="rig-actions">
+              <button type="button" class="rig-line" id="btn-use">使用</button>
+              <button type="button" class="rig-line" id="btn-door">开门</button>
+              <button type="button" class="rig-line hazard" id="btn-hurt">受伤</button>
+              <button type="button" class="rig-line ghost" id="btn-close-bag">合上</button>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="exit-note" id="exit-note" hidden>
+        <h3>维修通道出口</h3>
+        <p>钥匙湿漉漉地转动了。冷空气涌了进来。</p>
+        <button type="button" class="rig-line" id="btn-exit-ok">确认</button>
       </div>
     </div>
   </div>
@@ -204,7 +381,7 @@
         }
         bar.appendChild(seg);
       }
-      sk.setText(sk.$("#hp-label"), "生命 " + hp + "%");
+      sk.setText(sk.$("#hp-label"), hp + "%");
       sk.$("#bag-dot").hidden = hp > 35;
     }
 
@@ -217,6 +394,7 @@
     function closeBag() {
       sk.$("#inv-modal").hidden = true;
       selectedSlot = null;
+      sk.$all(".slot").forEach((s) => s.classList.remove("selected"));
       sk.setText(sk.$("#sel-name"), "—");
       sk.$("#ctx").classList.add("show");
     }
@@ -225,11 +403,7 @@
       const hasKey = sk.$('.slot[data-item="key"].has');
       if (hasKey) {
         feed("锁芯转动了");
-        sk.modal({
-          title: "维修通道出口",
-          body: "钥匙湿漉漉地转动了。冷空气涌了进来。",
-          onConfirm: () => feed("检查点已写入"),
-        });
+        sk.$("#exit-note").hidden = false;
       } else {
         feed("上锁 — 需要黄铜钥匙");
         flashVignette();
@@ -249,13 +423,19 @@
       if (e.target === sk.$("#inv-modal")) closeBag();
     });
     sk.on(sk.$("#btn-world-door"), "click", tryDoor);
+    sk.on(sk.$("#btn-exit-ok"), "click", () => {
+      sk.$("#exit-note").hidden = true;
+      feed("检查点已写入");
+    });
 
     sk.bindSlots("#inv", (slot) => {
+      sk.$all(".slot").forEach((s) => s.classList.remove("selected"));
       if (!slot.classList.contains("has")) {
         sk.setText(sk.$("#sel-name"), "空槽位");
         selectedSlot = null;
         return;
       }
+      slot.classList.add("selected");
       selectedSlot = slot;
       sk.setText(sk.$("#sel-name"), slot.dataset.label + (slot.dataset.qty ? " ×" + slot.dataset.qty : ""));
     });
@@ -264,9 +444,11 @@
       let q = parseInt(slot.dataset.qty || "1", 10);
       q -= 1;
       if (q <= 0) {
-        slot.classList.remove("has");
+        slot.classList.remove("has", "selected");
         slot.innerHTML = "";
         slot.removeAttribute("data-item");
+        slot.removeAttribute("data-qty");
+        slot.removeAttribute("data-label");
         selectedSlot = null;
         sk.setText(sk.$("#sel-name"), "—");
       } else {
