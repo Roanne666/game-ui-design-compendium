@@ -1,6 +1,7 @@
 // Screenshot genre-bound interactive scenes (puppeteer-core + local Chrome)
 // Usage: node tools/shoot.js
 // Outputs PNG to library/previews/<style>.png (gitignored).
+// Viewport is portrait 9:20 (390×867) to match delivery aspect.
 
 const puppeteer = require('puppeteer-core');
 const path = require('path');
@@ -21,10 +22,14 @@ const scenes = [
 ];
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 
-async function shootOne(browser, url, out, h = 800) {
+// 9:20 portrait — phone preview size
+const VIEW_W = 390;
+const VIEW_H = 867;
+
+async function shootOne(browser, url, out) {
   const page = await browser.newPage();
   try {
-    await page.setViewport({ width: 1280, height: h });
+    await page.setViewport({ width: VIEW_W, height: VIEW_H, deviceScaleFactor: 2 });
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 10000 });
     await new Promise(r => setTimeout(r, 200));
     await page.screenshot({ path: out, type: 'png' });
@@ -52,7 +57,7 @@ async function shootOne(browser, url, out, h = 800) {
       const url = 'file:///' + path.join(sceneDir, 'index.html').replace(/\\/g, '/');
       const out = path.join(previewRoot, dir + '.png');
       await shootOne(browser, url, out);
-      console.log('shot', dir);
+      console.log('shot', dir, VIEW_W + 'x' + VIEW_H);
     }
   } finally {
     await browser.close();

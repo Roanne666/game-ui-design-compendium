@@ -19,10 +19,10 @@
 - 信息过载的太空模拟仪表盘
 
 **本风格推荐场景包**
-- 主场景:`demo/scenes/02-dark-fantasy/index.html`（9:20）
+- 主场景:`library/scenes/02-dark-fantasy/index.html`（9:20）
 - 布局原型:顶弱地名；中空世界；底极少键 + 露滴侧置（无口袋、无小地图）
 - 核心玩法:靠近篝火休息；锁定；翻滚/攻击；喝露滴
-- 竖屏通用思路:`research/synthesis/mobile-portrait-first.md`
+- 竖屏通用思路:`docs/rules/mobile-portrait-first.md`
 - 扩展:篝火菜单、装备对比石板
 
 ## 3. 视觉关键词

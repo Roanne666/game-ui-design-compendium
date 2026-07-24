@@ -11,7 +11,7 @@ Scenes must feel like HUD over a game world (diegetic / non-diegetic / meta), no
 
 ## Implementation
 
-Shared layer: `demo/lib/game-feel.css` — import after `components.css` in every scene.
+Shared layer: `library/components/game-feel.css` — import after `components.css` in every scene.
 
 Structure:
 

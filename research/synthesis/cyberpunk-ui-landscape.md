@@ -246,7 +246,7 @@ infoDensity: low | mid | high
 
 ## 9. 对当前 Demo 的诊断（基于本分析）
 
-`demo/scenes/01-cyberpunk-hud/` 为 **9:20 竖屏手机框**，顶栏切换方言时 **配色与布局同时变化**：
+`library/scenes/01-cyberpunk-hud/` 为 **9:20 竖屏手机框**，顶栏切换方言时 **配色与布局同时变化**：
 
 | 键 | 方言 | 竖屏布局 |
 |----|------|----------|

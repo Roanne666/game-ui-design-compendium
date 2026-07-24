@@ -2,7 +2,7 @@
 
 ## shoot.js
 
-puppeteer-core 批量截图。给每个 `library/scenes/<style>/index.html` 渲染 1280×800 PNG，输出到 `library/previews/<style>.png`（gitignored）。
+puppeteer-core 批量截图。给每个 `library/scenes/<style>/index.html` 渲染 **9:20 竖屏**（默认 390×867）PNG，输出到 `library/previews/<style>.png`（gitignored）。
 
 ```bash
 npm install            # 装 puppeteer-core

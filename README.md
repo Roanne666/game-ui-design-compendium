@@ -5,7 +5,7 @@
 **交付目标：移动端竖屏 9:20（画幅定死）+ 触控；玩家可见 UI 文案一律中文。**  
 **楼型与玩法按游戏类型区分**，禁止全库统一「锁定 + 开火」模板。桌面仅作预览。
 
-通用准则：[`research/synthesis/mobile-portrait-first.md`](research/synthesis/mobile-portrait-first.md)（含类型 → 布局/玩法矩阵）。
+通用准则：[`docs/rules/mobile-portrait-first.md`](docs/rules/mobile-portrait-first.md)（含类型 → 布局/玩法矩阵）。
 
 ## 核心原则
 
@@ -63,7 +63,7 @@
 | 10 | Synthwave Neon | 复古动作 / 街机 | 标题→得分 | `10-synthwave-neon/` |
 
 代表作与互斥规则见各 Spec 与 `research/synthesis/style-boundaries.md`。  
-9:20 + 类型矩阵见 `research/synthesis/mobile-portrait-first.md`。
+9:20 + 类型矩阵见 `docs/rules/mobile-portrait-first.md`。
 
 ## 组件库清单(35+)
 

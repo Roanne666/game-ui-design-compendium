@@ -3,31 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>合成波霓虹 — 标题</title>
+  <title>合成波霓虹 — 街机一局</title>
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
   <link rel="stylesheet" href="../../components/styles/synthwave-neon.css" />
   <style>
     .title-block {
-      position:absolute; top:22%; left:50%; transform:translateX(-50%);
+      position:absolute; top:18%; left:50%; transform:translateX(-50%);
       text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px;
       pointer-events:none;
     }
-    .logo { font-family:var(--font-display); font-size:clamp(36px,8vw,72px); letter-spacing:.2em; text-shadow:0 0 20px var(--glow),0 0 40px var(--accent-2); margin:0; pointer-events:auto; }
-    .logo img { width:48px; height:48px; vertical-align:middle; margin-right:12px; filter:drop-shadow(0 0 8px var(--accent)); }
-    .menu { display:flex; flex-direction:column; gap:10px; min-width:260px; pointer-events:auto; }
-    .menu .btn { width:100%; letter-spacing:.15em; }
-    .side-stack { width:min(300px,38vw); max-height:80vh; overflow:auto; }
+    .logo { font-family:var(--font-display); font-size:clamp(28px,7vw,56px); letter-spacing:.2em; text-shadow:0 0 20px var(--glow),0 0 40px var(--accent-2); margin:0; pointer-events:auto; }
+    .logo img { width:40px; height:40px; vertical-align:middle; margin-right:10px; filter:drop-shadow(0 0 8px var(--accent)); }
+    .menu { display:flex; flex-direction:column; gap:10px; min-width:240px; pointer-events:auto; }
+    .menu .btn { width:100%; letter-spacing:.15em; min-height:48px; }
+    .side-stack { width:min(280px,78%); max-height:70vh; overflow:auto; }
     [data-sk-panel] { margin-bottom:12px; }
     .score-list { list-style:none; margin:0; padding:0; }
     .score-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border); font-family:var(--font-mono); font-size:12px; }
     .score-list li.top { color:var(--accent); text-shadow:0 0 8px var(--glow); }
     .vol-row { display:flex; align-items:center; gap:8px; margin:10px 0; }
     .vol-row span { flex:1; font-size:12px; }
-    #loading-bar-wrap { width:min(400px,90vw); opacity:0; transition:opacity .2s; pointer-events:auto; }
+    #loading-bar-wrap { width:min(320px,86vw); opacity:0; transition:opacity .2s; pointer-events:auto; }
     #loading-bar-wrap.visible { opacity:1; }
-    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); pointer-events:none; }
+    .hint { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); pointer-events:none; width:90%; text-align:center; }
+
+    #title-layer[hidden], #play-layer[hidden], #over-layer[hidden] { display:none; }
+    #play-layer, #over-layer { position:absolute; inset:0; z-index:12; }
+
+    .run-hud {
+      position:absolute; top:52px; left:14px; right:14px;
+      display:flex; justify-content:space-between; gap:10px;
+      font-family:var(--font-mono); letter-spacing:.12em;
+    }
+    .run-hud .pill {
+      padding:8px 12px; border:1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 80%, transparent);
+      text-shadow:0 0 8px var(--glow);
+      min-width:72px; text-align:center;
+    }
+    .run-hud .pill .lab { display:block; font-size:10px; color:var(--text-muted); }
+    .run-hud .pill .num { display:block; font-size:18px; color:var(--accent); }
+
+    .lane {
+      position:absolute; top:28%; left:8%; right:8%; height:28%;
+      border:1px solid var(--border);
+      box-shadow:0 0 24px var(--glow), inset 0 0 40px rgba(255,0,200,.08);
+      overflow:hidden;
+    }
+    .gate {
+      position:absolute; top:0; bottom:0; left:50%; width:64px;
+      transform:translateX(-50%);
+      border-left:2px solid var(--accent-2);
+      border-right:2px solid var(--accent-2);
+      background: color-mix(in srgb, var(--accent-2) 18%, transparent);
+      pointer-events:none;
+    }
+    .orb {
+      position:absolute; top:50%; width:44px; height:44px;
+      margin-top:-22px; border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 16px var(--glow);
+      left: -50px;
+    }
+    .orb.hit { opacity:0; transform:scale(1.4); transition: opacity .15s, transform .15s; }
+    .orb.miss { opacity:.35; }
+
+    .tap-btn {
+      position:absolute; left:50%; bottom:56px; transform:translateX(-50%);
+      width:min(220px,70%); min-height:64px;
+      font-family:var(--font-display); letter-spacing:.2em; font-size:18px;
+    }
+
+    .over-card {
+      position:absolute; left:50%; top:42%; transform:translate(-50%,-50%);
+      width:min(320px,88%); text-align:center;
+    }
+    .over-card .final { font-family:var(--font-mono); font-size:28px; color:var(--accent); text-shadow:0 0 16px var(--glow); margin:12px 0 20px; }
+    .over-actions { display:flex; flex-direction:column; gap:10px; }
+    .over-actions .btn { min-height:48px; }
   </style>
 </head>
 <body>
@@ -35,66 +90,94 @@
     <div class="game-world has-grid"></div>
     <div class="meta-vignette" id="vignette"></div>
     <div class="game-hud">
-      <div class="title-block">
-        <h1 class="logo">
-          <img src="../../assets/_shared/kenney/icons/star.png" alt="" />霓虹漂移
-        </h1>
-        <div id="loading-bar-wrap">
-          <div class="progress progress-linear" style="height:12px">
-            <div id="title-load-bar" class="progress-fill" style="width:0%;background:var(--accent-2)"></div>
+      <div id="title-layer">
+        <div class="title-block">
+          <h1 class="logo">
+            <img src="../../assets/_shared/kenney/icons/star.png" alt="" />霓虹漂移
+          </h1>
+          <div id="loading-bar-wrap">
+            <div class="progress progress-linear" style="height:12px">
+              <div id="title-load-bar" class="progress-fill" style="width:0%;background:var(--accent-2)"></div>
+            </div>
+            <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">投币开始</span></div>
           </div>
-          <div style="text-align:center;margin-top:8px"><span class="badge" id="load-label">投币开始</span></div>
+        </div>
+
+        <div class="hud-anchor-bc menu">
+          <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">开始</button>
+          <button type="button" class="btn menu-item-large" id="btn-scores">高分榜</button>
+          <button type="button" class="btn menu-item-large" id="btn-options">选项</button>
+          <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">退出</button>
+        </div>
+
+        <div class="hud-anchor-tr side-stack">
+          <div id="scores-panel" class="panel frame-brackets" data-sk-panel hidden>
+            <div class="panel-title">高分榜</div>
+            <div class="panel-body">
+              <ul class="score-list" id="score-list">
+                <li class="top"><span>1. 雾汽小子</span><span>984,200</span></li>
+                <li><span>2. 复古狐</span><span>812,050</span></li>
+                <li><span>3. 合成浪人</span><span>640,880</span></li>
+                <li><span>4. 你</span><span id="your-score">000,000</span></li>
+              </ul>
+              <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">关闭</button>
+            </div>
+          </div>
+
+          <div id="options-panel" class="panel frame-brackets" data-sk-panel hidden>
+            <div class="panel-title">选项</div>
+            <div class="panel-body">
+              <div class="vol-row">
+                <span>主音量</span>
+                <button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button>
+                <span id="vol-master" class="badge">70</span>
+                <button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button>
+              </div>
+              <div class="vol-row">
+                <span>音乐音量</span>
+                <button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button>
+                <span id="vol-music" class="badge">80</span>
+                <button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button>
+              </div>
+              <div class="vol-row">
+                <span>音效音量</span>
+                <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button>
+                <span id="vol-sfx" class="badge">90</span>
+                <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button>
+              </div>
+              <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">关闭</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="hud-anchor-bc menu">
-        <button type="button" class="btn btn-primary menu-item-large primary" id="btn-start">开始</button>
-        <button type="button" class="btn menu-item-large" id="btn-scores">高分榜</button>
-        <button type="button" class="btn menu-item-large" id="btn-options">选项</button>
-        <button type="button" class="btn btn-danger menu-item-large" id="btn-quit">退出</button>
+      <div id="play-layer" hidden>
+        <div class="run-hud">
+          <div class="pill"><span class="lab">得分</span><span class="num" id="run-score">0</span></div>
+          <div class="pill"><span class="lab">剩余</span><span class="num" id="run-time">20</span></div>
+          <div class="pill"><span class="lab">连击</span><span class="num" id="run-combo">0</span></div>
+        </div>
+        <div class="lane" id="lane">
+          <div class="gate"></div>
+          <div class="orb" id="orb"></div>
+        </div>
+        <button type="button" class="btn btn-primary tap-btn" id="btn-tap" aria-label="点按得分">点按</button>
       </div>
 
-      <div class="hud-anchor-tr side-stack">
-        <div id="scores-panel" class="panel frame-brackets" data-sk-panel hidden>
-          <div class="panel-title">高分榜</div>
+      <div id="over-layer" hidden>
+        <div class="over-card panel frame-brackets">
+          <div class="panel-title">本局结束</div>
           <div class="panel-body">
-            <ul class="score-list">
-              <li class="top"><span>1. VAPOR_KID</span><span>984,200</span></li>
-              <li><span>2. RETRO_FOX</span><span>812,050</span></li>
-              <li><span>3. SYNTH_RON</span><span>640,880</span></li>
-              <li><span>4. 你</span><span id="your-score">000,000</span></li>
-            </ul>
-            <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%">关闭</button>
-          </div>
-        </div>
-
-        <div id="options-panel" class="panel frame-brackets" data-sk-panel hidden>
-          <div class="panel-title">选项</div>
-          <div class="panel-body">
-            <div class="vol-row">
-              <span>主音量</span>
-              <button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button>
-              <span id="vol-master" class="badge">70</span>
-              <button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button>
+            <div class="final" id="final-score">0</div>
+            <div class="over-actions">
+              <button type="button" class="btn btn-primary" id="btn-again">再来一局</button>
+              <button type="button" class="btn" id="btn-title">返回标题</button>
             </div>
-            <div class="vol-row">
-              <span>音乐音量</span>
-              <button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button>
-              <span id="vol-music" class="badge">80</span>
-              <button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button>
-            </div>
-            <div class="vol-row">
-              <span>音效音量</span>
-              <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button>
-              <span id="vol-sfx" class="badge">90</span>
-              <button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button>
-            </div>
-            <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%">关闭</button>
           </div>
         </div>
       </div>
 
-      <p class="hint">开始填充进度条 · 高分榜 · 选项音量 · 退出 · Esc 关闭</p>
+      <p class="hint" id="hint">开始 → 一局点按得分 → 结束可重开</p>
     </div>
   </div>
   <script src="../../components/scene-kit.js"></script>
@@ -102,10 +185,114 @@
     const sk = SceneKit;
     const vol = { master: 70, music: 80, sfx: 90 };
     const volLabels = { master: "主音量", music: "音乐音量", sfx: "音效音量" };
+    const ROUND_SEC = 20;
+    let best = 0;
+    let score = 0;
+    let combo = 0;
+    let left = ROUND_SEC;
+    let playing = false;
+    let orbX = -50;
+    let orbSpeed = 3.2;
+    let raf = 0;
+    let tickTimer = 0;
 
     function syncVol(key) {
       sk.setText(sk.$("#vol-" + key), String(vol[key]));
     }
+
+    function fmt(n) {
+      return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function showLayer(name) {
+      sk.$("#title-layer").hidden = name !== "title";
+      sk.$("#play-layer").hidden = name !== "play";
+      sk.$("#over-layer").hidden = name !== "over";
+    }
+
+    function resetOrb() {
+      const orb = sk.$("#orb");
+      orb.classList.remove("hit", "miss");
+      orbX = -60;
+      orbSpeed = 2.8 + Math.random() * 2.4;
+      orb.style.left = orbX + "px";
+    }
+
+    function endRound() {
+      playing = false;
+      cancelAnimationFrame(raf);
+      clearInterval(tickTimer);
+      if (score > best) {
+        best = score;
+        sk.setText(sk.$("#your-score"), fmt(best).padStart(7, "0"));
+      }
+      sk.setText(sk.$("#final-score"), fmt(score));
+      showLayer("over");
+      sk.setText(sk.$("#hint"), "再来一局或返回标题");
+      sk.toast("本局得分 " + fmt(score), "success");
+    }
+
+    function frame() {
+      if (!playing) return;
+      const lane = sk.$("#lane");
+      const orb = sk.$("#orb");
+      const w = lane.clientWidth;
+      orbX += orbSpeed;
+      orb.style.left = orbX + "px";
+      if (orbX > w + 40) {
+        combo = 0;
+        sk.setText(sk.$("#run-combo"), "0");
+        orb.classList.add("miss");
+        resetOrb();
+      }
+      raf = requestAnimationFrame(frame);
+    }
+
+    function startRound() {
+      score = 0;
+      combo = 0;
+      left = ROUND_SEC;
+      playing = true;
+      sk.setText(sk.$("#run-score"), "0");
+      sk.setText(sk.$("#run-combo"), "0");
+      sk.setText(sk.$("#run-time"), String(left));
+      showLayer("play");
+      sk.setText(sk.$("#hint"), "光球进门时点按得分");
+      sk.closePanel("#scores-panel");
+      sk.closePanel("#options-panel");
+      resetOrb();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(frame);
+      clearInterval(tickTimer);
+      tickTimer = setInterval(() => {
+        if (!playing) return;
+        left -= 1;
+        sk.setText(sk.$("#run-time"), String(Math.max(0, left)));
+        if (left <= 0) endRound();
+      }, 1000);
+    }
+
+    sk.on(sk.$("#btn-tap"), "click", () => {
+      if (!playing) return;
+      const lane = sk.$("#lane");
+      const center = lane.clientWidth / 2;
+      const dist = Math.abs(orbX + 22 - center);
+      const orb = sk.$("#orb");
+      if (dist < 42) {
+        combo += 1;
+        const gain = 100 + combo * 25;
+        score += gain;
+        sk.setText(sk.$("#run-score"), fmt(score));
+        sk.setText(sk.$("#run-combo"), String(combo));
+        orb.classList.add("hit");
+        sk.pulse(sk.$("#btn-tap"));
+        setTimeout(resetOrb, 120);
+      } else {
+        combo = 0;
+        sk.setText(sk.$("#run-combo"), "0");
+        sk.toast("偏了", "warning");
+      }
+    });
 
     sk.on(sk.$("#btn-start"), "click", () => {
       const wrap = sk.$("#loading-bar-wrap");
@@ -114,18 +301,26 @@
       let pct = 0;
       const bar = sk.$("#title-load-bar");
       const timer = setInterval(() => {
-        pct += 4 + Math.floor(Math.random() * 5);
+        pct += 6 + Math.floor(Math.random() * 6);
         if (pct >= 100) {
           pct = 100;
           clearInterval(timer);
           sk.setFill(bar, pct);
           sk.setText(sk.$("#load-label"), "就绪");
-          sk.toast("第一关 — 午夜公路", "success");
-          sk.pulse(wrap);
+          startRound();
         } else {
           sk.setFill(bar, pct);
         }
-      }, 80);
+      }, 70);
+    });
+
+    sk.on(sk.$("#btn-again"), "click", () => startRound());
+    sk.on(sk.$("#btn-title"), "click", () => {
+      showLayer("title");
+      sk.setText(sk.$("#hint"), "开始 → 一局点按得分 → 结束可重开");
+      sk.setText(sk.$("#load-label"), "投币开始");
+      sk.$("#loading-bar-wrap").classList.remove("visible");
+      sk.setFill(sk.$("#title-load-bar"), 0);
     });
 
     sk.on(sk.$("#btn-scores"), "click", () => {
