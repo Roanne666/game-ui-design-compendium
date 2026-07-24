@@ -2,7 +2,7 @@
 
 `library/packs/` 是自包含风格包的根目录。每个风格包集中保存参数规格、Token、可打开场景与专属资产。
 
-**10 套均使用同一共享栈与目录约定**：`SPEC.md` + `tokens.css` + `scene.css` + `scene.js` + `index.html`（+ 可选 `assets/`）。见 `references/library-map.md`。无对应风格时用 [`../examples/generic/`](../examples/generic/)。
+**10 套均使用同一共享栈与目录约定**：`SPEC.md` + `tokens.css` + `scene.css` + `scene.js` + `index.html`（+ 可选 `assets/`）。见 `references/library-map.md`。无对应风格时按目标游戏类型自建（硬规则 + `library/components/`），不要硬套本表。
 
 | # | 风格 | 类型 | SPEC | 主场景 |
 |---|---|---|---|---|

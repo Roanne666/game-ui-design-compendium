@@ -1,6 +1,6 @@
 # Game UI Design Encyclopedia
 
-10 套游戏 UI 风格包 + **通用竖屏 HUD 思路**（Agent Plugin）。
+10 套游戏 UI 风格包 + 竖屏触控硬规则（Agent Plugin）。
 
 **交付目标：移动端竖屏 9:20（画幅定死）+ 触控；玩家可见 UI 文案一律中文。**  
 **楼型与玩法按游戏类型区分**，禁止全库统一「锁定 + 开火」模板。桌面仅作预览。
@@ -10,9 +10,9 @@
 | 判定 | 做法 |
 |------|------|
 | 目标游戏**有对应**风格（类型 + 玩法对上矩阵一行） | 套用 `library/packs/<id>/` |
-| **无对应** / 硬套会扭曲玩法 | 走通用路径：硬规则 + `library/components/` + 自拟 token；范例见 `library/examples/generic/` |
+| **无对应** / 硬套会扭曲玩法 | **按该游戏类型自建**楼型与视觉：硬规则 + `library/components/` + 自拟 tokens/scene（无仓库内「通用场景」） |
 
-Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 `generic`）、`/audit-hud`。安装见 [`INSTALL.md`](INSTALL.md)。
+Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（`<pack-id>` 或 `custom`）、`/audit-hud`。安装见 [`INSTALL.md`](INSTALL.md)。
 
 通用准则：[`docs/rules/mobile-portrait-first.md`](docs/rules/mobile-portrait-first.md)（含类型 → 布局/玩法矩阵）。
 
@@ -33,7 +33,7 @@ Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 
 ├── .claude-plugin/               ← Agent Plugin 清单
 ├── skills/ / commands/ / references/
 ├── library/                      ← UI 组件库 + 范例
-│   ├── index.html                 ← 入口（packs + generic）
+│   ├── index.html                 ← 10 套 pack 入口
 │   ├── components/                ← 共享建材
 │   ├── packs/<id>/                ← 每风格独立包
 │   │   ├── SPEC.md
@@ -42,7 +42,6 @@ Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 
 │   │   ├── scene.js
 │   │   ├── index.html
 │   │   └── assets/                ← 可空
-│   ├── examples/generic/          ← 无对应时的最小通用 HUD
 │   ├── assets/                    ← 第三方共享素材与许可
 │   └── previews/                  ← shoot.js 输出（gitignored）
 ├── docs/rules/                    ← 硬规则权威稿
@@ -54,19 +53,16 @@ Skill：`skills/game-ui-style/`。命令：`/pick-style`、`/apply-style`（含 
 
 ### 1. 先判定：有没有对应风格
 
-打开 [`references/style-matrix.md`](references/style-matrix.md)。对得上某一行 → 读该 pack 的 `SPEC.md`；对不上 → 打开 [`library/examples/generic/`](library/examples/generic/) 并读硬规则，**不要**硬套最近 pack。
+打开 [`references/style-matrix.md`](references/style-matrix.md)。对得上某一行 → 读该 pack 的 `SPEC.md`；对不上 → 读硬规则与 `library-map` 加载序，**按该游戏类型自建**，不要硬套最近 pack。
 
 ### 2. 用手机或 DevTools 竖屏玩场景
 
-- 有对应：`library/index.html` → 某 pack 的 `index.html`
-- 无对应：`library/examples/generic/index.html`
-
-优先 **手机框 9:20 + 触控**；验收看玩法是否成立。
+有对应：打开 `library/index.html` → 某 pack 的 `index.html`。优先 **手机框 9:20 + 触控**；验收看玩法是否成立。
 
 ### 3. 用组件库做建材
 
-- **套用 pack**：共享建材 + 该 pack 的 `tokens.css`
-- **通用路径**：共享建材 + 自拟 `tokens.css`（可参考 `examples/generic/tokens.css`）
+- **套用 pack**：共享建材 + 该 pack 的 `tokens.css` / `scene.css` / `scene.js`
+- **无对应自建**：共享建材 + 自拟 `tokens.css` / `scene.css` / `scene.js`（楼型跟游戏类型走）
 
 控件热区按触控尺寸设计。**全部案例统一共享栈**（见 `references/library-map.md`）。
 

@@ -12,7 +12,7 @@
 
 4. **类型正确的楼型** — 打开界面应能辨认游戏大类。**有对应 pack** 时须符合矩阵该行；**通用路径**时按目标游戏自身类型设计楼型（矩阵可作分区参考，不绑 pack 视觉）。→ [`mobile-portrait-first.md` §4](../docs/rules/mobile-portrait-first.md)、[`style-matrix.md`](./style-matrix.md)
 5. **禁止统一锁定开火模板** — 不得把「左辅圆键 + 右主开火 + 中口袋」套到不需要该玩法的类型（03/04/05/07/08/10 等）。→ [`mobile-portrait-first.md` §3–§4.2](../docs/rules/mobile-portrait-first.md)
-6. **无对应不硬套** — 目标游戏对不上 10 套时走通用 UI（硬规则 + `library/components/` + 自拟 token），禁止为凑合选最近 pack 换皮。→ [`skills/game-ui-style/SKILL.md`](../skills/game-ui-style/SKILL.md)
+6. **无对应不硬套** — 目标游戏对不上 10 套时按该游戏类型自建楼型与视觉（硬规则 + `library/components/` + 自拟 tokens/scene），禁止为凑合选最近 pack 换皮，也无仓库内「通用场景」可抄。→ [`skills/game-ui-style/SKILL.md`](../skills/game-ui-style/SKILL.md)
 
 ## 文案与语言
 
