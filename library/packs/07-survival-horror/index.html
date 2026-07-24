@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
-  <link rel="stylesheet" href="../../components/styles/survival-horror.css" />
+  <link rel="stylesheet" href="./tokens.css" />
   <style>
     .game-root {
       --bg: #070605;
@@ -28,7 +28,7 @@
 
     .game-world {
       background: var(--bg) center top / cover no-repeat;
-      background-image: url("../../assets/project/07-survival-horror/corridor-bg.png");
+      background-image: url("./assets/corridor-bg.png");
     }
     .game-world::before {
       opacity: 0.12;
@@ -123,7 +123,7 @@
       flex: 0 0 auto;
       padding: 0;
       overflow: visible;
-      background: url("../../assets/project/07-survival-horror/rig-case.png") center / contain no-repeat;
+      background: url("./assets/rig-case.png") center / contain no-repeat;
       border: none;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
     }
@@ -339,7 +339,7 @@
       <div class="ctx-prompt show" id="ctx">检查门锁</div>
 
       <button type="button" class="bag-entry" id="btn-bag" aria-label="打开脊骨背包">
-        <img src="../../assets/project/07-survival-horror/icons/icon-bag.png" alt="" draggable="false" />
+        <img src="./assets/icons/icon-bag.png" alt="" draggable="false" />
         <span class="dot" id="bag-dot" hidden></span>
       </button>
 
@@ -354,19 +354,19 @@
             </div>
             <div class="inv-grid" id="inv">
               <button type="button" class="slot has" data-item="med" data-qty="2" data-label="医疗包">
-                <img src="../../assets/project/07-survival-horror/icons/icon-med.png" alt="" draggable="false" /><span class="qty">×2</span>
+                <img src="./assets/icons/icon-med.png" alt="" draggable="false" /><span class="qty">×2</span>
               </button>
               <button type="button" class="slot has" data-item="key" data-qty="1" data-label="黄铜钥匙">
-                <img src="../../assets/project/07-survival-horror/icons/icon-key.png" alt="" draggable="false" /><span class="qty">×1</span>
+                <img src="./assets/icons/icon-key.png" alt="" draggable="false" /><span class="qty">×1</span>
               </button>
               <button type="button" class="slot has" data-item="knife" data-qty="1" data-label="生存刀">
-                <img src="../../assets/project/07-survival-horror/icons/icon-knife.png" alt="" draggable="false" />
+                <img src="./assets/icons/icon-knife.png" alt="" draggable="false" />
               </button>
               <button type="button" class="slot has" data-item="ammo" data-qty="12" data-label="9mm 子弹">
-                <img src="../../assets/project/07-survival-horror/icons/icon-ammo.png" alt="" draggable="false" /><span class="qty">×12</span>
+                <img src="./assets/icons/icon-ammo.png" alt="" draggable="false" /><span class="qty">×12</span>
               </button>
               <button type="button" class="slot has" data-item="shield" data-qty="1" data-label="破损护板">
-                <img src="../../assets/project/07-survival-horror/icons/icon-shield.png" alt="" draggable="false" />
+                <img src="./assets/icons/icon-shield.png" alt="" draggable="false" />
               </button>
               <button type="button" class="slot" aria-label="空槽"></button>
               <button type="button" class="slot" aria-label="空槽"></button>

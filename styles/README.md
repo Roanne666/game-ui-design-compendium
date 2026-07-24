@@ -10,9 +10,9 @@
 | 02 | [Dark Fantasy](../library/packs/02-dark-fantasy/SPEC.md) | 魂类 / 动作 RPG | `library/packs/02-dark-fantasy/` |
 | 03 | [Sci-Fi Space](../library/packs/03-scifi-space/SPEC.md) | 太空模拟 | `library/packs/03-scifi-space/` |
 | 04 | [Pixel Retro](../library/packs/04-pixel-retro/SPEC.md) | 2D 像素 RPG / 平台 | `library/packs/04-pixel-retro/` |
-| 05 | [Hand-drawn](05-hand-drawn.md) | 叙事动作 / Roguelike | `library/scenes/05-hand-drawn/` |
-| 06 | [Cartoon Comic](06-cartoon-comic.md) | 射击 / 节奏动作 | `library/scenes/06-cartoon-comic/` |
-| 07 | [Survival Horror](07-survival-horror.md) | 生存恐怖 | `library/scenes/07-survival-horror/` |
+| 05 | [Hand-drawn](../library/packs/05-hand-drawn/SPEC.md) | 叙事动作 / Roguelike | `library/packs/05-hand-drawn/` |
+| 06 | [Cartoon Comic](../library/packs/06-cartoon-comic/SPEC.md) | 射击 / 节奏动作 | `library/packs/06-cartoon-comic/` |
+| 07 | [Survival Horror](../library/packs/07-survival-horror/SPEC.md) | 生存恐怖 | `library/packs/07-survival-horror/` |
 | 08 | [Anime Colorful](08-anime-colorful.md) | 日式 JRPG / 社交 | `library/scenes/08-anime-colorful/` |
 | 09 | [Tactical Military](09-tactical-military.md) | 战术射击 / 军事模拟 | `library/scenes/09-tactical-military/` |
 | 10 | [Synthwave Neon](10-synthwave-neon.md) | 复古动作 / 街机 | `library/scenes/10-synthwave-neon/` |
