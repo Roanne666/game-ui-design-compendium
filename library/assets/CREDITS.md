@@ -83,3 +83,11 @@
 - `library/assets/project/09-tactical-military/icons/` — stance / sprint / fire / reload glyphs (keyed)
 - License: project original for this encyclopedia demo
 - **不含**商业战术射击官方或 Rip 素材
+
+## Project-generated scene plates (10 Synthwave Neon)
+
+- `library/assets/project/10-synthwave-neon/outrun-bg.png` — outrun sunset grid road plate
+- `library/assets/project/10-synthwave-neon/orb.png` — neon collectible orb (black-keyed)
+- `library/assets/project/10-synthwave-neon/icons/` — start / tap glyphs (keyed)
+- License: project original for this encyclopedia demo
+- **不含**商业 Synthwave / Hotline Miami 等官方或 Rip 素材

@@ -10,16 +10,19 @@
   <link rel="stylesheet" href="../../components/styles/synthwave-neon.css" />
   <style>
     .game-world {
-      background:
-        radial-gradient(ellipse 80% 40% at 50% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 60%),
-        linear-gradient(180deg, #120818 0%, #080510 50%, #1a0830 100%);
+      background: #090014 center top / cover no-repeat;
+      background-image: url("../../assets/project/10-synthwave-neon/outrun-bg.png");
+    }
+    .game-world::before { opacity: 0.14; }
+    .game-world::after {
+      box-shadow: inset 0 0 90px 28px rgba(9, 0, 20, 0.55);
     }
 
     #title-layer[hidden], #play-layer[hidden], #over-layer[hidden] { display: none; }
     #play-layer, #over-layer { position: absolute; inset: 0; z-index: 12; }
 
     .crt-title {
-      position: absolute; top: 16%; left: 50%; transform: translateX(-50%);
+      position: absolute; top: 14%; left: 50%; transform: translateX(-50%);
       text-align: center; width: 90%; pointer-events: none;
     }
     .logo {
@@ -33,24 +36,35 @@
       letter-spacing: 0.22em; color: var(--text-muted);
     }
     .coin-slot {
-      position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%);
+      position: absolute; left: 50%; bottom: 16%; transform: translateX(-50%);
       width: min(240px, 72%); display: flex; flex-direction: column; gap: 10px;
     }
     .coin-slot .insert {
-      min-height: 64px; width: 100%;
+      appearance: none; -webkit-appearance: none;
+      min-height: 64px; width: 100%; margin: 0; padding: 0 12px; outline: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      overflow: hidden;
       font-family: var(--font-display); font-size: 18px; letter-spacing: 0.28em;
       color: var(--bg); background: var(--accent);
       border: 2px solid var(--accent-2);
       box-shadow: 0 0 24px var(--glow);
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .coin-slot .insert img {
+      width: 28px; height: 28px; max-width: 28px; max-height: 28px;
+      object-fit: contain; flex-shrink: 0; pointer-events: none;
     }
     .coin-slot .insert:active { transform: scale(0.96); }
     .coin-slot .side {
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
     }
     .coin-slot .side .ghost {
-      min-height: 44px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+      appearance: none; -webkit-appearance: none;
+      min-height: 44px; margin: 0; padding: 0; outline: none;
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
       background: transparent; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .coin-slot .side .ghost:active { transform: scale(0.94); color: var(--accent); border-color: var(--accent); }
 
@@ -87,41 +101,75 @@
     .run-hud .num { display: block; font-size: 16px; color: var(--accent); }
 
     .road {
-      position: absolute; top: 26%; left: 0; right: 0; bottom: 28%;
+      position: absolute; top: 24%; left: 0; right: 0; bottom: 26%;
       overflow: hidden;
+      pointer-events: none;
     }
     .horizon {
-      position: absolute; left: 0; right: 0; top: 18%;
-      height: 1px; background: color-mix(in srgb, var(--accent-2) 55%, transparent);
+      position: absolute; left: 0; right: 0; top: 22%;
+      height: 1px; background: color-mix(in srgb, var(--accent-2) 35%, transparent);
       box-shadow: 0 0 12px var(--glow);
+      opacity: 0.55;
     }
     .gate {
-      position: absolute; top: 28%; bottom: 22%; left: 50%; width: 56px;
+      position: absolute; top: 30%; bottom: 24%; left: 50%; width: 56px;
       transform: translateX(-50%);
       border-left: 2px solid var(--accent-2);
       border-right: 2px solid var(--accent-2);
-      background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+      background: color-mix(in srgb, var(--accent-2) 10%, transparent);
       pointer-events: none;
-      box-shadow: 0 0 20px color-mix(in srgb, var(--glow) 40%, transparent);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--glow) 35%, transparent);
     }
     .orb {
-      position: absolute; top: 48%; width: 40px; height: 40px; margin-top: -20px;
-      border-radius: 50%; left: -50px;
-      background: var(--accent);
-      box-shadow: 0 0 18px var(--glow), 0 0 36px var(--accent);
+      position: absolute; top: 48%; width: 48px; height: 48px; margin-top: -24px;
+      left: -50px;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .orb img {
+      width: 100%; height: 100%; object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(255, 0, 255, 0.75));
+      pointer-events: none;
     }
     .orb.hit { opacity: 0; transform: scale(1.5); transition: opacity .12s, transform .12s; }
 
     .tap-btn {
-      position: absolute; left: 50%; bottom: 48px; transform: translateX(-50%);
-      width: min(180px, 52%); aspect-ratio: 1; border-radius: 50%;
-      font-family: var(--font-display); letter-spacing: 0.2em; font-size: 16px;
-      color: var(--bg); background: var(--accent-2);
+      appearance: none; -webkit-appearance: none;
+      position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%);
+      width: min(168px, 48%); aspect-ratio: 1; border-radius: 50%;
+      margin: 0; padding: 0; outline: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      overflow: hidden;
+      font-family: var(--font-display); letter-spacing: 0.2em; font-size: 14px;
+      color: #fff; background: rgba(8, 4, 20, 0.72);
       border: 2px solid var(--accent);
-      box-shadow: 0 0 28px var(--glow);
+      box-shadow: 0 0 28px var(--glow), inset 0 0 24px color-mix(in srgb, var(--accent-2) 35%, transparent);
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tap-btn img {
+      width: 52px; height: 52px; max-width: 46%; max-height: 46%;
+      object-fit: contain; pointer-events: none;
     }
     .tap-btn:active { transform: translateX(-50%) scale(0.94); }
+
+    .neon-line {
+      appearance: none; -webkit-appearance: none;
+      display: block; width: 100%; min-height: 48px; margin: 0; padding: 0 12px; outline: none;
+      font-family: var(--font-display); letter-spacing: 0.16em; font-size: 14px;
+      color: #fff; background: transparent;
+      border: 1px solid var(--accent-2);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--glow) 40%, transparent);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .neon-line.primary {
+      background: var(--accent); color: var(--bg); border-color: var(--accent-2);
+    }
+    .neon-line:active { transform: scale(0.97); }
+    .neon-line.ghost { color: var(--text-muted); border-color: var(--border); box-shadow: none; }
 
     .over-card {
       position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%);
@@ -132,7 +180,6 @@
       text-shadow: 0 0 16px var(--glow); margin: 12px 0 18px;
     }
     .over-actions { display: flex; flex-direction: column; gap: 10px; }
-    .over-actions .btn { min-height: 48px; letter-spacing: 0.16em; }
 
     .help-toggle {
       position: absolute; top: 52px; right: 12px; z-index: 16;
@@ -170,7 +217,9 @@
           </div>
         </div>
         <div class="coin-slot">
-          <button type="button" class="insert" id="btn-start" aria-label="投币开始">投币</button>
+          <button type="button" class="insert" id="btn-start" aria-label="投币开始">
+            <img src="../../assets/project/10-synthwave-neon/icons/icon-start.png" alt="" draggable="false" /><span>投币</span>
+          </button>
           <div class="side">
             <button type="button" class="ghost" id="btn-scores" aria-label="高分榜">高分</button>
             <button type="button" class="ghost" id="btn-options" aria-label="选项">选项</button>
@@ -187,16 +236,16 @@
                 <li><span>3. 合成浪人</span><span>640,880</span></li>
                 <li><span>4. 你</span><span id="your-score">000,000</span></li>
               </ul>
-              <button type="button" class="btn btn-ghost" id="scores-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
+              <button type="button" class="neon-line ghost" id="scores-close" style="margin-top:12px">关闭</button>
             </div>
           </div>
           <div id="options-panel" class="panel frame-brackets" data-sk-panel hidden>
             <div class="panel-title">选项</div>
             <div class="panel-body">
-              <div class="vol-row"><span>主音量</span><button type="button" class="btn btn-ghost" data-vol="master" data-delta="-10">−</button><span id="vol-master" class="badge">70</span><button type="button" class="btn btn-ghost" data-vol="master" data-delta="10">+</button></div>
-              <div class="vol-row"><span>音乐</span><button type="button" class="btn btn-ghost" data-vol="music" data-delta="-10">−</button><span id="vol-music" class="badge">80</span><button type="button" class="btn btn-ghost" data-vol="music" data-delta="10">+</button></div>
-              <div class="vol-row"><span>音效</span><button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="-10">−</button><span id="vol-sfx" class="badge">90</span><button type="button" class="btn btn-ghost" data-vol="sfx" data-delta="10">+</button></div>
-              <button type="button" class="btn btn-ghost" id="options-close" style="margin-top:12px;width:100%;min-height:44px">关闭</button>
+              <div class="vol-row"><span>主音量</span><button type="button" class="neon-line ghost" data-vol="master" data-delta="-10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">−</button><span id="vol-master" class="badge">70</span><button type="button" class="neon-line ghost" data-vol="master" data-delta="10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">+</button></div>
+              <div class="vol-row"><span>音乐</span><button type="button" class="neon-line ghost" data-vol="music" data-delta="-10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">−</button><span id="vol-music" class="badge">80</span><button type="button" class="neon-line ghost" data-vol="music" data-delta="10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">+</button></div>
+              <div class="vol-row"><span>音效</span><button type="button" class="neon-line ghost" data-vol="sfx" data-delta="-10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">−</button><span id="vol-sfx" class="badge">90</span><button type="button" class="neon-line ghost" data-vol="sfx" data-delta="10" style="min-height:36px;min-width:44px;width:auto;padding:0 10px">+</button></div>
+              <button type="button" class="neon-line ghost" id="options-close" style="margin-top:12px">关闭</button>
             </div>
           </div>
         </div>
@@ -211,9 +260,13 @@
         <div class="road" id="lane">
           <div class="horizon" aria-hidden="true"></div>
           <div class="gate"></div>
-          <div class="orb" id="orb"></div>
+          <div class="orb" id="orb">
+            <img src="../../assets/project/10-synthwave-neon/orb.png" alt="" draggable="false" />
+          </div>
         </div>
-        <button type="button" class="tap-btn" id="btn-tap" aria-label="点按得分">拍</button>
+        <button type="button" class="tap-btn" id="btn-tap" aria-label="点按得分">
+          <img src="../../assets/project/10-synthwave-neon/icons/icon-tap.png" alt="" draggable="false" /><span>拍</span>
+        </button>
       </div>
 
       <div id="over-layer" hidden>
@@ -222,8 +275,8 @@
           <div class="panel-body">
             <div class="final" id="final-score">0</div>
             <div class="over-actions">
-              <button type="button" class="btn btn-primary" id="btn-again">再来一局</button>
-              <button type="button" class="btn" id="btn-title">返回标题</button>
+              <button type="button" class="neon-line primary" id="btn-again">再来一局</button>
+              <button type="button" class="neon-line" id="btn-title">返回标题</button>
             </div>
           </div>
         </div>
