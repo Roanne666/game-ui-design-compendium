@@ -16,7 +16,6 @@ library/
 │       ├── tokens.css
 │       ├── index.html
 │       ├── scene.css           # 场景楼型私有样式（tokens 之后）
-│       ├── *.css               # 额外私有（如 01 的 layout-9x20.css）
 │       └── assets/             # 可空
 ├── examples/
 │   └── generic/                # 无对应风格时的最小通用 HUD
@@ -46,7 +45,6 @@ Pack ID：`01-cyberpunk-hud` … `10-synthwave-neon`（见 `references/style-mat
 <link rel="stylesheet" href="../../components/game-feel.css" />
 <link rel="stylesheet" href="./tokens.css" />
 <link rel="stylesheet" href="./scene.css" />
-<!-- 可选：额外私有 css，如 layout-9x20.css -->
 <script src="../../components/scene-kit.js" defer></script>
 ```
 

@@ -255,7 +255,7 @@ infoDensity: low | mid | high
 | AMBER | Amber Augment | 顶角 AR，任务居中括号框，底中弹药+技能坞 |
 | NOIR | Neon Noir | 顶满宽霓虹条，任务左中，地图左下，弹药/技能右下 |
 
-快捷键 `[` `]`。样式见 `layout-9x20.css`。
+快捷键 `[` `]`。方言布局已并入该 pack 的 `scene.css`。
 
 ---
 

@@ -1,4 +1,4 @@
-/* Style 01 — Cyberpunk gameplay scene layout + dialect switcher
+/* Style 01 — Cyberpunk gameplay scene + dialect switcher/layouts
    Dialects: neo | matrix | amber | noir
    Scene-local CSS after shared stack + tokens.css. */
 
@@ -811,7 +811,7 @@ html, body {
 .scan-on #world { filter: saturate(0.55) contrast(1.25) hue-rotate(-6deg); }
 .scan-on .minimap { border-color: var(--cp-cyan); box-shadow: 0 0 20px rgba(var(--scan-rgb), 0.2); }
 
-/* ===== Dialect switcher (outside phone; layout-9x20 may override) ===== */
+/* ===== Dialect switcher (outside phone; dialect layout block below may override) ===== */
 .dialect-bar {
   position: relative;
   z-index: 50;
@@ -954,4 +954,644 @@ html, body {
 .minimap .ping.hostile {
   background: var(--cp-red);
   box-shadow: 0 0 6px var(--cp-red);
+}
+
+/* ===== Portrait density + per-dialect layouts (merged from layout-9x20.css) ===== */
+html, body {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.entity {
+  width: 44px !important;
+  height: 88px !important;
+  opacity: 0.88;
+}
+.entity.loot { width: 28px !important; height: 28px !important; }
+.entity.cam { width: 32px !important; height: 24px !important; }
+.entity.door { width: 40px !important; height: 78px !important; }
+.entity .tag {
+  font-size: 8px !important;
+  padding: 2px 6px 2px 12px !important;
+  letter-spacing: 0.06em !important;
+}
+.entity.locked,
+.entity.marked { opacity: 1; }
+
+#hud {
+  transform: none !important;
+}
+
+/* Dialect switcher sits outside the phone */
+.dialect-bar {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: 50;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: min(92vw, 420px);
+}
+
+/* ========== NEO — top vitals + map, bottom skill dock ========== */
+.player-vitals {
+  left: 10px !important;
+  top: 10px !important;
+  right: 78px !important;
+  width: auto !important;
+  gap: 6px !important;
+}
+.player-vitals .lvl {
+  min-width: 28px !important;
+  height: 28px !important;
+  font-size: 13px !important;
+}
+.hp-trk { height: 10px !important; }
+.hp-num { font-size: 12px !important; min-width: 28px !important; }
+.xp-trk { display: none !important; }
+.scan-rail {
+  font-size: 8px !important;
+  margin-top: 2px !important;
+  letter-spacing: 0.08em !important;
+  opacity: 0.55;
+}
+.scan-rail.on { opacity: 0.95; }
+
+.nav-block {
+  right: 10px !important;
+  top: 10px !important;
+  gap: 2px !important;
+}
+.minimap {
+  width: 52px !important;
+  height: 52px !important;
+  box-shadow: none !important;
+  opacity: 0.8;
+}
+.nav-meta {
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 0 !important;
+  font-size: 8px !important;
+  line-height: 1.15;
+  opacity: 0.7;
+}
+.nav-meta #clock { font-size: 9px !important; }
+
+.pockets {
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  gap: 6px !important;
+  max-width: none;
+  justify-content: center;
+  position: relative !important;
+}
+.pockets .pocket {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  font-size: 8px !important;
+  padding: 2px 1px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.55);
+}
+.pockets .pocket .ico { font-size: 14px !important; line-height: 1; }
+.pockets .pocket .pn {
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pockets .pocket .k { display: none !important; }
+
+.weapon-dock {
+  position: absolute !important;
+  left: 50% !important;
+  /* Sit just above thumb keys — keep mid world clear */
+  bottom: 168px !important;
+  transform: translateX(-50%) !important;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: calc(100% - 168px);
+  max-width: 200px;
+  pointer-events: none;
+}
+.weapon-dock .weapon-hud,
+.weapon-dock .pockets {
+  pointer-events: auto;
+}
+
+/* Ammo readout sits above weapon dock */
+.weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  text-align: center !important;
+  min-width: 0 !important;
+  transform: none !important;
+}
+.weapon-hud .ammo { font-size: 16px !important; line-height: 1; opacity: 0.9; }
+.weapon-hud .ammo > span { font-size: 10px !important; }
+.weapon-hud .wname,
+.weapon-hud .stance { display: none !important; }
+
+.loop-rail { display: none !important; }
+
+.quest {
+  left: 10px !important;
+  right: auto !important;
+  top: 72px !important;
+  width: auto !important;
+  max-width: 58% !important;
+  text-align: left !important;
+  padding: 4px 8px !important;
+  background: rgba(0, 0, 0, 0.42) !important;
+  border-left: 2px solid color-mix(in srgb, var(--cp-red) 70%, transparent);
+  box-shadow: none !important;
+}
+.quest .q-title { display: none !important; }
+.quest .q-main { font-size: 11px !important; line-height: 1.25 !important; font-weight: 600; }
+.quest .q-sub { font-size: 9px !important; margin-top: 2px !important; opacity: 0.75; }
+
+.stamina {
+  bottom: 280px !important;
+  width: 32% !important;
+  max-width: 120px !important;
+  left: 12px !important;
+  transform: none !important;
+}
+
+.ram {
+  left: 10px !important;
+  right: 72px !important;
+  top: auto !important;
+  bottom: 270px !important;
+  transform: none !important;
+  width: auto !important;
+  max-height: 22%;
+  overflow: auto;
+}
+
+#feed {
+  top: 48% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(280px, 78%) !important;
+  font-size: 12px !important;
+  z-index: 19;
+  text-align: center !important;
+}
+#journal {
+  inset: 6% 5% !important;
+  padding: 16px !important;
+  overflow: auto;
+}
+.help {
+  top: 48px !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%);
+  font-size: 10px !important;
+  max-width: 72%;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.4;
+  z-index: 24;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+}
+.help[hidden] { display: none !important; }
+body.help-open .help { top: 48px !important; }
+body.help-open .loop-rail { opacity: 0.25; }
+
+.help-toggle {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  left: auto;
+  z-index: 24;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
+  clip-path: polygon(0 4px, 4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px));
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.help-toggle .ico {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(var(--accent-rgb), 0.45));
+}
+.help-toggle:active {
+  background: rgba(var(--accent-rgb), 0.35);
+  border-color: var(--cp-red);
+}
+.prompt {
+  font-size: 12px !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 52% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 20 !important;
+  text-align: center;
+}
+
+/* ========== MATRIX — terminal header + right rail skills ========== */
+[data-dialect="matrix"] .player-vitals {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  padding: 10px 10px 8px;
+  background: rgba(0, 12, 4, 0.88);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.45);
+  gap: 8px !important;
+}
+[data-dialect="matrix"] .nav-block {
+  top: 48px !important;
+  bottom: auto !important;
+  right: 10px !important;
+  left: auto !important;
+  align-items: flex-end !important;
+}
+[data-dialect="matrix"] .nav-meta { align-items: flex-end !important; }
+[data-dialect="matrix"] .quest {
+  top: 78px !important;
+  left: 10px !important;
+  right: auto !important;
+  max-width: 58% !important;
+  border-left: 0 !important;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.35);
+  background: transparent !important;
+  padding: 4px 0 !important;
+  font-family: "IBM Plex Mono", monospace;
+}
+[data-dialect="matrix"] .loop-rail { display: none !important; }
+[data-dialect="matrix"] .quest .q-main { font-size: 11px !important; letter-spacing: 0.04em; }
+[data-dialect="matrix"] .minimap {
+  width: 52px !important;
+  height: 52px !important;
+}
+[data-dialect="matrix"] .pockets {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  flex-direction: row !important;
+}
+[data-dialect="matrix"] .weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  text-align: center !important;
+}
+[data-dialect="matrix"] .weapon-hud .ammo {
+  color: var(--cp-red) !important;
+  text-shadow: 0 0 14px rgba(var(--accent-rgb), 0.45) !important;
+}
+[data-dialect="matrix"] .help { top: 88px !important; bottom: auto !important; left: 50% !important; }
+
+/* ========== AMBER — AR brackets, centered bottom dock ========== */
+[data-dialect="amber"] .player-vitals {
+  left: 10px !important;
+  right: auto !important;
+  top: 14px !important;
+  width: 62% !important;
+  background: none;
+  border: none;
+  padding: 0;
+}
+[data-dialect="amber"] .nav-block {
+  top: 14px !important;
+  right: 10px !important;
+  bottom: auto !important;
+  left: auto !important;
+  align-items: flex-end !important;
+}
+[data-dialect="amber"] .quest {
+  top: 72px !important;
+  left: 10px !important;
+  right: auto !important;
+  max-width: 62% !important;
+  text-align: left !important;
+  border-left: 0 !important;
+  background: rgba(8, 6, 0, 0.45) !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  clip-path: polygon(0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px));
+  box-shadow: none;
+}
+[data-dialect="amber"] .quest .q-title { text-align: center; }
+[data-dialect="amber"] .nav-block {
+  top: 48px !important;
+  right: 10px !important;
+  bottom: auto !important;
+  left: auto !important;
+  align-items: flex-end !important;
+}
+[data-dialect="amber"] .pockets {
+  position: relative !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  flex-direction: row;
+  padding: 4px 6px;
+  background: rgba(8, 6, 0, 0.55);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+}
+[data-dialect="amber"] .weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  text-align: center !important;
+}
+[data-dialect="amber"] .weapon-hud .ammo {
+  color: var(--cp-red) !important;
+  text-shadow: 0 0 12px rgba(var(--accent-rgb), 0.4) !important;
+}
+[data-dialect="amber"] .stamina { bottom: 340px !important; }
+
+/* ========== NOIR — full-bleed top vitals, asymmetric bottom ========== */
+[data-dialect="noir"] .player-vitals {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: auto !important;
+  padding: 12px 10px 10px;
+  background: linear-gradient(180deg, rgba(20, 0, 24, 0.92), rgba(8, 2, 18, 0.55));
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, #ff2bd6, #00fff5) 1;
+  gap: 8px !important;
+}
+[data-dialect="noir"] .nav-block {
+  top: 52px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 10px !important;
+  align-items: flex-end !important;
+}
+[data-dialect="noir"] .nav-meta { align-items: flex-end !important; }
+[data-dialect="noir"] .nav-meta .district { color: var(--cp-blue) !important; }
+[data-dialect="noir"] .quest {
+  top: 78px !important;
+  left: 10px !important;
+  right: auto !important;
+  max-width: 58% !important;
+  text-align: left !important;
+  border-left: 2px solid var(--cp-blue);
+  background: rgba(8, 2, 18, 0.5) !important;
+  padding: 4px 8px !important;
+}
+[data-dialect="noir"] .quest .q-title {
+  color: var(--cp-blue) !important;
+  text-shadow: 0 0 10px rgba(var(--data-rgb), 0.45) !important;
+}
+[data-dialect="noir"] .pockets {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: auto !important;
+  justify-content: center;
+}
+[data-dialect="noir"] .weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  text-align: center !important;
+}
+[data-dialect="noir"] .weapon-hud .ammo {
+  color: var(--cp-blue) !important;
+  text-shadow: 0 0 16px rgba(var(--data-rgb), 0.5), 0 0 4px rgba(255, 43, 214, 0.35) !important;
+}
+[data-dialect="noir"] .minimap {
+  border-color: rgba(var(--data-rgb), 0.55) !important;
+  box-shadow: 0 0 20px rgba(var(--data-rgb), 0.2), 0 0 32px rgba(255, 43, 214, 0.12) !important;
+}
+[data-dialect="noir"] .help { top: 96px !important; bottom: auto !important; }
+
+/* Touch — cyber loop: SCAN primary left · FIRE/HACK right · pockets center dock */
+.touch-pad {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+}
+.t-btn {
+  pointer-events: auto;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  letter-spacing: 0;
+  color: var(--cp-white);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  transition: transform 100ms ease-out, background 120ms ease-out, border-color 120ms ease-out;
+}
+.t-btn .ico {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.55));
+}
+.t-btn:active,
+.t-btn.pressed {
+  background: rgba(var(--accent-rgb), 0.4);
+  border-color: var(--cp-red);
+  transform: scale(0.94);
+}
+
+/* Left: scan = cyber primary (large), sprint = hold secondary */
+.t-scan {
+  left: 12px;
+  bottom: 14px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid rgba(var(--accent-rgb), 0.65);
+  background: rgba(var(--accent-rgb), 0.18);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.28);
+}
+.t-scan .ico { width: 34px; height: 34px; }
+.t-scan.on {
+  border-color: var(--cp-red);
+  background: rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.45);
+}
+.t-sprint {
+  left: 18px;
+  bottom: 100px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+.t-sprint .ico { width: 26px; height: 26px; }
+
+/* Right: fire · hack · reload */
+.t-fire {
+  right: 12px;
+  bottom: 14px;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.28);
+  border: 2px solid var(--cp-red);
+  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.35);
+}
+.t-fire .ico { width: 36px; height: 36px; }
+.t-hack {
+  right: 14px;
+  bottom: 100px;
+  width: 64px;
+  height: 48px;
+  padding: 0;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  border-color: rgba(0, 229, 255, 0.55);
+}
+.t-hack:disabled { opacity: 0.35; }
+.t-reload {
+  right: 14px;
+  bottom: 156px;
+  width: 64px;
+  height: 40px;
+  padding: 0;
+}
+
+/* Journal sits with help — top meta, not thumb stack */
+.t-journal {
+  position: absolute;
+  right: 48px;
+  top: 10px;
+  left: auto;
+  bottom: auto;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  z-index: 24;
+  pointer-events: auto;
+}
+.t-journal .ico { width: 18px; height: 18px; }
+
+.entity.scan-dim {
+  opacity: 0.45;
+  filter: grayscale(0.35);
+}
+.entity.marked .tag {
+  opacity: 1 !important;
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.45);
+}
+
+/* Final band lock — dialects must not drag chrome into thumb zone */
+.weapon-dock {
+  left: 50% !important;
+  bottom: 208px !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 176px) !important;
+  max-width: 240px !important;
+}
+.pockets {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+}
+.pockets .pocket {
+  min-width: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+}
+.pockets .pocket .k { display: none !important; }
+.weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  text-align: center !important;
+  transform: none !important;
+}
+[data-dialect="matrix"] .pockets,
+[data-dialect="amber"] .pockets,
+[data-dialect="noir"] .pockets {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+}
+[data-dialect="matrix"] .weapon-hud,
+[data-dialect="amber"] .weapon-hud,
+[data-dialect="noir"] .weapon-hud {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  text-align: center !important;
+  transform: none !important;
+}
+[data-dialect="matrix"] .weapon-dock,
+[data-dialect="amber"] .weapon-dock,
+[data-dialect="noir"] .weapon-dock {
+  left: 50% !important;
+  bottom: 208px !important;
+  transform: translateX(-50%) !important;
+}
+[data-dialect="matrix"] .nav-block,
+[data-dialect="amber"] .nav-block,
+[data-dialect="noir"] .nav-block {
+  top: 48px !important;
+  bottom: auto !important;
+  right: 10px !important;
+  left: auto !important;
+}
+
+#viewport {
+  touch-action: none;
 }
