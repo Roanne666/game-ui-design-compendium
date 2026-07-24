@@ -63,5 +63,7 @@
 
 - `library/assets/project/07-survival-horror/corridor-bg.png` — original maintenance corridor plate
 - `library/assets/project/07-survival-horror/door.png` — steel door prop (black-keyed)
+- `library/assets/project/07-survival-horror/rig-case.png` — open attache / RIG inventory case plate
+- `library/assets/project/07-survival-horror/icons/` — bag entry + item props (med / key / knife / ammo / shield), black-keyed
 - License: project original for this encyclopedia demo
 - **不含**商业生存恐怖官方或 Rip 素材
