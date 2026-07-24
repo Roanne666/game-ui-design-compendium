@@ -81,24 +81,12 @@
         </div>
         <div class="nav-meta">
           <span id="clock">00:00:00</span>
-          <span class="district">沃森区</span>
         </div>
       </div>
 
       <div class="quest" id="quest">
-        <div class="q-title">主线委托</div>
         <div class="q-main" id="q-main">在来世与中间人接头</div>
-        <div class="q-sub" id="q-sub">目标 · 寻找入口 · 240米</div>
-      </div>
-
-      <div class="loop-rail" id="loop-rail" aria-hidden="true">
-        <span class="step" data-step="scan">扫描</span>
-        <span class="sep">→</span>
-        <span class="step" data-step="mark">标记</span>
-        <span class="sep">→</span>
-        <span class="step" data-step="pocket">切枪</span>
-        <span class="sep">→</span>
-        <span class="step" data-step="act">开火/黑客</span>
+        <div class="q-sub" id="q-sub">入口 · 240米</div>
       </div>
 
       <div class="stamina" id="stamina">
@@ -108,8 +96,6 @@
 
       <div class="weapon-dock">
         <div class="weapon-hud">
-          <div class="stance" id="stance">站立</div>
-          <div class="wname" id="w-name">团结</div>
           <div class="ammo"><span id="ammo-cur">24</span> <span>/ <span id="ammo-res">120</span></span></div>
         </div>
         <div class="pockets" id="pockets">
@@ -122,7 +108,6 @@
           <button type="button" class="pocket hit" data-w="2" aria-label="悟">
             <span class="ico">3</span><span class="pn">悟</span>
           </button>
-          <div class="pocket dim" aria-hidden="true"><span class="ico">+</span><span class="pn">伤药</span></div>
         </div>
       </div>
 
@@ -160,7 +145,7 @@
       <button type="button" class="help-toggle hit" id="btn-help" aria-label="操作指引" title="操作指引">
         <img class="ico" src="../../assets/project/01-cyberpunk-hud/icons/icon-help.png" alt="" draggable="false" />
       </button>
-      <div class="help" id="help" hidden>玩法链：点左下开扫描 → 点敌/设备标记 → 底栏口袋切枪 → 右下开火或黑客（耗运算力）· 按住冲刺 · 顶栏日志</div>
+      <div class="help" id="help" hidden>左下开扫描 → 点敌/设备标记 → 底口袋切枪 → 右下开火或黑客 · 按住冲刺 · 顶角日志</div>
     </div>
 
     <div id="journal">
@@ -189,9 +174,9 @@
     { name: "悟", cur: 1, res: 1, mag: 1, dmg: 120, melee: true },
   ];
   const jobs = [
-    { main: "在来世与中间人接头", sub: "目标 · 寻找入口 · 240米" },
-    { main: "幽灵掉安保摄像头", sub: "目标 · 突破设备 · 22米" },
-    { main: "可选：放倒卫兵", sub: "目标 · 敌对 · 18米" },
+    { main: "在来世与中间人接头", sub: "入口 · 240米" },
+    { main: "幽灵掉安保摄像头", sub: "设备 · 22米" },
+    { main: "可选：放倒卫兵", sub: "敌对 · 18米" },
   ];
 
   const dialects = ["neo", "matrix", "amber", "noir"];
@@ -258,7 +243,6 @@
     $("#hp-fill").style.width = (state.hp / state.hpMax) * 100 + "%";
     $("#st-fill").style.width = state.st + "%";
     $("#hp-num").textContent = String(Math.round(state.hp));
-    $("#w-name").textContent = w.name;
     $("#ammo-cur").textContent = String(w.cur);
     $("#ammo-res").textContent = String(w.res);
     renderRamTicks();
@@ -275,19 +259,11 @@
     $("#ram-menu").classList.toggle("show", !!state.lock);
     $("#journal").classList.toggle("open", state.journal);
     $("#stamina").classList.toggle("show", state.sprint || state.st < 99);
-    $("#stance").textContent = state.sprint ? "冲刺中" : "站立";
     $$(".entity").forEach((ent) => {
       const markable = ent.dataset.type === "hostile" || ent.dataset.type === "device";
       ent.classList.toggle("scan-dim", !state.scan && markable);
       ent.classList.toggle("marked", state.scan && markable && !ent.hidden);
     });
-    const rail = $("#loop-rail");
-    if (rail) {
-      rail.querySelector('[data-step="scan"]').classList.toggle("on", state.scan);
-      rail.querySelector('[data-step="mark"]').classList.toggle("on", !!state.lock || !!state.focus);
-      rail.querySelector('[data-step="pocket"]').classList.toggle("on", state.w > 0 || state.pocketTouched);
-      rail.querySelector('[data-step="act"]').classList.toggle("on", !!state.lock);
-    }
   }
 
   function setFocus(ent) {
@@ -362,13 +338,13 @@
       ent.hidden = true;
       setFocus(null);
       feed("获得 · 数据芯片");
-      $("#q-sub").textContent = "目标 · 芯片已解锁门 · 6米";
+      $("#q-sub").textContent = "门已开 · 6米";
     } else if (type === "door") {
       if (state.shard || state.doorOpen) {
         state.doorOpen = true;
         feed("门已开 · 来世");
         $("#q-main").textContent = "进入来世";
-        $("#q-sub").textContent = "目标 · 完成 · 握手就绪";
+        $("#q-sub").textContent = "握手就绪";
       } else {
         feed("锁定 · 需要数据芯片");
         hurt(15);
@@ -420,7 +396,7 @@
       state.lock = null;
       feed("摄像头离线 · 已幽灵");
       $("#q-main").textContent = jobs[1].main;
-      $("#q-sub").textContent = "目标 · 完成";
+      $("#q-sub").textContent = "完成";
     }
     if (id === "suicide" && target.dataset.type === "hostile") {
       target.hidden = true;
