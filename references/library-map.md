@@ -24,6 +24,11 @@ library/
 
 Pack ID 列表：`01-cyberpunk-hud` … `10-synthwave-neon`（见 `references/style-matrix.md`）。
 
+## 预览入口
+
+- 总览：[`library/index.html`](../library/index.html) — 表格链到各 pack 的 `index.html` 与 `SPEC.md`
+- 单包：[`library/packs/<id>/index.html`](../library/packs/) — 竖屏 9:20 触控主场景
+
 ## HTML 加载序
 
 场景 `<head>` 中 CSS / JS 必须按此顺序：

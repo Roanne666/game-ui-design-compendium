@@ -1,7 +1,7 @@
 # Design: Agent Plugin + library/packs 收拢
 
 日期: 2026-07-25  
-状态: 已确认，实施中  
+状态: 已实施  
 形态: Claude / Cursor **Agent Plugin**（对标 `incremental-game-framework`）
 
 ---

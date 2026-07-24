@@ -33,6 +33,10 @@ components.css → phone-frame.css → game-feel.css → ./tokens.css → 可选
 - ❌ 键鼠快捷键作为玩家唯一操作路径
 - ❌ 网页卡片 / pill / 默认 `.btn` 皮当作最终游戏 HUD
 
+## 本地预览
+
+打开 [`library/index.html`](../../library/index.html) 浏览全部 10 套 pack 入口；单包主场景在 `library/packs/<id>/index.html`。
+
 ## 相关
 
 - 选型矩阵：`references/style-matrix.md`

@@ -13,8 +13,8 @@
 
 ## 本地预览
 
-- **当前（P0/P1 前）**：打开 [`library/index.html`](library/index.html) 浏览各风格入口
-- **P2 后**：预览链接将指向 `library/packs/<id>/index.html`
+- **入口页**：打开 [`library/index.html`](library/index.html) 浏览全部 10 套风格
+- **单包场景**：`library/packs/<id>/index.html`（例：[`02-dark-fantasy`](library/packs/02-dark-fantasy/index.html) 魂类）
 
 ## 开发期目录
 
