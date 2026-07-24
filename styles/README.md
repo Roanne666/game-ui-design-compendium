@@ -6,9 +6,9 @@
 
 | # | 风格 | 锚定游戏类型 | 主场景 |
 |---|------|-------------|--------|
-| 01 | [Cyberpunk HUD](01-cyberpunk-hud.md) | 赛博 RPG / 潜入 | `library/scenes/01-cyberpunk-hud/` |
-| 02 | [Dark Fantasy](02-dark-fantasy.md) | 魂类 / 动作 RPG | `library/scenes/02-dark-fantasy/` |
-| 03 | [Sci-Fi Space](03-scifi-space.md) | 太空模拟 | `library/scenes/03-scifi-space/` |
+| 01 | [Cyberpunk HUD](../library/packs/01-cyberpunk-hud/SPEC.md) | 赛博 RPG / 潜入 | `library/packs/01-cyberpunk-hud/` |
+| 02 | [Dark Fantasy](../library/packs/02-dark-fantasy/SPEC.md) | 魂类 / 动作 RPG | `library/packs/02-dark-fantasy/` |
+| 03 | [Sci-Fi Space](../library/packs/03-scifi-space/SPEC.md) | 太空模拟 | `library/packs/03-scifi-space/` |
 | 04 | [Pixel Retro](../library/packs/04-pixel-retro/SPEC.md) | 2D 像素 RPG / 平台 | `library/packs/04-pixel-retro/` |
 | 05 | [Hand-drawn](05-hand-drawn.md) | 叙事动作 / Roguelike | `library/scenes/05-hand-drawn/` |
 | 06 | [Cartoon Comic](06-cartoon-comic.md) | 射击 / 节奏动作 | `library/scenes/06-cartoon-comic/` |

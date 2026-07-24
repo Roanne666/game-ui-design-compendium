@@ -37,7 +37,7 @@ html, body {
   position: absolute;
   inset: 0;
   background: #020817 center/cover no-repeat;
-  background-image: url("../../assets/project/03-scifi-space/space-bg.png");
+  background-image: url("./assets/space-bg.png");
 }
 #world::after {
   content: "";

@@ -19,7 +19,7 @@
 - 写实军事战术射击(应用 Tactical Military)
 
 **本风格推荐场景包**
-- 主场景:`library/scenes/01-cyberpunk-hud/index.html`（9:20）
+- 主场景:`library/packs/01-cyberpunk-hud/index.html`（9:20）
 - 布局原型:顶任务+小地图+玩法链；中世界；底**武器坞**口袋；左大扫描/冲刺；右开火/黑客/换弹；日志顶栏
 - 核心玩法:开扫描 → 标记敌/设备 → 口袋切枪 → 开火或黑客（扫描门闩）
 - 操作准则:`docs/rules/mobile-portrait-first.md`

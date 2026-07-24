@@ -43,7 +43,7 @@ html, body {
   inset: -8%;
   transition: transform 80ms linear;
   background: #0a0908 center/cover no-repeat;
-  background-image: url("../../assets/project/02-dark-fantasy/ruins-bg.png");
+  background-image: url("./assets/ruins-bg.png");
 }
 #world::before {
   content: "";
