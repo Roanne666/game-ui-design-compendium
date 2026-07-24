@@ -13,9 +13,9 @@
 | 05 | [Hand-drawn](../library/packs/05-hand-drawn/SPEC.md) | 叙事动作 / Roguelike | `library/packs/05-hand-drawn/` |
 | 06 | [Cartoon Comic](../library/packs/06-cartoon-comic/SPEC.md) | 射击 / 节奏动作 | `library/packs/06-cartoon-comic/` |
 | 07 | [Survival Horror](../library/packs/07-survival-horror/SPEC.md) | 生存恐怖 | `library/packs/07-survival-horror/` |
-| 08 | [Anime Colorful](08-anime-colorful.md) | 日式 JRPG / 社交 | `library/scenes/08-anime-colorful/` |
-| 09 | [Tactical Military](09-tactical-military.md) | 战术射击 / 军事模拟 | `library/scenes/09-tactical-military/` |
-| 10 | [Synthwave Neon](10-synthwave-neon.md) | 复古动作 / 街机 | `library/scenes/10-synthwave-neon/` |
+| 08 | [Anime Colorful](../library/packs/08-anime-colorful/SPEC.md) | 日式 JRPG / 社交 | `library/packs/08-anime-colorful/` |
+| 09 | [Tactical Military](../library/packs/09-tactical-military/SPEC.md) | 战术射击 / 军事模拟 | `library/packs/09-tactical-military/` |
+| 10 | [Synthwave Neon](../library/packs/10-synthwave-neon/SPEC.md) | 复古动作 / 街机 | `library/packs/10-synthwave-neon/` |
 
 ## 类型 → 布局 / 玩法 矩阵
 

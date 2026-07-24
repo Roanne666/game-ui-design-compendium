@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
-  <link rel="stylesheet" href="../../components/styles/anime-colorful.css" />
+  <link rel="stylesheet" href="./tokens.css" />
   <style>
     .game-root {
       --bg: #0a0a0a;
@@ -28,7 +28,7 @@
 
     .game-world {
       background: #0a0a0a center top / cover no-repeat;
-      background-image: url("../../assets/project/08-anime-colorful/city-bg.png");
+      background-image: url("./assets/city-bg.png");
     }
     .game-world::before {
       opacity: 0.18;
@@ -306,16 +306,16 @@
         </div>
         <div class="menu-stack">
           <button type="button" class="slash primary" id="btn-start" aria-label="开始">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-start.png" alt="" draggable="false" /><span>开始</span>
+            <img src="./assets/icons/icon-start.png" alt="" draggable="false" /><span>开始</span>
           </button>
           <button type="button" class="slash" id="btn-load" aria-label="读取">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-load.png" alt="" draggable="false" /><span>读取</span>
+            <img src="./assets/icons/icon-load.png" alt="" draggable="false" /><span>读取</span>
           </button>
           <button type="button" class="slash" id="btn-config" aria-label="设置">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-gear.png" alt="" draggable="false" /><span>设置</span>
+            <img src="./assets/icons/icon-gear.png" alt="" draggable="false" /><span>设置</span>
           </button>
           <button type="button" class="slash" id="btn-exit" aria-label="退出">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-exit.png" alt="" draggable="false" /><span>退出</span>
+            <img src="./assets/icons/icon-exit.png" alt="" draggable="false" /><span>退出</span>
           </button>
         </div>
       </div>
@@ -324,7 +324,7 @@
         <div class="log-line" id="battle-log">点按指令条行动</div>
         <div class="battle-stage">
           <div class="foe-plate" id="foe-card">
-            <img src="../../assets/project/08-anime-colorful/foe-shadow.png" alt="" draggable="false" />
+            <img src="./assets/foe-shadow.png" alt="" draggable="false" />
             <div class="name" id="foe-name">影狼</div>
             <div class="hp"><i id="foe-hp-fill" style="width:100%"></i></div>
           </div>
@@ -343,16 +343,16 @@
         </div>
         <div class="cmd-rail">
           <button type="button" class="cmd primary" id="cmd-atk" aria-label="攻击">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-atk.png" alt="" draggable="false" /><span>攻击</span>
+            <img src="./assets/icons/icon-atk.png" alt="" draggable="false" /><span>攻击</span>
           </button>
           <button type="button" class="cmd" id="cmd-skill" aria-label="技能">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-skill.png" alt="" draggable="false" /><span>技能</span>
+            <img src="./assets/icons/icon-skill.png" alt="" draggable="false" /><span>技能</span>
           </button>
           <button type="button" class="cmd" id="cmd-item" aria-label="道具">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-item.png" alt="" draggable="false" /><span>道具</span>
+            <img src="./assets/icons/icon-item.png" alt="" draggable="false" /><span>道具</span>
           </button>
           <button type="button" class="cmd danger" id="cmd-run" aria-label="逃跑">
-            <img src="../../assets/project/08-anime-colorful/icons/icon-run.png" alt="" draggable="false" /><span>逃跑</span>
+            <img src="./assets/icons/icon-run.png" alt="" draggable="false" /><span>逃跑</span>
           </button>
         </div>
       </div>
