@@ -14,3 +14,5 @@ library/assets/tmp/
 library/previews/
 png/
 docs/superpowers/
+.superpowers/
+logs/
