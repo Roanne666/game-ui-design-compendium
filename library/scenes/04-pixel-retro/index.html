@@ -90,10 +90,11 @@
       -webkit-tap-highlight-color: transparent;
       transition: transform 80ms step-end;
     }
-    /* 站位：整组压在与英雄同高的草地带，不顶到树线/天空 */
-    .foe[data-id="orc"]   { right: 8%;  bottom: 5%; }
-    .foe[data-id="bat"]   { right: 2%;  bottom: 15%; }
-    .foe[data-id="slime"] { right: 14%; bottom: 24%; }
+    /* 站位：三角散开，横向拉开，避免互相遮挡；全体贴草地 */
+    .foe[data-id="slime"] { right: 36%; bottom: 8%;  z-index: 3; } /* 偏场中，后排 */
+    .foe[data-id="bat"]   { right: 6%;  bottom: 20%; z-index: 4; } /* 右上角飞行位，空开兽人 */
+    .foe[data-id="orc"]   { right: 18%; bottom: 3%;  z-index: 5; } /* 前排偏右 */
+    .foe.selected { z-index: 6; }
     .foe .sprite {
       width: 78px; height: 92px;
       object-fit: contain;
