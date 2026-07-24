@@ -1,22 +1,27 @@
 /* ============================================================
-   Phone Frame — fake-phone desktop preview stage
+   Phone Frame — desktop preview shell (standard = style 02)
    ------------------------------------------------------------
-   Shared bezel + box-shadow + 9:20 sizing. Loaded alongside
-   game-feel.css by every scene. Per-scene overrides happen
-   by setting these :root variables BEFORE this file loads,
-   or by re-declaring them after this file in the scene CSS.
+   Single 9:20 fake-phone for ALL scenes:
+   - Shared stack scenes: .game-root
+   - Custom HUD scenes (01–03): #viewport
 
-   Default bezel reads "neutral device on dark desk".
-   Override --phone-border-color / --phone-shadow-inset to
-   tint the frame per style (e.g. 02 dark-fantasy uses gold).
+   Geometry locked to 02 Dark Fantasy reference:
+   width: min(92vw, calc(96dvh * 9 / 20)); max-height: 96dvh;
+   radius 28px; 2px bezel; ring + drop + inset shadow.
+
+   Tint the bezel per style via :root vars (set in scene CSS
+   BEFORE or AFTER this file). Desk outside the phone stays
+   neutral so style tokens don't paint the browser chrome.
    ============================================================ */
 
 :root {
-  --phone-border-color:  rgba(255, 255, 255, 0.08);
-  --phone-shadow-ring:   0 0 0 1px rgba(0, 0, 0, 0.80);
-  --phone-shadow-drop:   0 24px 64px rgba(0, 0, 0, 0.65);
-  --phone-shadow-inset:  inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --phone-border-color: rgba(255, 255, 255, 0.08);
+  --phone-shadow-ring: 0 0 0 1px rgba(0, 0, 0, 0.85);
+  --phone-shadow-drop: 0 24px 64px rgba(0, 0, 0, 0.65);
+  --phone-shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   --phone-border-radius: 28px;
+  --phone-desk-bg:
+    radial-gradient(ellipse at 50% 40%, #16161c 0%, #050506 70%);
 }
 
 html, body {
@@ -26,7 +31,7 @@ html, body {
   overflow: hidden;
   cursor: default;
   user-select: none;
-  -webkit-font-smoothing: none;
+  -webkit-tap-highlight-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,23 +39,24 @@ html, body {
   gap: 12px;
   padding: 12px;
 }
-/* Higher-specificity bg override so per-scene `body { background }`
-   can't bleed into the desk area outside the phone frame. */
+
+/* Desk outside the phone — higher specificity so scene
+   `body { background }` cannot recolor the browser chrome. */
 html body {
-  background:
-    radial-gradient(ellipse at 50% 40%, #16161c 0%, #050506 70%);
+  background: var(--phone-desk-bg);
 }
 
-/* 9:20 portrait phone stage — hard rule per mobile-portrait-first.md §2.
-   Sized off vh first so the phone never grows wider than tall. 88dvh
-   leaves visible "desk" margin top + bottom on desktop preview. */
+/* 9:20 portrait phone stage — hard rule.
+   Same selector list for custom #viewport and shared .game-root. */
+#viewport,
 .game-root {
   position: relative;
   aspect-ratio: 9 / 20;
-  width: min(88vw, calc(88dvh * 9 / 20));
-  max-height: 88dvh;
+  width: min(92vw, calc(96dvh * 9 / 20));
+  height: auto;
+  max-height: 96dvh;
   overflow: hidden;
-  background: var(--bg);
+  background: #050505;
   border-radius: var(--phone-border-radius);
   border: 2px solid var(--phone-border-color);
   box-shadow:
@@ -60,28 +66,25 @@ html body {
   touch-action: none;
 }
 
-/* Real touch devices: drop frame, fill safe area. */
+/* Shared-stack scenes fill the phone with token --bg when set. */
+.game-root {
+  background: var(--bg, #050505);
+}
+
+/* Real touch devices: drop bezel, fill safe area. */
 @media (max-width: 600px) {
   html, body {
     padding: 0;
     gap: 0;
   }
+  #viewport,
   .game-root {
     width: 100vw;
     height: 100dvh;
+    max-height: none;
     aspect-ratio: auto;
     box-shadow: none;
     border-radius: 0;
     border: none;
   }
-}
-
-/* Opt-out for scenes that ship their own viewport (#viewport). */
-body.has-viewport .game-root {
-  width: 100vw;
-  height: 100vh;
-  aspect-ratio: auto;
-  box-shadow: none;
-  border-radius: 0;
-  border: none;
 }

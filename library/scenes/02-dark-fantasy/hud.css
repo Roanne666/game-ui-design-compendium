@@ -22,40 +22,19 @@
     rgba(18, 14, 11, 0.94) 42%,
     rgba(28, 22, 16, 0.92) 100%
   );
+  /* phone bezel tint — matches former #viewport gold frame */
+  --phone-border-color: rgba(201, 169, 97, 0.28);
+  --phone-shadow-inset: inset 0 0 0 1px rgba(201, 169, 97, 0.12);
 }
 
 * { box-sizing: border-box; }
 html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 50% 40%, #16120e 0%, #050403 70%);
   font-family: "Cormorant Garamond", Georgia, serif;
   color: var(--df-bone);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 #viewport {
-  position: relative;
-  aspect-ratio: 9 / 20;
-  width: min(92vw, calc(96dvh * 9 / 20));
-  max-height: 96dvh;
-  overflow: hidden;
   background: #0a0908;
-  border-radius: 28px;
-  border: 2px solid rgba(201, 169, 97, 0.28);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.85),
-    inset 0 0 0 1px rgba(201, 169, 97, 0.12),
-    0 24px 64px rgba(0, 0, 0, 0.65);
-  touch-action: none;
 }
 
 /* ===== World ===== */

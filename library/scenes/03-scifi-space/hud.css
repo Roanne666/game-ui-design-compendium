@@ -18,40 +18,19 @@
     0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px,
     100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)
   );
+  /* phone bezel tint — cyan instrument frame */
+  --phone-border-color: rgba(var(--sf-cyan-rgb), 0.28);
+  --phone-shadow-inset: inset 0 0 0 1px rgba(var(--sf-cyan-rgb), 0.1);
 }
 
 * { box-sizing: border-box; }
 html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 50% 40%, #0a1e3f 0%, #020817 70%);
   font-family: "Rajdhani", "Segoe UI", sans-serif;
   color: var(--sf-white);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 #viewport {
-  position: relative;
-  aspect-ratio: 9 / 20;
-  width: min(92vw, calc(96dvh * 9 / 20));
-  max-height: 96dvh;
-  overflow: hidden;
   background: var(--sf-void);
-  border-radius: 28px;
-  border: 2px solid rgba(var(--sf-cyan-rgb), 0.28);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.85),
-    inset 0 0 0 1px rgba(var(--sf-cyan-rgb), 0.1),
-    0 24px 64px rgba(0, 0, 0, 0.65);
-  touch-action: none;
 }
 
 #world {

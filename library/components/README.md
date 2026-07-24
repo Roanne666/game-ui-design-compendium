@@ -34,15 +34,20 @@ components/
 
 ## phone-frame.css 可覆写变量
 
+标准几何对齐 **02 Dark Fantasy**：`min(92vw, 96dvh×9/20)`、圆角 28、双层阴影。  
+`#viewport`（01–03）与 `.game-root`（04–10）共用同一套壳。
+
 ```css
 :root {
   --phone-border-color:  rgba(255, 255, 255, 0.08);  /* bezel 边框色 */
-  --phone-shadow-ring:   0 0 0 1px rgba(0, 0, 0, 0.80); /* 外黑环 */
+  --phone-shadow-ring:   0 0 0 1px rgba(0, 0, 0, 0.85); /* 外黑环 */
   --phone-shadow-drop:   0 24px 64px rgba(0, 0, 0, 0.65); /* 落影 */
-  --phone-shadow-inset:  inset 0 0 0 1px rgba(255, 255, 255, 0.04); /* 内白边 */
-  --phone-border-radius: 28px;                       /* 圆角 */
+  --phone-shadow-inset:  inset 0 0 0 1px rgba(255, 255, 255, 0.04); /* 内描边 */
+  --phone-border-radius: 28px;
 }
 ```
+
+例：02 金边在 `hud.css` 的 `:root` 覆写 `--phone-border-color` / `--phone-shadow-inset`。
 
 ## 组件速查(35+)
 
