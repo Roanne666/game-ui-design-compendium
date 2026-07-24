@@ -111,57 +111,37 @@
     }
 
     /* diegetic 公文包：材质来自生成板，不是网页 .panel */
+    .rig-wrap {
+      width: min(94%, 340px);
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 92%;
+    }
     .rig {
       position: relative;
-      width: min(94%, 348px);
-      aspect-ratio: 3 / 4.15;
-      max-height: 86%;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      flex: 0 0 auto;
       padding: 0;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(8, 8, 6, 0.2), rgba(8, 8, 6, 0.55)),
-        url("../../assets/project/07-survival-horror/rig-case.png") center top / cover no-repeat;
-      border: 1px solid rgba(59, 85, 112, 0.55);
-      box-shadow:
-        0 22px 48px rgba(0, 0, 0, 0.8),
-        inset 0 0 0 1px rgba(0, 0, 0, 0.55);
-      clip-path: polygon(
-        0 10px, 10px 0, calc(100% - 18px) 0, 100% 18px,
-        100% calc(100% - 10px), calc(100% - 10px) 100%,
-        18px 100%, 0 calc(100% - 18px)
-      );
-    }
-    .rig::before {
-      content: "";
-      position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background:
-        radial-gradient(circle at 8% 8%, #6a5848 0 2px, transparent 2.5px),
-        radial-gradient(circle at 92% 8%, #6a5848 0 2px, transparent 2.5px),
-        radial-gradient(circle at 8% 92%, #6a5848 0 2px, transparent 2.5px),
-        radial-gradient(circle at 92% 92%, #6a5848 0 2px, transparent 2.5px);
-      opacity: 0.85;
+      overflow: visible;
+      background: url("../../assets/project/07-survival-horror/rig-case.png") center / contain no-repeat;
+      border: none;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
     }
     .rig-stamp {
-      position: absolute; left: 12%; right: 12%; top: 5.5%;
+      position: absolute; left: 18%; right: 18%; top: 7%;
       z-index: 2; pointer-events: none;
       font-family: var(--font-display); font-size: 10px; letter-spacing: 0.34em;
       color: rgba(216, 208, 188, 0.55); text-align: center;
       text-transform: uppercase; text-shadow: 0 1px 6px #000;
     }
-    .rig-body {
-      position: absolute; left: 9%; right: 9%; top: 8%; bottom: 3.5%;
-      z-index: 2;
-      display: flex; flex-direction: column; gap: 6px;
-    }
-
     .spine-row {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      flex: 0 0 auto;
-      padding: 8px 10px;
-      background: linear-gradient(180deg, rgba(18, 16, 14, 0.5), rgba(8, 8, 6, 0.55));
-      border: 1px solid rgba(59, 85, 112, 0.35);
-      clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.35);
+      position: absolute; left: 18%; right: 18%; top: 30%;
+      z-index: 2;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 6px 8px;
+      background: rgba(8, 8, 6, 0.45);
+      border: 1px solid rgba(59, 85, 112, 0.3);
+      clip-path: polygon(0 5px, 5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%);
     }
     .spine-row .spine-label {
       flex: 0 0 auto;
@@ -184,58 +164,62 @@
     }
 
     .inv-grid {
-      flex: 1.35;
-      display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr);
-      gap: 6px;
-      padding: 7px;
-      background: rgba(4, 4, 3, 0.28);
-      border: 1px solid rgba(42, 36, 28, 0.55);
-      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+      position: absolute;
+      left: 13.5%;
+      right: 13.5%;
+      top: 50.5%;
+      height: 28.5%;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 3.2% 2.6%;
+      padding: 0; margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
     }
     .slot {
       appearance: none; -webkit-appearance: none;
-      min-height: 0; padding: 4px; margin: 0; outline: none;
-      background:
-        radial-gradient(ellipse at 50% 40%, rgba(28, 24, 20, 0.55), rgba(4, 4, 3, 0.85));
-      border: 1px solid rgba(30, 28, 24, 0.95);
-      box-shadow:
-        inset 0 2px 6px rgba(0, 0, 0, 0.65),
-        inset 0 0 0 1px rgba(90, 70, 45, 0.12);
+      min-height: 0; padding: 3px; margin: 0; outline: none;
+      background: transparent;
+      border: 1px solid transparent;
+      box-shadow: none;
       color: var(--text);
       cursor: pointer;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       position: relative;
       -webkit-tap-highlight-color: transparent;
     }
-    .slot.has {
-      border-color: rgba(59, 85, 112, 0.45);
-      box-shadow:
-        inset 0 2px 6px rgba(0, 0, 0, 0.5),
-        inset 0 0 0 1px rgba(59, 85, 112, 0.2);
-    }
+    .slot.has { border-color: transparent; }
     .slot.selected {
-      border-color: rgba(216, 152, 48, 0.65);
-      box-shadow:
-        inset 0 0 0 1px rgba(216, 152, 48, 0.28),
-        0 0 14px rgba(216, 152, 48, 0.12);
+      border-color: rgba(216, 152, 48, 0.7);
+      box-shadow: inset 0 0 0 1px rgba(216, 152, 48, 0.25), 0 0 12px rgba(216, 152, 48, 0.12);
     }
     .slot img {
-      width: 78%; height: 78%; max-width: 42px; max-height: 42px;
+      width: 82%; height: 82%; max-width: 48px; max-height: 48px;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
       pointer-events: none;
     }
     .slot .qty {
-      position: absolute; right: 3px; bottom: 2px;
+      position: absolute; right: 2px; bottom: 1px;
       font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.04em;
-      color: rgba(216, 208, 188, 0.7); text-shadow: 0 1px 3px #000;
+      color: rgba(216, 208, 188, 0.85); text-shadow: 0 1px 3px #000;
     }
 
-    .detail { margin-top: 0; flex: 0 0 auto; }
+    .rig-deck {
+      flex: 0 0 auto;
+      padding: 8px 6px 4px;
+      background: linear-gradient(180deg, rgba(22, 20, 18, 0.92), rgba(10, 10, 8, 0.96));
+      border: 1px solid rgba(59, 85, 112, 0.45);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+      clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    }
     .sel-line {
       font-family: var(--font-display); font-size: 9px; letter-spacing: 0.22em;
       color: rgba(216, 208, 188, 0.42); margin-bottom: 6px;
-      min-height: 1em; text-transform: uppercase;
+      min-height: 1em; text-transform: uppercase; text-align: center;
     }
     .sel-line strong { color: rgba(216, 208, 188, 0.85); font-weight: 400; letter-spacing: 0.14em; }
 
@@ -353,9 +337,9 @@
       </button>
 
       <div id="inv-modal" hidden>
-        <div class="rig" role="dialog" aria-label="脊骨背包">
-          <div class="rig-stamp">RIG · 脊骨箱</div>
-          <div class="rig-body">
+        <div class="rig-wrap">
+          <div class="rig" role="dialog" aria-label="脊骨背包">
+            <div class="rig-stamp">RIG · 脊骨箱</div>
             <div class="spine-row" aria-label="脊骨体征">
               <span class="spine-label">脊骨</span>
               <div class="spine-bar" id="spine-bar"></div>
@@ -381,14 +365,14 @@
               <button type="button" class="slot" aria-label="空槽"></button>
               <button type="button" class="slot" aria-label="空槽"></button>
             </div>
-            <div class="detail">
-              <div class="sel-line">已选 <strong id="sel-name">—</strong></div>
-              <div class="rig-actions">
-                <button type="button" class="rig-line" id="btn-use">使用</button>
-                <button type="button" class="rig-line" id="btn-door">开门</button>
-                <button type="button" class="rig-line hazard" id="btn-hurt">受伤</button>
-                <button type="button" class="rig-line ghost" id="btn-close-bag">合上箱盖</button>
-              </div>
+          </div>
+          <div class="rig-deck">
+            <div class="sel-line">已选 <strong id="sel-name">—</strong></div>
+            <div class="rig-actions">
+              <button type="button" class="rig-line" id="btn-use">使用</button>
+              <button type="button" class="rig-line" id="btn-door">开门</button>
+              <button type="button" class="rig-line hazard" id="btn-hurt">受伤</button>
+              <button type="button" class="rig-line ghost" id="btn-close-bag">合上箱盖</button>
             </div>
           </div>
         </div>
