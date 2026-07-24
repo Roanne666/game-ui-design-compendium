@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="../../components/components.css" />
   <link rel="stylesheet" href="../../components/phone-frame.css" />
   <link rel="stylesheet" href="../../components/game-feel.css" />
-  <link rel="stylesheet" href="../../components/styles/pixel-retro.css" />
+  <link rel="stylesheet" href="./tokens.css" />
   <style>
     .game-world {
       image-rendering: pixelated;
       background: #1D2B53 center top / cover no-repeat;
-      background-image: url("../../assets/project/04-pixel-retro/battle-bg.png");
+      background-image: url("./assets/battle-bg.png");
     }
     .game-world::before { opacity: 0.1; }
     .game-world::after {
@@ -261,25 +261,25 @@
       <div class="stage" id="stage">
         <div class="float-layer" id="floats"></div>
         <div class="party" id="party">
-          <img class="sprite" src="../../assets/project/04-pixel-retro/hero.png" alt="" draggable="false" />
+          <img class="sprite" src="./assets/hero.png" alt="" draggable="false" />
           <div class="shadow" aria-hidden="true"></div>
           <span class="tag">隆</span>
         </div>
         <div class="enemies" id="enemies">
           <button type="button" class="foe" data-id="slime" data-hp="30" data-max="30" data-name="史莱姆" aria-label="选择史莱姆">
-            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-slime.png" alt="" draggable="false" />
+            <img class="sprite" src="./assets/foe-slime.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">史莱姆</span>
             <span class="hp-mini" data-hp-label>30</span>
           </button>
           <button type="button" class="foe selected" data-id="bat" data-hp="22" data-max="22" data-name="蝙蝠" aria-label="选择蝙蝠">
-            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-bat.png" alt="" draggable="false" />
+            <img class="sprite" src="./assets/foe-bat.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">蝙蝠</span>
             <span class="hp-mini" data-hp-label>22</span>
           </button>
           <button type="button" class="foe" data-id="orc" data-hp="45" data-max="45" data-name="兽人" aria-label="选择兽人">
-            <img class="sprite" src="../../assets/project/04-pixel-retro/foe-orc.png" alt="" draggable="false" />
+            <img class="sprite" src="./assets/foe-orc.png" alt="" draggable="false" />
             <div class="shadow" aria-hidden="true"></div>
             <span class="name">兽人</span>
             <span class="hp-mini" data-hp-label>45</span>
@@ -339,7 +339,7 @@
     const sk = SceneKit;
     const HP_MAX = 99;
     const MP_MAX = 30;
-    const ASSET = "../../assets/project/04-pixel-retro/";
+    const ASSET = "./assets/";
     const FOE_DEFAULTS = [
       { id: "slime", hp: 30, name: "史莱姆", src: ASSET + "foe-slime.png" },
       { id: "bat", hp: 22, name: "蝙蝠", src: ASSET + "foe-bat.png" },

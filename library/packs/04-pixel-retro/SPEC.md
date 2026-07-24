@@ -19,7 +19,7 @@
 - 高分辨率写实恐怖 diegetic
 
 **本风格推荐场景包**
-- 主场景:`library/scenes/04-pixel-retro/index.html`（9:20）
+- 主场景:`library/packs/04-pixel-retro/index.html`（9:20）
 - 布局原型:上半战场；下半指令窗
 - 核心玩法:点指令——攻击 / 技能 / 道具 / 逃跑（含胜负再战闭环）
 - 扩展:主菜单、背包格阵
