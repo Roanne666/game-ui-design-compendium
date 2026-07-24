@@ -10,21 +10,32 @@
   <link rel="stylesheet" href="../../components/styles/tactical-military.css" />
   <style>
     .game-world {
-      background:
-        linear-gradient(180deg, #1a2218 0%, #0c100c 45%, #141810 100%);
+      background: #0c100c center top / cover no-repeat;
+      background-image: url("../../assets/project/09-tactical-military/ops-bg.png");
     }
-    .game-world.has-grid::before { opacity: 0.25; }
+    .game-world.has-grid::before { opacity: 0.12; }
+    .game-world::after {
+      box-shadow: inset 0 0 80px 24px rgba(0, 0, 0, 0.45);
+    }
 
     .target {
-      position: absolute; left: 58%; top: 36%;
-      width: 54px; height: 72px;
+      position: absolute; left: 58%; top: 38%;
+      width: 56px; height: 96px;
       transform: translate(-50%, -50%);
-      border: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
-      background: color-mix(in srgb, var(--surface) 25%, transparent);
-      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed color-mix(in srgb, var(--border) 55%, transparent);
+      background: transparent;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 0; margin: 0;
       pointer-events: auto; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
-    .target img { width: 28px; height: 28px; opacity: 0.7; }
+    .target img {
+      width: 100%; height: 100%; object-fit: contain;
+      object-position: bottom center;
+      opacity: 0.95;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+      pointer-events: none;
+    }
     .target.locked {
       border-style: solid; border-color: var(--accent);
       box-shadow: 0 0 0 1px var(--accent), 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
@@ -84,7 +95,7 @@
       background: transparent; border: 1px solid var(--border); color: var(--text);
       font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; cursor: pointer;
     }
-    .stance-row .t-btn img { width: 18px; height: 18px; opacity: 0.85; }
+    .stance-row .t-btn img { width: 22px; height: 22px; object-fit: contain; opacity: 0.9; }
     .stance-row .t-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
     .stance-row .t-btn:active { transform: scale(0.94); }
 
@@ -99,7 +110,7 @@
       font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; cursor: pointer;
     }
     .fire-stack .t-btn.primary { border-color: var(--accent); color: var(--accent); min-height: 56px; }
-    .fire-stack .t-btn img { width: 18px; height: 18px; }
+    .fire-stack .t-btn img { width: 26px; height: 18px; object-fit: contain; }
     .fire-stack .t-btn:active { transform: scale(0.94); background: var(--accent-soft); }
     .fire-stack .t-btn:disabled { opacity: 0.35; }
 
@@ -168,7 +179,7 @@
       </div>
 
       <button type="button" class="target" id="tgt" aria-label="锁定目标">
-        <img src="../../assets/_shared/rpg-icons/eye.png" alt="" />
+        <img src="../../assets/project/09-tactical-military/hostile.png" alt="" draggable="false" />
       </button>
       <div class="reticle" id="reticle" aria-hidden="true">
         <svg viewBox="0 0 88 88">
@@ -181,9 +192,9 @@
         <div class="pad">
           <div class="lab">姿态</div>
           <div class="stance-row" id="stance-group">
-            <button type="button" class="t-btn active" data-stance="STAND" aria-label="站立"><img src="../../assets/_shared/rpg-icons/brave.png" alt="" /><span>立</span></button>
-            <button type="button" class="t-btn" data-stance="CROUCH" aria-label="蹲伏"><img src="../../assets/_shared/rpg-icons/boots.png" alt="" /><span>蹲</span></button>
-            <button type="button" class="t-btn" data-stance="PRONE" aria-label="卧倒"><img src="../../assets/_shared/rpg-icons/down.png" alt="" /><span>卧</span></button>
+            <button type="button" class="t-btn active" data-stance="STAND" aria-label="站立"><img src="../../assets/project/09-tactical-military/icons/icon-stand.png" alt="" draggable="false" /><span>立</span></button>
+            <button type="button" class="t-btn" data-stance="CROUCH" aria-label="蹲伏"><img src="../../assets/project/09-tactical-military/icons/icon-crouch.png" alt="" draggable="false" /><span>蹲</span></button>
+            <button type="button" class="t-btn" data-stance="PRONE" aria-label="卧倒"><img src="../../assets/project/09-tactical-military/icons/icon-prone.png" alt="" draggable="false" /><span>卧</span></button>
           </div>
           <div class="lab" style="margin-top:8px">耐力</div>
           <div class="stm">
@@ -191,7 +202,7 @@
             <span id="stm-val" class="badge">100</span>
           </div>
           <button type="button" class="t-btn" id="btn-sprint" aria-label="冲刺" style="width:100%;margin-top:8px;min-height:44px">
-            <img src="../../assets/_shared/kenney/icons/play.png" alt="" /><span>冲刺</span>
+            <img src="../../assets/project/09-tactical-military/icons/icon-sprint.png" alt="" draggable="false" /><span>冲刺</span>
           </button>
         </div>
       </div>
@@ -201,9 +212,11 @@
           <div class="lab">武器</div>
           <div class="ammo" id="ammo-val">24 / 120</div>
           <div class="fire-stack">
-            <button type="button" class="t-btn" id="btn-reload" aria-label="换弹">换弹</button>
+            <button type="button" class="t-btn" id="btn-reload" aria-label="换弹">
+              <img src="../../assets/project/09-tactical-military/icons/icon-reload.png" alt="" draggable="false" /><span>换弹</span>
+            </button>
             <button type="button" class="t-btn primary" id="btn-fire" aria-label="点射">
-              <img src="../../assets/_shared/rpg-icons/gun.png" alt="" /><span>点射</span>
+              <img src="../../assets/project/09-tactical-military/icons/icon-fire.png" alt="" draggable="false" /><span>点射</span>
             </button>
           </div>
         </div>

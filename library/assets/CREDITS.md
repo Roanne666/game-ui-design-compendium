@@ -75,3 +75,11 @@
 - `library/assets/project/08-anime-colorful/icons/` — slash menu + battle command icons (start / load / gear / exit / atk / skill / item / run), keyed
 - License: project original for this encyclopedia demo
 - **不含**商业 Persona / Atlus 官方或 Rip 素材
+
+## Project-generated scene plates (09 Tactical Military)
+
+- `library/assets/project/09-tactical-military/ops-bg.png` — urban combat ruin ops plate
+- `library/assets/project/09-tactical-military/hostile.png` — hostile operator plate (black-keyed)
+- `library/assets/project/09-tactical-military/icons/` — stance / sprint / fire / reload glyphs (keyed)
+- License: project original for this encyclopedia demo
+- **不含**商业战术射击官方或 Rip 素材
