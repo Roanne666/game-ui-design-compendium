@@ -9,7 +9,10 @@
 - Commands：`commands/pick-style.md`、`commands/apply-style.md`、`commands/audit-hud.md`
 - 短索引：`references/`（矩阵、硬规则、目录图）
 
-在 Cursor / Claude 中安装或加载本仓库为 Agent Plugin 后，Agent 可通过 Skills 与 Commands 按游戏类型选型并生成 UI。
+在 Cursor / Claude 中安装或加载本仓库为 Agent Plugin 后，Agent 可通过 Skills 与 Commands 生成 UI：
+
+- **有对应风格** → 套用 `library/packs/<id>/`
+- **无对应** → 走通用竖屏游戏 UI 思路（硬规则 + 共享组件，不硬套 pack）
 
 ## 本地预览
 
@@ -26,6 +29,6 @@
 
 | 命令 | 作用 |
 |------|------|
-| `/pick-style` | 按游戏类型推荐 pack id |
-| `/apply-style` | 指定 pack，生成/改造 UI |
+| `/pick-style` | 判定有无对应风格；有则推荐 pack，无则走通用 |
+| `/apply-style` | `<pack-id>` 套用风格，或 `generic` 通用 UI |
 | `/audit-hud` | 验收 HUD 是否符合规则 |

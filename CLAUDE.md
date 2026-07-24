@@ -4,6 +4,8 @@
 
 蒸馏多套**可程序化生成**的游戏 UI 风格文档。每套风格绑定**适合该风格的游戏类型**：参数化规则 + 类型正确的参考场景。工程师拿规则可生成按钮/面板/血条等。**只定义风格,不涉及具体美术素材**(icon、character art、logo)。
 
+**Agent 路由**：目标游戏有对应风格 → 套用 `library/packs/<id>/`；无对应 → 走通用竖屏游戏 UI 思路（`docs/rules` + `library/components`，不硬套 pack）。见 `skills/game-ui-style/SKILL.md`。
+
 **本项目为移动端竖屏服务**（画幅 **9:20 定死**，主输入为触控）。桌面浏览器仅作预览壳。  
 **楼型与玩法循环按游戏类型区分**，禁止全库套同一套「锁定 + 开火」动作条。见 `docs/rules/mobile-portrait-first.md`。  
 **控件同语汇、反网页壳**：见 `docs/rules/game-feel-vs-web.md`。

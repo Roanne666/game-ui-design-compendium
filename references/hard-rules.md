@@ -10,19 +10,20 @@
 
 ## 类型与玩法
 
-4. **类型正确的楼型** — 打开场景应能辨认游戏大类；布局与核心玩法必须符合 `references/style-matrix.md` 对应行。→ [`mobile-portrait-first.md` §4](../docs/rules/mobile-portrait-first.md)
+4. **类型正确的楼型** — 打开界面应能辨认游戏大类。**有对应 pack** 时须符合矩阵该行；**通用路径**时按目标游戏自身类型设计楼型（矩阵可作分区参考，不绑 pack 视觉）。→ [`mobile-portrait-first.md` §4](../docs/rules/mobile-portrait-first.md)、[`style-matrix.md`](./style-matrix.md)
 5. **禁止统一锁定开火模板** — 不得把「左辅圆键 + 右主开火 + 中口袋」套到不需要该玩法的类型（03/04/05/07/08/10 等）。→ [`mobile-portrait-first.md` §3–§4.2](../docs/rules/mobile-portrait-first.md)
+6. **无对应不硬套** — 目标游戏对不上 10 套时走通用 UI（硬规则 + `library/components/` + 自拟 token），禁止为凑合选最近 pack 换皮。→ [`skills/game-ui-style/SKILL.md`](../skills/game-ui-style/SKILL.md)
 
 ## 文案与语言
 
-6. **界面文案一律中文** — 玩家可见标签、任务、提示、日志均为中文；`aria-label` 同步中文。→ [`mobile-portrait-first.md` §1、§7](../docs/rules/mobile-portrait-first.md)
+7. **界面文案一律中文** — 玩家可见标签、任务、提示、日志均为中文；`aria-label` 同步中文。→ [`mobile-portrait-first.md` §1、§7](../docs/rules/mobile-portrait-first.md)
 
 ## 观感与控件
 
-7. **反网页壳** — HUD 须像盖在游戏世界上的操作层，禁止居中卡片柱、Material 双栏底栏、光泽圆 CTA 混进风格场。→ [`game-feel-vs-web.md` §3–§4](../docs/rules/game-feel-vs-web.md)
-8. **认形交互** — 常驻触控用风格化图标/物件/仪表/指令条；中文留给情境、菜单与 `aria-label`。→ [`mobile-portrait-first.md` §5](../docs/rules/mobile-portrait-first.md)、[`game-feel-vs-web.md` §1–§2](../docs/rules/game-feel-vs-web.md)
-9. **不依赖 hover** — `:hover` 仅增强；以 `active` / `pressed` / 选中为准。→ [`mobile-portrait-first.md` §2](../docs/rules/mobile-portrait-first.md)
+8. **反网页壳** — HUD 须像盖在游戏世界上的操作层，禁止居中卡片柱、Material 双栏底栏、光泽圆 CTA 混进风格场。→ [`game-feel-vs-web.md` §3–§4](../docs/rules/game-feel-vs-web.md)
+9. **认形交互** — 常驻触控用风格化图标/物件/仪表/指令条；中文留给情境、菜单与 `aria-label`。→ [`mobile-portrait-first.md` §5](../docs/rules/mobile-portrait-first.md)、[`game-feel-vs-web.md` §1–§2](../docs/rules/game-feel-vs-web.md)
+10. **不依赖 hover** — `:hover` 仅增强；以 `active` / `pressed` / 选中为准。→ [`mobile-portrait-first.md` §2](../docs/rules/mobile-portrait-first.md)
 
 ## 验收
 
-10. **盲测** — 隐藏帮助后仍能完成该风格矩阵规定的核心玩法循环；并排两套须一眼可辨玩法差异。→ [`mobile-portrait-first.md` §2、§9](../docs/rules/mobile-portrait-first.md)
+11. **盲测** — 隐藏帮助后仍能完成约定的核心玩法循环（pack 路径用矩阵该行；通用路径用该游戏自述循环）；pack 路径并排两套须一眼可辨玩法差异。→ [`mobile-portrait-first.md` §2、§9](../docs/rules/mobile-portrait-first.md)
